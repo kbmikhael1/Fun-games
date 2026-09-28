@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Daraja</title>
+<meta name="description" content="Daraja: build bridges across Uganda's rivers and gorges, then send the traffic over.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;900&family=Barlow+Semi+Condensed:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/*@STYLE*/
+</style>
+</head>
+<body class="screen-title">
+<canvas id="world" aria-label="Bridge building area"></canvas>
+
+<!-- Title screen -->
+<section id="title" class="overlay" aria-labelledby="title-word">
+  <div class="title-inner">
+    <p class="dict"><span class="dict-word">da·ra·ja</span> <span class="dict-ipa">/dɑːˈrɑːdʒɑː/</span> <span class="dict-pos">Swahili, noun</span> — a bridge.</p>
+    <h1 id="title-word">Daraja</h1>
+    <p class="tagline">Draw a bridge on the blueprint. Then watch a real vehicle cross it at dusk, or fall into the river.</p>
+    <div class="title-actions">
+      <button id="btn-start" class="btn btn-primary">Start building</button>
+      <button id="btn-help-title" class="btn btn-ghost">How to play</button>
+    </div>
+  </div>
+  <p class="title-foot">8 crossings · Kampala to the Source of the Nile · Sound on for the full effect</p>
+</section>
+
+<!-- Level register -->
+<section id="levels" class="overlay" aria-labelledby="levels-h" hidden>
+  <header class="levels-head">
+    <button id="btn-levels-back" class="btn btn-ghost btn-small" aria-label="Back to title">‹ Title</button>
+    <div>
+      <p class="eyebrow">Daraja Bridge Works · Drawing register</p>
+      <h2 id="levels-h">Choose a crossing</h2>
+    </div>
+    <p class="levels-sum" id="levels-sum"></p>
+  </header>
+  <div id="level-grid" class="level-grid"></div>
+</section>
+
+<!-- In-game HUD -->
+<header id="hud" hidden>
+  <div class="hud-left panel">
+    <button id="btn-back" class="icon-btn" aria-label="Back to the drawing register" title="Levels (Esc)">‹</button>
+    <div class="tb">
+      <div class="tb-cell tb-code"><span class="tb-k">DRG</span><span id="hud-code">DJ-01</span></div>
+      <div class="tb-cell tb-name"><span class="tb-k" id="hud-place">Kampala</span><span id="hud-name">Nakivubo Channel</span></div>
+      <div class="tb-cell tb-veh"><span class="tb-k">Design vehicle</span><span id="hud-veh">Saloon car 1.2 t</span></div>
+    </div>
+  </div>
+  <div class="hud-mode" id="hud-mode">Blueprint</div>
+  <div class="hud-right panel">
+    <div class="budget">
+      <div class="budget-row"><span class="tb-k">Cost</span><span id="hud-cost" class="num">UGX 0</span><span class="budget-of">of <span id="hud-budget" class="num">6.50M</span></span></div>
+      <div class="budget-bar" aria-hidden="true"><i id="hud-bar"></i><b style="left:70%"></b><b style="left:85%"></b></div>
+    </div>
+    <div class="live-stats" id="live-stats">
+      <div><span class="tb-k">Time</span><span id="hud-time" class="num">0.0 s</span></div>
+      <div><span class="tb-k">Peak stress</span><span id="hud-peak" class="num">0%</span></div>
+    </div>
+    <button id="btn-mute" class="icon-btn" aria-label="Mute sound" title="Sound (M)">♪</button>
+    <button id="btn-help" class="icon-btn" aria-label="How to play" title="Help (H)">?</button>
+  </div>
+</header>
+
+<!-- Toolbars -->
+<nav id="toolbar" class="panel" hidden>
+  <div class="tb-group" id="tools-build">
+    <div class="tools-mat" id="tools-mat"></div>
+    <span class="sep"></span>
+    <button class="tool tool-sm" id="tool-erase" data-tool="erase" aria-pressed="false"><span class="tool-name">Erase</span><span class="k">E · right-click</span></button>
+    <button class="tool tool-sm" id="btn-undo"><span class="tool-name">Undo</span><span class="k">Ctrl Z</span></button>
+    <button class="tool tool-sm" id="btn-redo"><span class="tool-name">Redo</span><span class="k">Ctrl Y</span></button>
+    <button class="tool tool-sm" id="btn-clear"><span class="tool-name">Clear</span><span class="k">all</span></button>
+    <span class="sep"></span>
+    <button class="btn btn-go" id="btn-test"><span>Test</span><small>Space</small></button>
+  </div>
+  <div class="tb-group" id="tools-live" hidden>
+    <button class="btn btn-go btn-stop" id="btn-stop"><span>Edit</span><small>Space</small></button>
+    <button class="tool tool-sm" id="btn-slow" aria-pressed="false"><span class="tool-name">Slow motion</span><span class="k">S</span></button>
+    <button class="tool tool-sm" id="btn-forces" aria-pressed="false"><span class="tool-name">Forces</span><span class="k">F</span></button>
+    <button class="tool tool-sm" id="btn-restart"><span class="tool-name">Replay</span><span class="k">R</span></button>
+    <div class="legend" id="legend" aria-hidden="true">
+      <span class="lg-heat"><i></i><em>0%</em><em>stress</em><em>100%</em></span>
+      <span class="lg-force"><i class="t"></i><em>tension</em><i class="c"></i><em>compression</em></span>
+    </div>
+  </div>
+</nav>
+
+<!-- Result card -->
+<section id="result" class="overlay-card" hidden aria-live="polite">
+  <div class="sheet">
+    <p class="eyebrow" id="res-eyebrow">DJ-01 · Test report</p>
+    <h3 id="res-title">Crossed.</h3>
+    <p class="res-line" id="res-line"></p>
+    <div class="res-row"><div class="stars" id="res-stars" aria-label="Stars"></div><div class="stamp" id="res-stamp">Approved</div></div>
+    <dl class="res-stats" id="res-stats"></dl>
+    <div class="res-actions">
+      <button class="btn btn-ink-ghost" id="res-edit">Refine design</button>
+      <button class="btn btn-ink" id="res-next">Next crossing ›</button>
+    </div>
+  </div>
+</section>
+
+<!-- Help -->
+<section id="help" class="overlay-card" hidden role="dialog" aria-modal="true" aria-labelledby="help-h">
+  <div class="sheet sheet-help">
+    <p class="eyebrow">Site induction</p>
+    <h3 id="help-h">How to build a bridge</h3>
+    <ol class="help-steps">
+      <li><b>Drag from an anchor</b> (the amber pins on the banks) or from any joint to draw a member. Members snap to a 0.5 m grid.</li>
+      <li><b>Lay a road deck</b> from bank to bank. Only road carries wheels.</li>
+      <li><b>Brace it with triangles.</b> A deck on its own sags and snaps.</li>
+      <li><b>Test it.</b> The vehicle drives across. Members glow hot as they near failure, then break.</li>
+    </ol>
+    <div class="help-mats" id="help-mats"></div>
+    <p class="help-note">Engineering truths in the game: long members in compression buckle (capacity falls with 1/L²). Cables only pull. Forces view shows tension in red and compression in blue.</p>
+    <div class="help-keys">
+      <span><kbd>1</kbd>–<kbd>4</kbd> material</span><span><kbd>E</kbd> erase</span><span><kbd>Ctrl</kbd>+<kbd>Z</kbd> undo</span>
+      <span><kbd>Space</kbd> test / edit</span><span><kbd>S</kbd> slow-mo</span><span><kbd>F</kbd> forces</span><span><kbd>M</kbd> sound</span>
+    </div>
+    <div class="res-actions"><button class="btn btn-ink" id="help-close">Got it</button></div>
+  </div>
+</section>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/*@ENGINE*/
+</script>
+<script>
+/*@LEVELS*/
+</script>
+<script>
+/*@GAME*/
+</script>
+</body>
+</html>
