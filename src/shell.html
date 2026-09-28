@@ -76,6 +76,7 @@
     <button class="tool tool-sm" id="btn-undo"><span class="tool-name">Undo</span><span class="k">Ctrl Z</span></button>
     <button class="tool tool-sm" id="btn-redo"><span class="tool-name">Redo</span><span class="k">Ctrl Y</span></button>
     <button class="tool tool-sm" id="btn-clear"><span class="tool-name">Clear</span><span class="k">all</span></button>
+    <button class="tool tool-sm" id="btn-solve" hidden><span class="tool-name">Solutions</span><span class="k">stuck? look here</span></button>
     <span class="sep"></span>
     <button class="btn btn-go" id="btn-test"><span>Test</span><small>Space</small></button>
   </div>
@@ -100,9 +101,21 @@
     <div class="res-row"><div class="stars" id="res-stars" aria-label="Stars"></div><div class="stamp" id="res-stamp">Approved</div></div>
     <dl class="res-stats" id="res-stats"></dl>
     <div class="res-actions">
+      <button class="btn btn-ink-ghost" id="res-solve" hidden>See solutions</button>
       <button class="btn btn-ink-ghost" id="res-edit">Refine design</button>
       <button class="btn btn-ink" id="res-next">Next crossing ›</button>
     </div>
+  </div>
+</section>
+
+<!-- Engineer's solutions -->
+<section id="solutions" class="overlay-card" hidden role="dialog" aria-modal="true" aria-labelledby="sol-h">
+  <div class="sheet sheet-sol">
+    <p class="eyebrow" id="sol-eyebrow">DJ-01 · Engineer's solutions</p>
+    <h3 id="sol-h">Solutions</h3>
+    <p class="res-line sol-intro">Found by searching thousands of bridges with the game's own physics. Load one into your drawing, test it, then try to beat it. Ctrl+Z brings your own design back.</p>
+    <div class="sol-grid" id="sol-grid"></div>
+    <div class="res-actions"><button class="btn btn-ink-ghost" id="sol-close">Keep trying myself</button></div>
   </div>
 </section>
 
@@ -134,6 +147,9 @@
 </script>
 <script>
 /*@LEVELS*/
+</script>
+<script>
+/*@SOLUTIONS*/
 </script>
 <script>
 /*@GAME*/

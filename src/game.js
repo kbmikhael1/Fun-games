@@ -18,7 +18,8 @@ function loadSave() {
   try { const s = JSON.parse(localStorage.getItem(SAVE_KEY)); if (s && typeof s === 'object') return s; } catch (e) { /* no storage */ }
   return {};
 }
-const save = Object.assign({ progress: {}, designs: {}, muted: false, seenHelp: false }, loadSave());
+const save = Object.assign({ progress: {}, designs: {}, fails: {}, muted: false, seenHelp: false }, loadSave());
+save.fails = save.fails || {};
 function persist() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch (e) { /* ignore */ } }
 
 // ---------------------------------------------------------------- helpers
@@ -1051,6 +1052,7 @@ function setScreen(name) {
   $('#tools-live').hidden = name !== 'live';
   $('#hud-mode').textContent = name === 'live' ? 'Live test' : 'Blueprint';
   if (name !== 'live') $('#result').hidden = true;
+  if (name !== 'build' && name !== 'live') $('#solutions').hidden = true;
   if (name !== 'live') Snd.engine(false, 0, 0);
 }
 
@@ -1106,11 +1108,11 @@ function buildLevelGrid() {
       </div>`;
     b.addEventListener('click', () => { Snd.init(); openLevel(L); });
     grid.appendChild(b);
-    requestAnimationFrame(() => drawThumb(b.querySelector('canvas'), L));
+    requestAnimationFrame(() => drawThumb(b.querySelector('canvas'), L, save.designs[L.id]));
   });
   $('#levels-sum').textContent = `${total} / ${LEVELS.length * 3} stars`;
 }
-function drawThumb(canvas, L) {
+function drawThumb(canvas, L, D) {
   const r = canvas.getBoundingClientRect();
   const w = Math.max(10, r.width), h = Math.max(10, r.height), d = Math.min(2, window.devicePixelRatio || 1);
   canvas.width = Math.round(w * d); canvas.height = Math.round(h * d);
@@ -1128,7 +1130,6 @@ function drawThumb(canvas, L) {
     for (let k = -h; k < w; k += 5) { c.beginPath(); c.moveTo(k, h); c.lineTo(k + h, 0); c.stroke(); }
     c.restore(); path(c, p.pts, v); c.strokeStyle = 'rgba(234,243,255,.7)'; c.lineWidth = 1; c.stroke();
   }
-  const D = save.designs[L.id];
   if (D) {
     const nodes = L.anchors.concat(D.nodes);
     for (const m of D.members) {
@@ -1155,6 +1156,7 @@ function openLevel(L) {
   $('#hud-place').textContent = L.place;
   $('#hud-veh').textContent = `${V.name} ${(V.mass / 1000).toFixed(1)} t`;
   $('#hud-budget').textContent = ugxShort(L.budget);
+  updateSolveButton();
   requestAnimationFrame(() => { rebuild(); updateCost(); });
   rebuild(); updateCost();
   if (!save.seenHelp) { save.seenHelp = true; persist(); setTimeout(() => showHelp(true), 350); }
@@ -1350,6 +1352,7 @@ cv.addEventListener('pointercancel', endDrag);
 window.addEventListener('keydown', e => {
   if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
   if (!$('#help').hidden) { if (e.key === 'Escape' || e.key === 'Enter') { $('#help').hidden = true; e.preventDefault(); } return; }
+  if (!$('#solutions').hidden) { if (e.key === 'Escape') { $('#solutions').hidden = true; e.preventDefault(); } return; }
   const k = e.key.toLowerCase(), mod = e.ctrlKey || e.metaKey;
   if (S.screen === 'build') {
     if (mod && k === 'z' && !e.shiftKey) { undo(); e.preventDefault(); return; }
@@ -1480,6 +1483,8 @@ function showResult() {
   const idx = LEVELS.indexOf(L);
   const next = LEVELS[idx + 1];
   const nb = $('#res-next');
+  $('#res-solve').hidden = stars > 0 || !SOLUTIONS[L.id];
+  if (stars === 0) { save.fails[L.id] = (save.fails[L.id] || 0) + 1; persist(); updateSolveButton(); }
   if (stars > 0) {
     const prev = save.progress[L.id];
     if (!prev || stars > prev.stars || (stars === prev.stars && cost < prev.cost)) { save.progress[L.id] = { stars, cost }; persist(); }
@@ -1493,6 +1498,51 @@ function showResult() {
   }
   $('#res-edit').onclick = () => { $('#result').hidden = true; stopTest(); };
   $('#result').hidden = false;
+}
+
+// ---------------------------------------------------------------- solutions
+function updateSolveButton() {
+  const L = S.level; if (!L || !L.code || !SOLUTIONS[L.id]) { $('#btn-solve').hidden = true; return; }
+  $('#btn-solve').hidden = !((save.fails[L.id] || 0) > 0 || save.progress[L.id]);
+}
+// The one place a reveal is unlocked. It runs the callback straight away today.
+// A rewarded-ad SDK (e.g. a game portal's "rewarded break") would be called here
+// and run cb() only when the viewer finishes the ad.
+function revealGate(cb) { cb(); }
+
+function starsFor(L, c) { return c <= L.budget * .7 ? 3 : c <= L.budget * .85 ? 2 : c <= L.budget ? 1 : 0; }
+function showSolutions() {
+  const L = S.level, list = SOLUTIONS[L.id] || [];
+  $('#result').hidden = true;
+  $('#sol-eyebrow').textContent = `${L.code} · ${L.name} · Engineer's solutions`;
+  const grid = $('#sol-grid'); grid.innerHTML = '';
+  list.forEach(sol => {
+    const st = starsFor(L, sol.cost);
+    const mats = [...new Set(sol.members.map(m => m[2]))].map(k => MATERIALS[k].short.toLowerCase()).join(', ');
+    const desc = list.length === 1 ? `The best design the search found: cheap and still comfortable, peaking at ${Math.round(sol.peak * 100)}%.`
+      : sol.name === 'Sturdy' ? `The safer choice: its busiest member peaks at ${Math.round(sol.peak * 100)}% of capacity, so it forgives your tweaks.`
+      : `The cheapest bridge the search found that still holds. Its busiest member peaks at ${Math.round(sol.peak * 100)}%.`;
+    const card = document.createElement('div');
+    card.className = 'sol-card';
+    card.innerHTML = `<canvas></canvas><div class="sol-body">
+      <div class="sol-name"><b>${list.length === 1 ? 'Best found' : sol.name}</b><span aria-label="${st} stars">${'★'.repeat(st)}${'☆'.repeat(3 - st)}</span></div>
+      <p class="sol-desc">${desc}</p>
+      <div class="sol-facts"><span>${ugx(sol.cost)}</span><span>${sol.members.length} members</span><span>${mats}</span></div>
+      <button class="btn btn-ink">Load into drawing</button></div>`;
+    card.querySelector('button').addEventListener('click', () => revealGate(() => loadSolution(sol)));
+    grid.appendChild(card);
+    requestAnimationFrame(() => drawThumb(card.querySelector('canvas'), L, sol));
+  });
+  $('#solutions').hidden = false;
+  const first = grid.querySelector('button'); if (first) first.focus();
+}
+function loadSolution(sol) {
+  $('#solutions').hidden = true;
+  if (S.screen === 'live') { S.trans = null; S.sim = null; setScreen('build'); }
+  snapshot();
+  S.design = { nodes: sol.nodes.map(n => n.slice()), members: sol.members.map(m => m.slice()) };
+  S.lastAdded = null; changed(); Snd.place('steel');
+  toast(`${sol.name} design loaded. Press Space to test it. Ctrl+Z brings yours back.`, 4200);
 }
 
 // ---------------------------------------------------------------- navigation
@@ -1514,6 +1564,10 @@ $('#btn-clear').addEventListener('click', clearDesign);
 $('#tool-erase').addEventListener('click', () => selectTool('erase'));
 $('#btn-mute').addEventListener('click', toggleMute);
 $('#btn-help').addEventListener('click', () => showHelp());
+$('#btn-solve').addEventListener('click', showSolutions);
+$('#res-solve').addEventListener('click', showSolutions);
+$('#sol-close').addEventListener('click', () => { $('#solutions').hidden = true; });
+$('#solutions').addEventListener('click', e => { if (e.target.id === 'solutions') $('#solutions').hidden = true; });
 $('#help-close').addEventListener('click', () => { $('#help').hidden = true; });
 $('#help').addEventListener('click', e => { if (e.target.id === 'help') $('#help').hidden = true; });
 $('#btn-mute').classList.toggle('off', !!save.muted);
@@ -1563,5 +1617,5 @@ if (document.fonts && document.fonts.ready) Promise.race([document.fonts.ready, 
 else boot();
 
 // hook for automated checks
-window.__daraja = { S, openLevel: i => openLevel(LEVELS[i - 1]), setDesign(d) { S.design = d; changed(); }, startTest, goLevels, LEVELS };
+window.__daraja = { S, showSolutions, openLevel: i => openLevel(LEVELS[i - 1]), setDesign(d) { S.design = d; changed(); }, startTest, goLevels, LEVELS };
 })();
