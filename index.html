@@ -103,7 +103,8 @@ button:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
 .eyebrow { margin: 0 0 4px; font: 500 12px/1.3 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-dim); }
 #levels h2 { margin: 0; font: 700 clamp(40px, 6vw, 64px)/.95 var(--f-display); text-transform: uppercase; letter-spacing: .01em; text-wrap: balance; }
 .levels-sum { margin: 0; font: 500 13px/1.4 var(--f-mono); color: var(--ink-dim); }
-.level-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; max-width: 1180px; margin: 0 auto; }
+.level-grid { max-width: 1180px; margin: 0 auto; }
+.level-grid-inner { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
 .lvl {
   position: relative; text-align: left; cursor: pointer; padding: 0; border: 0;
   background: rgba(8, 26, 52, .7); box-shadow: inset 0 0 0 1px rgba(160, 205, 255, .3);
@@ -215,7 +216,7 @@ button:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
 /* live mode: warm glass instead of blueprint panels */
 body.live .panel { background: rgba(28, 16, 38, .62); box-shadow: inset 0 0 0 1px rgba(255, 200, 150, .22); }
 body.live .tb-cell, body.live .hud-left .icon-btn { border-color: rgba(255, 200, 150, .18); }
-body.live .hud-mode { color: #ffd9b0; border-color: rgba(255, 200, 150, .4); border-style: solid; }
+body.live .hud-mode { color: #ffd9b0; border-color: rgba(255, 200, 150, .4); border-style: solid; background: rgba(28, 16, 38, .62); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
 body.live .hud-mode::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--ember); margin-right: 8px; vertical-align: 1px; animation: blink 1.2s infinite; }
 body.live .live-stats { display: flex; }
 body.live .budget { display: none; }
@@ -283,6 +284,54 @@ kbd { font: 600 11px/1 var(--f-mono); padding: 3px 5px; border-radius: 3px; back
 .sol-facts { display: flex; flex-wrap: wrap; gap: 4px 12px; font: 500 12px/1.5 var(--f-mono); color: rgba(29, 36, 51, .8); }
 .sol-card .btn { margin-top: auto; align-self: flex-start; padding: 10px 16px; font-size: 15px; }
 
+.levels-tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.levels-tools .levels-sum { margin-right: 6px; }
+.chapter-head { max-width: 1180px; margin: 30px auto 12px; display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; border-bottom: 1px solid rgba(160, 205, 255, .3); padding-bottom: 8px; }
+.chapter-head:first-of-type { margin-top: 0; }
+.chapter-head h3 { margin: 0; font: 700 28px/1 var(--f-display); text-transform: uppercase; letter-spacing: .03em; }
+.chapter-head p { margin: 0; font: 500 14px/1.3 var(--f-body); color: var(--ink-dim); }
+.chapter-head .num { font: 600 12px/1 var(--f-mono); color: var(--amber); letter-spacing: .12em; }
+.lvl-new { position: absolute; top: 14px; left: 12px; font: 700 11px/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; padding: 4px 6px; background: var(--amber); color: #231703; border-radius: 2px; }
+.tool-hint .tool-name::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--amber); margin-right: 6px; vertical-align: 1px; box-shadow: 0 0 8px var(--amber); }
+.pulse { animation: pulse 1.4s ease-in-out infinite; }
+@keyframes pulse { 50% { box-shadow: 0 0 0 6px rgba(255, 198, 92, .35), 0 0 30px rgba(255, 198, 92, .6); } }
+.res-notes { margin: 0 0 14px; padding: 10px 12px 4px; background: rgba(255, 198, 92, .16); border-left: 3px solid #e09a1a; }
+.res-notes ul { margin: 4px 0 6px; padding-left: 18px; font: 500 15px/1.4 var(--f-body); }
+.res-notes li { margin-bottom: 6px; }
+.res-share { display: flex; gap: 16px; flex-wrap: wrap; margin: -6px 0 14px; }
+.linkish { border: 0; background: none; padding: 0; cursor: pointer; font: 600 14px/1.4 var(--f-body); color: var(--sheet-ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(29, 36, 51, .35); }
+.linkish:hover { text-decoration-color: var(--sheet-ink); }
+.sheet-hint { width: min(520px, 100%); }
+.hint-steps { list-style: none; counter-reset: h; margin: 6px 0 16px; padding: 0; }
+.hint-steps li { counter-increment: h; position: relative; padding: 10px 0 12px 40px; border-top: 1px solid rgba(29, 36, 51, .18); }
+.hint-steps li::before { content: counter(h); position: absolute; left: 0; top: 10px; width: 26px; height: 26px; border-radius: 50%; background: var(--sheet-ink); color: var(--sheet); font: 700 14px/26px var(--f-mono); text-align: center; }
+.hint-steps b { font: 700 18px/1.2 var(--f-body); }
+.hint-steps p { margin: 4px 0 8px; font: 500 15px/1.4 var(--f-body); color: rgba(29, 36, 51, .8); }
+.sheet-wide { width: min(820px, 100%); }
+.notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin: 10px 0 18px; }
+.note { border: 1.5px solid var(--sheet-ink); border-radius: 3px; background: rgba(255, 255, 255, .5); display: flex; flex-direction: column; min-width: 0; }
+.note svg { display: block; width: 100%; height: auto; background: #0c2748; border-bottom: 1.5px solid var(--sheet-ink); }
+.note div { padding: 10px 12px 12px; }
+.note h4 { margin: 0 0 4px; font: 900 22px/1 var(--f-display); text-transform: uppercase; letter-spacing: .02em; }
+.note p { margin: 0; font: 500 14px/1.45 var(--f-body); color: rgba(29, 36, 51, .85); }
+.note.locked { opacity: .5; border-style: dashed; }
+.note.locked svg { filter: grayscale(1) brightness(.6); }
+.badge-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin: 10px 0 18px; }
+.badge { display: flex; gap: 10px; align-items: center; padding: 10px; border: 1.5px solid var(--sheet-ink); border-radius: 3px; background: rgba(255, 255, 255, .5); }
+.badge i { flex: none; width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; font: 900 18px/1 var(--f-display); font-style: normal; background: #e09a1a; color: #fff8e6; box-shadow: inset 0 0 0 3px rgba(255, 255, 255, .5), 0 2px 0 rgba(0, 0, 0, .2); }
+.badge b { display: block; font: 700 15px/1.2 var(--f-body); }
+.badge span { display: block; font: 500 13px/1.3 var(--f-body); color: rgba(29, 36, 51, .7); }
+.badge.locked { opacity: .45; border-style: dashed; }
+.badge.locked i { background: rgba(29, 36, 51, .3); }
+.sheet-sandbox { width: min(480px, 100%); }
+.sb-form { display: grid; grid-template-columns: 1fr; gap: 4px; margin: 6px 0 18px; }
+.sb-form label { display: flex; justify-content: space-between; font: 600 14px/1.3 var(--f-body); margin-top: 8px; }
+.sb-form output { font: 600 13px/1.3 var(--f-mono); }
+.sb-form input[type=range] { width: 100%; accent-color: var(--sheet-ink); }
+.sb-form select { font: 500 15px/1.3 var(--f-body); padding: 7px 8px; border: 1.5px solid var(--sheet-ink); border-radius: 3px; background: #fffdf7; color: var(--sheet-ink); color-scheme: light; }
+.sb-check { justify-content: flex-start !important; gap: 8px; align-items: center; }
+.confetti-flash { position: fixed; inset: 0; pointer-events: none; z-index: 9; background: radial-gradient(circle at 50% 40%, rgba(255, 220, 120, .35), transparent 60%); animation: fade .6s ease reverse both; }
+
 #toast {
   position: fixed; left: 50%; top: 84px; transform: translate(-50%, -8px); z-index: 20; opacity: 0; pointer-events: none;
   padding: 9px 14px; border-radius: 3px; background: var(--sheet); color: var(--sheet-ink);
@@ -299,6 +348,21 @@ kbd { font: 600 11px/1 var(--f-mono); padding: 3px 5px; border-radius: 3px; back
   .tool { min-width: 78px; }
   .legend { display: none; }
 }
+@media (max-width: 1100px), (max-height: 520px) {
+  .tool .k { display: none; }
+  .tool { min-width: 0; padding: 6px 10px; }
+  .tool .sw { width: 44px; }
+  .tool .hot { display: none; }
+  #tools-build .btn-go { position: sticky; right: 0; min-width: 84px; box-shadow: -12px 0 14px rgba(8, 28, 56, .85); }
+  .btn-go { font-size: 20px; padding: 6px 14px; }
+}
+@media (max-height: 520px) {
+  #hud { padding-top: calc(6px + env(safe-area-inset-top, 0px)); }
+  .tb-cell { padding: 3px 10px; }
+  .tb-name span:last-child { font-size: 17px; }
+  #toolbar { bottom: calc(6px + env(safe-area-inset-bottom, 0px)); padding: 4px; }
+}
+.live-stats .num { white-space: nowrap; }
 @media (max-width: 560px) {
   .tb-code { display: none; }
   .budget-of { display: none; }
@@ -323,11 +387,12 @@ kbd { font: 600 11px/1 var(--f-mono); padding: 3px 5px; border-radius: 3px; back
     <h1 id="title-word">Daraja</h1>
     <p class="tagline">Draw a bridge on the blueprint. Then watch a real vehicle cross it at dusk, or fall into the river.</p>
     <div class="title-actions">
+      <button id="btn-continue" class="btn btn-primary" hidden>Continue</button>
       <button id="btn-start" class="btn btn-primary">Start building</button>
       <button id="btn-help-title" class="btn btn-ghost">How to play</button>
     </div>
   </div>
-  <p class="title-foot">8 crossings · Kampala to the Source of the Nile · Sound on for the full effect</p>
+  <p class="title-foot">14 crossings · from a Kampala ditch to the Source of the Nile · sandbox · sound on for the full effect</p>
 </section>
 
 <!-- Level register -->
@@ -338,7 +403,12 @@ kbd { font: 600 11px/1 var(--f-mono); padding: 3px 5px; border-radius: 3px; back
       <p class="eyebrow">Daraja Bridge Works · Drawing register</p>
       <h2 id="levels-h">Choose a crossing</h2>
     </div>
-    <p class="levels-sum" id="levels-sum"></p>
+    <div class="levels-tools">
+      <p class="levels-sum" id="levels-sum"></p>
+      <button class="btn btn-ghost btn-small" id="btn-notes">Field notes <span id="notes-count"></span></button>
+      <button class="btn btn-ghost btn-small" id="btn-badges">Badges <span id="badges-count"></span></button>
+      <button class="btn btn-primary btn-small" id="btn-sandbox">Sandbox</button>
+    </div>
   </header>
   <div id="level-grid" class="level-grid"></div>
 </section>
@@ -373,11 +443,15 @@ kbd { font: 600 11px/1 var(--f-mono); padding: 3px 5px; border-radius: 3px; back
   <div class="tb-group" id="tools-build">
     <div class="tools-mat" id="tools-mat"></div>
     <span class="sep"></span>
+    <button class="tool tool-sm" id="tool-move" data-tool="move" aria-pressed="false"><span class="tool-name">Move</span><span class="k">G · joints</span></button>
     <button class="tool tool-sm" id="tool-erase" data-tool="erase" aria-pressed="false"><span class="tool-name">Erase</span><span class="k">E · right-click</span></button>
+    <button class="tool tool-sm" id="btn-mirror" aria-pressed="false"><span class="tool-name">Mirror</span><span class="k">X · draw both sides</span></button>
+    <span class="sep"></span>
     <button class="tool tool-sm" id="btn-undo"><span class="tool-name">Undo</span><span class="k">Ctrl Z</span></button>
     <button class="tool tool-sm" id="btn-redo"><span class="tool-name">Redo</span><span class="k">Ctrl Y</span></button>
     <button class="tool tool-sm" id="btn-clear"><span class="tool-name">Clear</span><span class="k">all</span></button>
-    <button class="tool tool-sm" id="btn-solve" hidden><span class="tool-name">Solutions</span><span class="k">stuck? look here</span></button>
+    <span class="sep"></span>
+    <button class="tool tool-sm tool-hint" id="btn-hint"><span class="tool-name">Hint</span><span class="k">H · tip, sketch, solution</span></button>
     <span class="sep"></span>
     <button class="btn btn-go" id="btn-test"><span>Test</span><small>Space</small></button>
   </div>
@@ -400,7 +474,12 @@ kbd { font: 600 11px/1 var(--f-mono); padding: 3px 5px; border-radius: 3px; back
     <h3 id="res-title">Crossed.</h3>
     <p class="res-line" id="res-line"></p>
     <div class="res-row"><div class="stars" id="res-stars" aria-label="Stars"></div><div class="stamp" id="res-stamp">Approved</div></div>
+    <div class="res-notes" id="res-notes" hidden><p class="eyebrow">Site engineer's notes</p><ul id="res-notes-list"></ul></div>
     <dl class="res-stats" id="res-stats"></dl>
+    <div class="res-share" id="res-share">
+      <button class="linkish" id="res-postcard">Save a postcard</button>
+      <button class="linkish" id="res-link">Copy a challenge link</button>
+    </div>
     <div class="res-actions">
       <button class="btn btn-ink-ghost" id="res-solve" hidden>See solutions</button>
       <button class="btn btn-ink-ghost" id="res-edit">Refine design</button>
@@ -420,6 +499,74 @@ kbd { font: 600 11px/1 var(--f-mono); padding: 3px 5px; border-radius: 3px; back
   </div>
 </section>
 
+<!-- Hints -->
+<section id="hint" class="overlay-card" hidden role="dialog" aria-modal="true" aria-labelledby="hint-h">
+  <div class="sheet sheet-hint">
+    <p class="eyebrow" id="hint-eyebrow">AP-01 · Hints</p>
+    <h3 id="hint-h">Need a hand?</h3>
+    <ol class="hint-steps">
+      <li><b>Tip</b><p id="hint-tip"></p></li>
+      <li><b>Engineer's sketch</b><p>Faint lines of a working bridge appear on your drawing. Trace over them in your own materials.</p><button class="btn btn-ink-ghost btn-small" id="hint-sketch">Show the sketch</button></li>
+      <li><b>Full solution</b><p>Load a finished design and see how it was done.</p><button class="btn btn-ink-ghost btn-small" id="hint-solve">See solutions</button></li>
+    </ol>
+    <div class="res-actions"><button class="btn btn-ink" id="hint-close">Back to the drawing</button></div>
+  </div>
+</section>
+
+<!-- Field notes -->
+<section id="notes" class="overlay-card" hidden role="dialog" aria-modal="true" aria-labelledby="notes-h">
+  <div class="sheet sheet-wide">
+    <p class="eyebrow">Daraja Bridge Works · Engineering handbook</p>
+    <h3 id="notes-h">Field notes</h3>
+    <div class="notes-grid" id="notes-grid"></div>
+    <div class="res-actions"><button class="btn btn-ink" id="notes-close">Close</button></div>
+  </div>
+</section>
+
+<!-- Badges -->
+<section id="badges" class="overlay-card" hidden role="dialog" aria-modal="true" aria-labelledby="badges-h">
+  <div class="sheet sheet-wide">
+    <p class="eyebrow">Daraja Bridge Works · Commendations</p>
+    <h3 id="badges-h">Badges</h3>
+    <div class="badge-grid" id="badge-grid"></div>
+    <div class="res-actions"><button class="btn btn-ink" id="badges-close">Close</button></div>
+  </div>
+</section>
+
+<!-- Sandbox -->
+<section id="sandbox" class="overlay-card" hidden role="dialog" aria-modal="true" aria-labelledby="sandbox-h">
+  <div class="sheet sheet-sandbox">
+    <p class="eyebrow">Daraja Bridge Works · Your own site</p>
+    <h3 id="sandbox-h">Sandbox</h3>
+    <p class="res-line">No budget, no rules. Set up any gorge and build whatever you like.</p>
+    <form id="sb-form" class="sb-form">
+      <label for="sb-gap">Span <output id="sb-gap-out">20 m</output></label>
+      <input type="range" id="sb-gap" min="6" max="60" step="1" value="20">
+      <label for="sb-hr">Far bank height <output id="sb-hr-out">0 m</output></label>
+      <input type="range" id="sb-hr" min="-3" max="4" step="0.5" value="0">
+      <label for="sb-piers">River piers <output id="sb-piers-out">0</output></label>
+      <input type="range" id="sb-piers" min="0" max="3" step="1" value="0">
+      <label for="sb-towers" class="sb-check"><input type="checkbox" id="sb-towers"> Rock towers for cables</label>
+      <label for="sb-vehicle">Vehicle</label>
+      <select id="sb-vehicle">
+        <option value="boda">Boda boda · 0.26 t</option>
+        <option value="car">Saloon car · 1.2 t</option>
+        <option value="van">Delivery van · 2.4 t</option>
+        <option value="matatu" selected>Matatu · 3.2 t</option>
+        <option value="truck">Murram tipper · 6 t</option>
+      </select>
+      <label for="sb-mood">Time of day</label>
+      <select id="sb-mood">
+        <option value="dawn">Dawn</option>
+        <option value="noon">Noon</option>
+        <option value="dusk" selected>Dusk</option>
+        <option value="night">Night</option>
+      </select>
+    </form>
+    <div class="res-actions"><button class="btn btn-ink-ghost" id="sb-close">Cancel</button><button class="btn btn-ink" id="sb-go">Start building</button></div>
+  </div>
+</section>
+
 <!-- Help -->
 <section id="help" class="overlay-card" hidden role="dialog" aria-modal="true" aria-labelledby="help-h">
   <div class="sheet sheet-help">
@@ -434,8 +581,8 @@ kbd { font: 600 11px/1 var(--f-mono); padding: 3px 5px; border-radius: 3px; back
     <div class="help-mats" id="help-mats"></div>
     <p class="help-note">Engineering truths in the game: long members in compression buckle (capacity falls with 1/L²). Cables only pull. Forces view shows tension in red and compression in blue.</p>
     <div class="help-keys">
-      <span><kbd>1</kbd>–<kbd>4</kbd> material</span><span><kbd>E</kbd> erase</span><span><kbd>Ctrl</kbd>+<kbd>Z</kbd> undo</span>
-      <span><kbd>Space</kbd> test / edit</span><span><kbd>S</kbd> slow-mo</span><span><kbd>F</kbd> forces</span><span><kbd>M</kbd> sound</span>
+      <span><kbd>1</kbd>–<kbd>4</kbd> material</span><span><kbd>G</kbd> move joints</span><span><kbd>E</kbd> erase</span><span><kbd>X</kbd> mirror</span><span><kbd>Ctrl</kbd>+<kbd>Z</kbd> undo</span>
+      <span><kbd>H</kbd> hint</span><span><kbd>Space</kbd> test / edit</span><span><kbd>S</kbd> slow-mo</span><span><kbd>F</kbd> forces</span><span><kbd>M</kbd> sound</span><span><kbd>?</kbd> this page</span>
     </div>
     <div class="res-actions"><button class="btn btn-ink" id="help-close">Got it</button></div>
   </div>
@@ -468,6 +615,7 @@ const VEHICLES = {
   car:    { key: 'car',    name: 'Saloon car',        mass: 1200, wheels: [0, 2.5],        r: 0.34, speed: 5.5, height: 1.25, rear: 0.8, front: 0.8, accel: 5.0 },
   van:    { key: 'van',    name: 'Delivery van',      mass: 2400, wheels: [0, 3.0],        r: 0.38, speed: 5.0, height: 2.0,  rear: 0.7, front: 0.8, accel: 4.5 },
   matatu: { key: 'matatu', name: 'Matatu',            mass: 3200, wheels: [0, 2.9],        r: 0.37, speed: 5.5, height: 2.0,  rear: 0.9, front: 0.7, accel: 4.5 },
+  boda:   { key: 'boda',   name: 'Boda boda',         mass: 260,  wheels: [0, 1.35],       r: 0.3,  speed: 5.0, height: 1.55, rear: 0.45, front: 0.35, accel: 4.5 },
   truck:  { key: 'truck',  name: 'Murram tipper',     mass: 6000, wheels: [0, 1.3, 4.6],   r: 0.5,  speed: 4.0, height: 2.6,  rear: 0.9, front: 1.2, accel: 3.5 },
 };
 
@@ -580,7 +728,7 @@ function createSim(level, design, opts = {}) {
   return {
     level, P, members, nA, terrain,
     veh: { def: V, wheels, body, rigid, contact: wheels.map(() => false), roll: wheels.map(() => 0), startX },
-    t: 0, state: 'running', result: null, stuckT: 0, events: [],
+    t: 0, state: 'running', result: null, stuckT: 0, events: [], firstBreak: null, breaks: 0,
     substeps: opts.substeps || 40, finishX: level.gap + (level.finishPad || 5),
     maxX: startX,
   };
@@ -801,6 +949,8 @@ function breakMember(sim, m, mode, ev) {
   mk(m.a, a); mk(m.b, b);
   const s1 = sim.members[sim.members.length - 2], s2 = sim.members[sim.members.length - 1];
   sim.veh.rigid.push({ a: s1.a, b: s1.b, L0: s1.L0 }, { a: s2.a, b: s2.b, L0: s2.L0 });
+  sim.breaks++;
+  if (!sim.firstBreak) sim.firstBreak = { id: m.id, mat: m.mat, mode, L: m.L0, force: m.ff, cap: mode === 'tension' ? m.capT : m.capC, t: sim.t, x: mx, y: my };
   ev.push({ type: 'break', id: m.id, mat: m.mat, mode, x: mx, y: my, vx: (a.vx + b.vx) / 2, vy: (a.vy + b.vy) / 2 });
 }
 
@@ -818,33 +968,118 @@ function designCost(level, design) {
 </script>
 <script>
 /*LEVELS-START*/
-// Eight crossings, each named for a real Ugandan river, falls or gorge.
+// Chapter 1 (Apprentice) teaches one idea per crossing. Chapter 2 is named for
+// real Ugandan rivers, falls and gorges.
 // Anchors: [x, y] in metres. The first two are always the road-level bank edges.
+// mood: the time of day in the live test. tip: the first hint.
+// guide: ghost members drawn for the very first levels.
+// unlocks: the field note that completing the level unlocks.
+const CHAPTERS = [
+  { id: 1, name: 'Apprentice', blurb: 'Six small crossings. One new idea each.' },
+  { id: 2, name: 'The Nile and beyond', blurb: 'Real rivers, heavier traffic, tighter budgets.' },
+];
+
 const LEVELS = [
   {
-    id: 1, code: 'DJ-01', name: 'Nakivubo Channel', place: 'Kampala',
-    gap: 10, hR: 0, waterY: -8, seed: 11, vehicle: 'car', budget: 6500,
+    id: 101, chapter: 1, code: 'AP-01', name: 'The Ditch', place: 'Kawempe',
+    gap: 2, hR: 0, waterY: -2.6, seed: 5, vehicle: 'boda', budget: 1000, mood: 'noon',
+    materials: ['road'],
+    anchors: [[0, 0], [2, 0]],
+    guide: [[0, 0, 2, 0]],
+    notes: [
+      'Press on the left amber pin, drag to the right one, let go.',
+      'Then press Test.',
+    ],
+    tip: 'Press and hold on the amber pin on the left bank, drag to the pin on the right bank, and let go. That line is a road plank. Then press Test.',
+    unlocks: 'forces',
+  },
+  {
+    id: 102, chapter: 1, code: 'AP-02', name: 'Two Planks', place: 'Nakawa',
+    gap: 4, hR: 0, waterY: -3.5, seed: 8, vehicle: 'boda', budget: 1500, mood: 'noon',
+    materials: ['road'],
+    anchors: [[0, 0], [4, 0]],
+    guide: [[0, 0, 2, 0], [2, 0, 4, 0]],
+    notes: [
+      'A plank is at most 2.5 m long.',
+      'Stop in the middle to make a joint, then carry on from it.',
+    ],
+    tip: 'Planks max out at 2.5 m, so this gap needs two. Drag from the left pin to the middle and let go: that makes a joint. Then drag from the new joint to the right pin.',
+    unlocks: 'sag',
+  },
+  {
+    id: 103, chapter: 1, code: 'AP-03', name: 'Prop It Up', place: 'Lugazi',
+    gap: 6, hR: 0, waterY: -5, seed: 12, vehicle: 'van', budget: 3200, mood: 'dawn',
+    materials: ['road', 'wood'],
+    anchors: [[0, 0], [6, 0], [0, -2], [6, -2]],
+    notes: [
+      'A 2.4 t van. A bare deck will snap.',
+      'Use the lower anchors on the cliffs. Props turn a sag into a push.',
+    ],
+    tip: 'Lay the deck in three planks. Then draw timber props from the two lower anchors on the cliffs up to the deck joints, like legs. The load now flows down the props into the rock.',
+    unlocks: 'loadpath',
+  },
+  {
+    id: 104, chapter: 1, code: 'AP-04', name: 'The Triangle', place: 'Mpigi',
+    gap: 8, hR: 0, waterY: -6, seed: 17, vehicle: 'car', budget: 4500, mood: 'noon',
+    materials: ['road', 'wood'],
+    anchors: [[0, 0], [8, 0]],
+    notes: [
+      'No lower anchors here. The bridge must hold itself up.',
+      'Squares fold flat. Triangles cannot change shape.',
+    ],
+    tip: 'Push on a square and it folds into a diamond. A triangle can\'t change shape without stretching a side. Build a row of triangles along the deck: a joint 1.5 m above (or below) the middle of each plank, joined to both of its ends and to its neighbours.',
+    unlocks: 'triangle',
+  },
+  {
+    id: 105, chapter: 1, code: 'AP-05', name: 'Heavy Metal', place: 'Jinja Road',
+    gap: 10, hR: 0, waterY: -6, seed: 21, vehicle: 'truck', budget: 10000, mood: 'dawn',
+    materials: ['road', 'wood', 'steel'],
+    anchors: [[0, 0], [10, 0], [0, -2.5], [10, -2.5]],
+    notes: [
+      'The 6 t tipper is here. Timber alone will buckle.',
+      'Steel is strong and costly. Test, then press F to see where forces peak.',
+    ],
+    tip: 'Build triangles under the deck. Test with Forces view (F): the brightest members work hardest. Make those steel and keep timber where the colour is faint. Diagonals near the banks usually matter most.',
+    unlocks: 'buckling',
+  },
+  {
+    id: 106, chapter: 1, code: 'AP-06', name: 'Hanging On', place: 'Busia',
+    gap: 12, hR: 0, waterY: -6, seed: 29, vehicle: 'car', budget: 9000, mood: 'dusk',
+    materials: ['road', 'cable'],
+    anchors: [[0, 0], [12, 0], [-2, 6], [14, 6]],
+    spires: [{ x: -2, y: 6, w: 2.2 }, { x: 14, y: 6, w: 2.2 }],
+    notes: [
+      'Only road and cable here.',
+      'Cables pull but never push. Hang the deck from the rock towers.',
+    ],
+    tip: 'Lay the deck in 2 m planks. Then draw cables from each tower top down to deck joints on its side of the river. Two or three cables per tower are enough.',
+    unlocks: 'cables',
+  },
+  {
+    id: 1, chapter: 2, code: 'DJ-01', name: 'Nakivubo Channel', place: 'Kampala',
+    gap: 10, hR: 0, waterY: -8, seed: 11, vehicle: 'car', budget: 6500, mood: 'dusk',
     materials: ['road', 'wood'],
     anchors: [[0, 0], [10, 0], [0, -2.5], [10, -2.5]],
     notes: [
       'Lay a road deck from bank to bank.',
       'A deck alone sags and snaps. Brace it with timber triangles.',
-      'Drag from any joint or anchor to add a member.',
     ],
+    tip: 'A row of triangles under the deck carries a car comfortably. Keep the diagonals short.',
   },
   {
-    id: 2, code: 'DJ-02', name: 'Mayanja Crossing', place: 'Wakiso',
-    gap: 14, hR: 0, waterY: -9, seed: 23, vehicle: 'van', budget: 10000,
+    id: 2, chapter: 2, code: 'DJ-02', name: 'Mayanja Crossing', place: 'Wakiso',
+    gap: 14, hR: 0, waterY: -9, seed: 23, vehicle: 'van', budget: 10000, mood: 'noon',
     materials: ['road', 'wood'],
     anchors: [[0, 0], [14, 0], [0, -3], [14, -3]],
     notes: [
       'Longer span, heavier van: 2.4 t.',
       'Long timber in compression buckles. Keep struts short.',
     ],
+    tip: 'Fourteen metres is long for one row of triangles. Make them deeper (2 m) and short-sided. Members next to the banks carry the most.',
   },
   {
-    id: 3, code: 'DJ-03', name: 'Ssezibwa Falls', place: 'Mukono',
-    gap: 20, hR: 0, waterY: -10, seed: 5, vehicle: 'matatu', budget: 16500,
+    id: 3, chapter: 2, code: 'DJ-03', name: 'Ssezibwa Falls', place: 'Mukono',
+    gap: 20, hR: 0, waterY: -10, seed: 5, vehicle: 'matatu', budget: 16500, mood: 'dawn',
     materials: ['road', 'wood', 'steel'],
     anchors: [[0, 0], [20, 0], [0, -3], [20, -3], [10, -3.5]],
     pillars: [{ x: 10, y: -3.5 }],
@@ -852,43 +1087,49 @@ const LEVELS = [
       'A rock outcrop mid-river gives you a third support.',
       'Steel unlocked: strong but costly. Spend it where forces peak.',
     ],
+    tip: 'Treat it as two 10 m bridges. Put a deck joint right above the rock and run a strut down to its anchor.',
+    unlocks: 'spans',
   },
   {
-    id: 4, code: 'DJ-04', name: 'Sipi Gorge', place: 'Kapchorwa',
-    gap: 16, hR: 2, waterY: -10, seed: 41, vehicle: 'van', budget: 12000,
+    id: 4, chapter: 2, code: 'DJ-04', name: 'Sipi Gorge', place: 'Kapchorwa',
+    gap: 16, hR: 2, waterY: -10, seed: 41, vehicle: 'van', budget: 12000, mood: 'noon',
     materials: ['road', 'wood', 'steel'],
     anchors: [[0, 0], [16, 2], [0, -3], [16, -1]],
     notes: [
       'The far bank sits 2 m higher. Build a ramp.',
       'Joints stay where you draw them, so a sloping deck needs no special trick.',
     ],
+    tip: 'Lay the deck as one straight slope from the low bank to the high one. Triangles work at any angle. Tie the bottom chord to both lower anchors.',
   },
   {
-    id: 5, code: 'DJ-05', name: 'Kalagala Rapids', place: 'Kayunga',
-    gap: 22, hR: 0, waterY: -9, seed: 77, vehicle: 'matatu', budget: 20000,
+    id: 5, chapter: 2, code: 'DJ-05', name: 'Kalagala Rapids', place: 'Kayunga',
+    gap: 22, hR: 0, waterY: -9, seed: 77, vehicle: 'matatu', budget: 20000, mood: 'dusk',
     materials: ['road', 'wood', 'steel', 'cable'],
     anchors: [[0, 0], [22, 0], [-2.6, 8], [24.6, 8]],
     spires: [{ x: -2.6, y: 8, w: 2.6 }, { x: 24.6, y: 8, w: 2.6 }],
     notes: [
       'No footing below the deck here: the rapids scour everything.',
-      'Cables unlocked. They carry tension only and go slack in compression.',
+      'Cables carry tension only and go slack in compression.',
       'Hang the deck from the rock towers.',
     ],
+    tip: 'Give the deck a shallow row of timber triangles so it stays stiff, then hang it from the towers with two cables each side.',
   },
   {
-    id: 6, code: 'DJ-06', name: 'Karuma Crossing', place: 'Kiryandongo',
-    gap: 28, hR: 0, waterY: -11, seed: 19, vehicle: 'truck', budget: 29000,
+    id: 6, chapter: 2, code: 'DJ-06', name: 'Karuma Crossing', place: 'Kiryandongo',
+    gap: 28, hR: 0, waterY: -11, seed: 19, vehicle: 'truck', budget: 29000, mood: 'night',
     materials: ['road', 'wood', 'steel', 'cable'],
     anchors: [[0, 0], [28, 0], [0, -3.5], [28, -3.5], [9.5, -4], [18.5, -4]],
     pillars: [{ x: 9.5, y: -4 }, { x: 18.5, y: -4 }],
     notes: [
-      'A 6 t tipper loaded with murram.',
+      'A 6 t tipper loaded with murram, crossing at night.',
       'Two river piers. Three short spans beat one long one.',
     ],
+    tip: 'Three short spans, one between each pair of supports. Put steel in the diagonals next to each support (that is where the shear is), and timber in the middle.',
+    unlocks: 'shear',
   },
   {
-    id: 7, code: 'DJ-07', name: 'Murchison Gorge', place: 'Nwoya',
-    gap: 30, hR: 0, waterY: -13, seed: 3, vehicle: 'truck', budget: 58000,
+    id: 7, chapter: 2, code: 'DJ-07', name: 'Murchison Gorge', place: 'Nwoya',
+    gap: 30, hR: 0, waterY: -13, seed: 3, vehicle: 'truck', budget: 58000, mood: 'dawn',
     materials: ['road', 'wood', 'steel', 'cable'],
     anchors: [[0, 0], [30, 0], [0, -4], [30, -4], [0, -7], [30, -7], [-3, 9], [33, 9]],
     spires: [{ x: -3, y: 9, w: 3 }, { x: 33, y: 9, w: 3 }],
@@ -896,10 +1137,11 @@ const LEVELS = [
       'Here the whole Nile squeezes through a 7 m slot.',
       'Thirty metres clear, nothing in between. Use every anchor.',
     ],
+    tip: 'Thirty metres with nothing below. A deep steel truss above the deck, plus cables from the towers to its top chord, shares the load.',
   },
   {
-    id: 8, code: 'DJ-08', name: 'Source of the Nile', place: 'Jinja',
-    gap: 40, hR: 0, waterY: -12, seed: 99, vehicle: 'truck', budget: 62000,
+    id: 8, chapter: 2, code: 'DJ-08', name: 'Source of the Nile', place: 'Jinja',
+    gap: 40, hR: 0, waterY: -12, seed: 99, vehicle: 'truck', budget: 62000, mood: 'dusk',
     materials: ['road', 'wood', 'steel', 'cable'],
     anchors: [[0, 0], [40, 0], [0, -4], [40, -4], [13.5, -4.5], [26.5, -4.5], [-3, 10], [43, 10]],
     pillars: [{ x: 13.5, y: -4.5 }, { x: 26.5, y: -4.5 }],
@@ -908,7 +1150,49 @@ const LEVELS = [
       'Forty metres where the Nile leaves Lake Victoria.',
       'Piers, towers, cables: the full toolkit. Build it well.',
     ],
+    tip: 'Use both piers: three spans of triangles under the deck, tied down to every anchor. Steel where forces peak, timber elsewhere.',
+    unlocks: 'jinja',
   },
+];
+
+// Short lessons unlocked by finishing levels. `fig` names an illustration.
+const FIELD_NOTES = [
+  { id: 'forces', title: 'Tension and compression',
+    text: 'Every member of a bridge is either being pulled (tension) or squashed (compression). Press F during a test to see it: red members are pulled, blue ones pushed. Designing a bridge means giving every force a path down to the ground.' },
+  { id: 'sag', title: 'Why a flat deck sags',
+    text: 'A deck joined only at its ends acts like a rope. It can only carry weight by sagging, and the flatter it stays, the harder it has to pull. Nearly flat means enormous tension, which is why long bare decks snap.' },
+  { id: 'loadpath', title: 'Load paths',
+    text: 'Weight always finds its way to the ground. A prop gives it a short, direct path, and the prop is squashed rather than stretched. Good engineers trace the load path before they draw a single member.' },
+  { id: 'triangle', title: 'The triangle',
+    text: 'A square with pinned corners folds flat under a push. A triangle can\'t change shape unless a side changes length, so it stays rigid. Chains of triangles are called trusses. The Warren truss, patented in 1848, uses a row of equal triangles like the ones you just built.' },
+  { id: 'buckling', title: 'Buckling',
+    text: 'Push the ends of a ruler together and it bows sideways long before the material crushes. Leonhard Euler worked out the rule in the 1700s: buckling strength falls with the square of the length. Double a strut\'s length and it holds a quarter as much. Keep compression members short.' },
+  { id: 'cables', title: 'Cables',
+    text: 'Steel wire is fantastically strong when pulled, and useless when pushed. In a cable-stayed bridge, straight cables run from tall towers down to the deck. The Source of the Nile Bridge at Jinja, opened in 2018, is a cable-stayed bridge.' },
+  { id: 'spans', title: 'Spans and piers',
+    text: 'The bending in a span grows with the square of its length. Split a span in two with a pier and each half carries only a quarter of the bending. That is why long river bridges stand on many piers wherever the riverbed allows it.' },
+  { id: 'shear', title: 'Shear near the supports',
+    text: 'In a truss, the chords at mid-span carry most of the bending. Near the supports the diagonals carry the shear: the whole weight trying to slide down past the support. Strengthen diagonals near supports and chords near mid-span.' },
+  { id: 'jinja', title: 'The engineer\'s job',
+    text: 'Real bridges balance strength, cost, and what can actually be built on site. The best designs do more with less: every member works hard and nothing is wasted. The Lean solutions in this game are that idea, found by a computer search. Can you beat them?' },
+];
+
+// Achievements, checked after each test.
+const BADGES = [
+  { id: 'first', name: 'Ribbon Cutter', desc: 'Complete your first crossing.' },
+  { id: 'triangle', name: 'Triangulated', desc: 'Finish The Triangle (AP-04).' },
+  { id: 'apprentice', name: 'Apprentice No More', desc: 'Finish every Apprentice crossing.' },
+  { id: 'three', name: 'Penny Pincher', desc: 'Earn three stars on any crossing.' },
+  { id: 'half', name: 'Scrooge', desc: 'Cross for less than half the budget.' },
+  { id: 'beat', name: 'Beat the Engineer', desc: 'Cross for less than the Lean solution.' },
+  { id: 'lazy', name: 'Belt and Braces', desc: 'Cross with every member below 25% stress.' },
+  { id: 'edge', name: 'Nerves of Steel', desc: 'Cross while a member hits 95% or more.' },
+  { id: 'survivor', name: 'Held Together by Hope', desc: 'Cross even though three or more members broke.' },
+  { id: 'splash', name: 'Splash Zone', desc: 'Send five vehicles into the river.' },
+  { id: 'demolition', name: 'Demolition Crew', desc: 'Break 25 members in a single test.' },
+  { id: 'nile', name: 'Master of the Nile', desc: 'Three stars on every Nile crossing.' },
+  { id: 'dreamer', name: 'Big Dreamer', desc: 'Cross a 40 m span in the sandbox.' },
+  { id: 'sharer', name: 'Show-off', desc: 'Share a bridge or save a postcard.' },
 ];
 /*LEVELS-END*/
 
@@ -1800,7 +2084,120 @@ const SOLUTIONS = {"1":[{"name":"Sturdy","cost":3816,"peak":0.571,"nodes":[[2.5,
 [2,9,"steel"],
 [3,42,"steel"],
 [4,21,"steel"],
-[5,30,"steel"]]}]};
+[5,30,"steel"]]}],"101":[{"name":"Best","cost":380,"peak":0.314,"nodes":[[1,0]],"members":[[0,2,"road"],
+[2,1,"road"]]}],"102":[{"name":"Best","cost":760,"peak":0.438,"nodes":[[2,0]],"members":[[0,2,"road"],
+[2,1,"road"]]}],"103":[{"name":"Best","cost":2179,"peak":0.321,"nodes":[[2,0],
+[1,-1.5],
+[4,0],
+[5,-1.5]],"members":[[0,4,"road"],
+[0,5,"wood"],
+[5,4,"wood"],
+[4,6,"road"],
+[6,1,"road"],
+[6,7,"wood"],
+[7,1,"wood"],
+[2,5,"wood"],
+[3,7,"wood"]]}],"104":[{"name":"Sturdy","cost":3568,"peak":0.608,"nodes":[[2,0],
+[1,-1.5],
+[3,-1.5],
+[4,0],
+[5,-1.5],
+[6,0],
+[7,-1.5]],"members":[[0,2,"road"],
+[0,3,"wood"],
+[3,2,"wood"],
+[3,4,"wood"],
+[2,5,"road"],
+[2,4,"wood"],
+[4,6,"wood"],
+[5,7,"road"],
+[5,6,"wood"],
+[6,7,"wood"],
+[6,8,"wood"],
+[7,1,"road"],
+[7,8,"wood"],
+[8,1,"wood"]]},{"name":"Lean","cost":2973,"peak":0.79,"nodes":[[2,0],
+[1,-1.5],
+[3,-1.5],
+[4,0],
+[5,-1.5],
+[6,0],
+[7,-1.5]],"members":[[0,2,"road"],
+[0,3,"wood"],
+[3,2,"wood"],
+[3,4,"wood"],
+[2,5,"road"],
+[4,6,"wood"],
+[5,7,"road"],
+[6,8,"wood"],
+[7,1,"road"],
+[7,8,"wood"],
+[8,1,"wood"]]}],"105":[{"name":"Sturdy","cost":5567,"peak":0.644,"nodes":[[2.5,0],
+[1.25,-1.5],
+[3.75,-1.5],
+[5,0],
+[6.25,-1.5],
+[7.5,0],
+[8.75,-1.5]],"members":[[0,4,"road"],
+[0,5,"wood"],
+[5,4,"steel"],
+[5,6,"wood"],
+[4,7,"road"],
+[4,6,"wood"],
+[6,7,"wood"],
+[6,8,"wood"],
+[7,9,"road"],
+[7,8,"wood"],
+[8,9,"wood"],
+[9,1,"road"],
+[9,10,"steel"],
+[10,1,"wood"],
+[2,5,"wood"],
+[3,10,"steel"]]},{"name":"Lean","cost":4891,"peak":0.876,"nodes":[[2.5,0],
+[1.25,-1.5],
+[3.75,-1.5],
+[5,0],
+[6.25,-1.5],
+[7.5,0],
+[8.75,-1.5]],"members":[[0,4,"road"],
+[0,5,"wood"],
+[5,4,"wood"],
+[4,7,"road"],
+[4,6,"wood"],
+[6,7,"wood"],
+[6,8,"wood"],
+[7,9,"road"],
+[7,8,"wood"],
+[8,9,"wood"],
+[8,10,"wood"],
+[9,1,"road"],
+[9,10,"steel"],
+[10,1,"wood"],
+[2,5,"wood"],
+[3,10,"wood"]]}],"106":[{"name":"Sturdy","cost":7216,"peak":0.641,"nodes":[[2,0],
+[4,0],
+[6,0],
+[8,0],
+[10,0]],"members":[[0,4,"road"],
+[4,5,"road"],
+[5,6,"road"],
+[6,7,"road"],
+[7,8,"road"],
+[8,1,"road"],
+[2,4,"cable"],
+[2,5,"cable"],
+[3,8,"cable"],
+[2,6,"cable"]]},{"name":"Lean","cost":3553,"peak":0.857,"nodes":[[2,0],
+[4,0],
+[6,0],
+[8,0],
+[10,0]],"members":[[0,4,"road"],
+[4,5,"road"],
+[5,6,"road"],
+[6,7,"road"],
+[7,8,"road"],
+[8,1,"road"],
+[2,5,"cable"]]}]};
 /*SOLUTIONS-END*/
 
 </script>
@@ -1825,8 +2222,8 @@ function loadSave() {
   try { const s = JSON.parse(localStorage.getItem(SAVE_KEY)); if (s && typeof s === 'object') return s; } catch (e) { /* no storage */ }
   return {};
 }
-const save = Object.assign({ progress: {}, designs: {}, fails: {}, muted: false, seenHelp: false }, loadSave());
-save.fails = save.fails || {};
+const save = Object.assign({ progress: {}, designs: {}, fails: {}, badges: {}, stats: {}, muted: false, seenHelp: false }, loadSave());
+for (const k of ['fails', 'badges', 'stats', 'progress', 'designs']) save[k] = save[k] || {};
 function persist() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch (e) { /* ignore */ } }
 
 // ---------------------------------------------------------------- helpers
@@ -2112,6 +2509,47 @@ function labelBox(c, text, x, y, opts = {}) {
 function renderBuild(t) {
   const v = S.view, c = v.ctx, L = S.level, D = S.design;
   c.drawImage(S.bgBlue, 0, 0, W, H);
+  // mirror axis
+  if (S.mirror && !L.hR) {
+    const x = v.X(L.gap / 2);
+    c.strokeStyle = 'rgba(255,198,92,.45)'; c.setLineDash([10, 4, 2, 4]); c.lineWidth = 1;
+    c.beginPath(); c.moveTo(x, v.Y(levelBounds(L).y1 - .6)); c.lineTo(x, v.Y(L.waterY)); c.stroke(); c.setLineDash([]);
+    c.font = '600 10px "IBM Plex Mono", ui-monospace, monospace'; c.fillStyle = 'rgba(255,198,92,.8)'; c.textAlign = 'center';
+    c.fillText('MIRROR', x, v.Y(levelBounds(L).y1 - .6) - 6); c.textAlign = 'left';
+  }
+  // engineer's sketch: faint amber lines to trace
+  if (S.sketch) {
+    const sk = sketchDesign();
+    if (sk) {
+      const nodes = L.anchors.concat(sk.nodes);
+      c.save(); c.setLineDash([6, 5]); c.lineCap = 'round';
+      for (const m of sk.members) {
+        const a = nodes[m[0]], b = nodes[m[1]];
+        c.strokeStyle = m[2] === 'road' ? 'rgba(255,198,92,.35)' : 'rgba(255,198,92,.6)'; c.lineWidth = m[2] === 'road' ? 7 : 3;
+        c.beginPath(); c.moveTo(v.X(a[0]), v.Y(a[1])); c.lineTo(v.X(b[0]), v.Y(b[1])); c.stroke();
+      }
+      c.setLineDash([]); c.fillStyle = 'rgba(255,198,92,.7)';
+      for (const n of sk.nodes) { c.beginPath(); c.arc(v.X(n[0]), v.Y(n[1]), 3, 0, Math.PI * 2); c.fill(); }
+      c.restore();
+    }
+  }
+  // first-level guide: pulsing ghost planks with a travelling dot
+  if (L.guide) {
+    const nodes = L.anchors.concat(D.nodes);
+    const has = (x1, y1, x2, y2) => D.members.some(m => { const a = nodes[m[0]], b = nodes[m[1]]; return (Math.hypot(a[0] - x1, a[1] - y1) < .1 && Math.hypot(b[0] - x2, b[1] - y2) < .1) || (Math.hypot(a[0] - x2, a[1] - y2) < .1 && Math.hypot(b[0] - x1, b[1] - y1) < .1); });
+    const todo = L.guide.filter(g => !has(...g));
+    const next = todo[0];
+    if (next) {
+      const [x1, y1, x2, y2] = next, ax = v.X(x1), ay = v.Y(y1), bx = v.X(x2), by = v.Y(y2);
+      const pulse = .5 + .5 * Math.sin(t * 4);
+      c.strokeStyle = `rgba(255,198,92,${.35 + .4 * pulse})`; c.lineWidth = 6; c.setLineDash([10, 8]); c.lineCap = 'round';
+      c.beginPath(); c.moveTo(ax, ay); c.lineTo(bx, by); c.stroke(); c.setLineDash([]); c.lineCap = 'butt';
+      const k = (t * .7) % 1, e = ease(Math.min(1, k * 1.3));
+      c.fillStyle = '#ffc65c'; c.beginPath(); c.arc(lerp(ax, bx, e), lerp(ay, by, e), 7, 0, Math.PI * 2); c.fill();
+      labelBox(c, todo.length === L.guide.length ? 'Drag from here' : 'Now from this joint', ax, ay - 34, { borderColor: 'rgba(255,198,92,.9)', color: '#ffc65c' });
+    }
+    $('#btn-test').classList.toggle('pulse', !todo.length && S.screen === 'build');
+  } else $('#btn-test').classList.remove('pulse');
   // members
   D.members.forEach((m, k) => {
     const a = nodePos(m[0]), b = nodePos(m[1]);
@@ -2134,6 +2572,13 @@ function renderBuild(t) {
     c.strokeStyle = '#eaf3ff'; c.lineWidth = 1.5; c.stroke();
   });
   drawAnchorsBP(v, L, t);
+  // where the last test failed first
+  if (S.failMark) {
+    const x = v.X(S.failMark.x), y = v.Y(S.failMark.y), r = 12 + 3 * Math.sin(t * 5);
+    c.strokeStyle = '#ff7a6b'; c.lineWidth = 2; c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.stroke();
+    c.beginPath(); c.moveTo(x - 6, y - 6); c.lineTo(x + 6, y + 6); c.moveTo(x + 6, y - 6); c.lineTo(x - 6, y + 6); c.stroke();
+    labelBox(c, S.failMark.text, x, y - 30, { borderColor: 'rgba(255,122,107,.9)', color: '#ffb3a8' });
+  }
   // drag ghost
   if (S.drag) {
     const a = nodePos(S.drag.from), mat = MATERIALS[S.tool];
@@ -2170,59 +2615,130 @@ function renderBuild(t) {
 // ======================================================================
 // LIVE (REALITY) RENDERING
 // ======================================================================
+// Time of day for the live scene. Each level picks one with `mood`.
+const MOODS = {
+  dusk: {
+    sky: [[0, '#171032'], [.3, '#35194a'], [.56, '#7e3050'], [.78, '#d8674a'], [.92, '#f4a257'], [1, '#fbcf88']],
+    stars: 90, orb: { x: .7, dy: .06, r: .05, core: ['#fffaf0', '#ffe3a3', '#ffc671'], glow: ['rgba(255,226,160,.75)', 'rgba(255,190,120,.4)', 'rgba(240,120,80,.12)', 'rgba(240,120,80,0)'] },
+    clouds: 'streak', cloudLit: [255, 196, 150], cloudDim: [214, 120, 150],
+    hills: [['#b0607a', 'rgba(250,176,128,.55)'], ['#7a3761', 'rgba(235,128,104,.38)'], ['#4b2148', 'rgba(210,96,96,.26)']], hillTree: ['#5f2a53', '#3a1839'],
+    far: ['#7b3440', '#3a1a2c'], farGlow: 'rgba(240,140,110,.22)',
+    light: '255,170,100', shadow: '25,6,30', veil: null, tree: '#26122a', treeRim: 'rgba(255,170,100,.35)', grass: ['#3a3a1c', '#5a4a22'], edge: 'rgba(255,214,150,.85)',
+    water: ['rgba(92,70,104,.93)', 'rgba(44,52,86,.95)', 'rgba(12,18,38,.98)'], reflect: '250,150,100', glint: [255, 190, 130], ripple: 'rgba(255,200,170,.13)',
+    birds: 'rgba(40,16,40,.75)', vignette: 'rgba(10,4,20,.5)', beam: .34, tint: null,
+  },
+  dawn: {
+    sky: [[0, '#1c2550'], [.35, '#44488a'], [.6, '#a07aa8'], [.8, '#eba3a0'], [.93, '#ffd0a6'], [1, '#fff0d4']],
+    stars: 40, orb: { x: .24, dy: .035, r: .045, core: ['#fffdf5', '#fff0cf', '#ffd9a0'], glow: ['rgba(255,236,200,.7)', 'rgba(255,200,170,.35)', 'rgba(200,140,170,.1)', 'rgba(200,140,170,0)'] },
+    clouds: 'streak', cloudLit: [255, 214, 196], cloudDim: [170, 140, 190],
+    hills: [['#9a8ab4', 'rgba(255,214,200,.5)'], ['#6b5d95', 'rgba(230,170,180,.35)'], ['#43396c', 'rgba(190,140,170,.25)']], hillTree: ['#54477d', '#2f2754'],
+    far: ['#7d4658', '#35243f'], farGlow: 'rgba(255,190,190,.2)',
+    light: '255,205,170', shadow: '30,20,60', veil: 'rgba(70,60,130,.14)', tree: '#231c3d', treeRim: 'rgba(255,210,190,.35)', grass: ['#3b3d33', '#595238'], edge: 'rgba(255,225,200,.85)',
+    water: ['rgba(120,110,160,.92)', 'rgba(60,64,110,.95)', 'rgba(18,22,48,.98)'], reflect: '255,200,190', glint: [255, 230, 210], ripple: 'rgba(255,225,215,.15)',
+    birds: 'rgba(40,30,60,.7)', vignette: 'rgba(15,10,40,.42)', beam: .22, tint: null,
+  },
+  noon: {
+    sky: [[0, '#2a64ad'], [.4, '#4f8fd0'], [.75, '#8fc0e6'], [.92, '#c8e3f0'], [1, '#e6f2ee']],
+    stars: 0, orb: { x: .8, dy: .52, r: .032, core: ['#ffffff', '#fffbe8', '#fff3c4'], glow: ['rgba(255,255,235,.8)', 'rgba(255,250,220,.3)', 'rgba(220,240,255,.08)', 'rgba(220,240,255,0)'] },
+    clouds: 'puff', cloudLit: [255, 255, 255], cloudDim: [210, 225, 240],
+    hills: [['#8fb0b4', 'rgba(225,238,240,.6)'], ['#5f8f71', 'rgba(200,225,215,.4)'], ['#3f6e4a', 'rgba(170,200,170,.25)']], hillTree: ['#4b7d5c', '#2c5236'],
+    far: ['#a2583b', '#5a2b22'], farGlow: 'rgba(255,230,190,.18)',
+    light: '255,240,210', shadow: '40,20,30', veil: null, tree: '#2d4527', treeRim: 'rgba(230,255,200,.3)', grass: ['#4d6b2a', '#708f35'], edge: 'rgba(255,250,220,.9)',
+    water: ['rgba(80,135,150,.92)', 'rgba(40,95,115,.95)', 'rgba(14,46,62,.98)'], reflect: '215,240,250', glint: [255, 255, 240], ripple: 'rgba(255,255,255,.2)',
+    birds: 'rgba(30,30,40,.7)', vignette: 'rgba(10,25,35,.26)', beam: .1, tint: null,
+  },
+  night: {
+    sky: [[0, '#02030a'], [.35, '#070b1f'], [.7, '#0f1a3c'], [.9, '#1c2b55'], [1, '#2a3b69']],
+    stars: 320, orb: { moon: true, x: .22, dy: .5, r: .038, core: ['#fbfbf3', '#e9ebdf', '#c9cdc0'], glow: ['rgba(210,225,255,.35)', 'rgba(160,180,230,.14)', 'rgba(80,100,160,.05)', 'rgba(80,100,160,0)'] },
+    clouds: 'streak', cloudLit: [120, 140, 190], cloudDim: [60, 72, 115],
+    hills: [['#1e2a4d', 'rgba(60,80,140,.3)'], ['#141d3a', 'rgba(40,60,110,.22)'], ['#0c1229', 'rgba(30,40,80,.18)']], hillTree: ['#111a33', '#080c1c'],
+    far: ['#2b2034', '#110d1b'], farGlow: 'rgba(90,110,170,.12)',
+    light: '170,190,255', shadow: '5,5,15', veil: 'rgba(8,12,35,.58)', tree: '#060913', treeRim: 'rgba(170,190,255,.28)', grass: ['#18202d', '#212a3a'], edge: 'rgba(190,205,255,.5)',
+    water: ['rgba(22,30,58,.95)', 'rgba(11,17,38,.97)', 'rgba(4,6,16,.99)'], reflect: '120,140,200', glint: [215, 228, 255], ripple: 'rgba(180,200,255,.12)',
+    birds: null, vignette: 'rgba(0,0,8,.62)', beam: .62, tint: 'rgba(10,16,44,.34)',
+  },
+};
+const moodOf = L => MOODS[(L && L.mood) || 'dusk'] || MOODS.dusk;
+
 function renderRealBG(v, L, T) {
-  const c = v.ctx, w = v.W, h = v.H;
+  const c = v.ctx, w = v.W, h = v.H, M = moodOf(L);
   const horizon = v.Y(1.4);
   const R = Math.min(w, h);
-  const sunX = w * .7, sunY = horizon - R * .06;
+  const sunX = w * M.orb.x, sunY = horizon - R * M.orb.dy * (M.orb.dy > .2 ? 1.6 : 1);
   S.sun = { x: sunX, y: sunY, horizon };
   // sky
   let g = c.createLinearGradient(0, 0, 0, horizon);
-  g.addColorStop(0, '#171032'); g.addColorStop(.3, '#35194a'); g.addColorStop(.56, '#7e3050');
-  g.addColorStop(.78, '#d8674a'); g.addColorStop(.92, '#f4a257'); g.addColorStop(1, '#fbcf88');
+  for (const [k, col] of M.sky) g.addColorStop(k, col);
   c.fillStyle = g; c.fillRect(0, 0, w, h);
-  // stars in the high, dark sky
+  // stars
   const rnd = mulberry32(L.seed * 7 + 3);
-  for (let i = 0; i < 90; i++) {
-    const y = rnd() * horizon * .42, x = rnd() * w;
-    c.fillStyle = `rgba(255,240,230,${(1 - y / (horizon * .42)) * (.25 + rnd() * .6)})`;
-    const s = rnd() < .12 ? 1.6 : 1; c.fillRect(x, y, s, s);
+  for (let i = 0; i < M.stars; i++) {
+    const hmax = M.stars > 100 ? .75 : .42;
+    const y = rnd() * horizon * hmax, x = rnd() * w;
+    c.fillStyle = `rgba(255,245,235,${(1 - y / (horizon * hmax)) * (.25 + rnd() * .65)})`;
+    const s = rnd() < .1 ? 1.7 : 1; c.fillRect(x, y, s, s);
   }
-  // sun + glow
+  if (M.stars > 100) { // a faint milky band
+    c.save(); c.translate(w * .55, horizon * .3); c.rotate(-.35);
+    g = c.createLinearGradient(0, -h * .08, 0, h * .08);
+    g.addColorStop(0, 'rgba(160,170,230,0)'); g.addColorStop(.5, 'rgba(160,170,230,.07)'); g.addColorStop(1, 'rgba(160,170,230,0)');
+    c.fillStyle = g; c.fillRect(-w, -h * .08, w * 2, h * .16);
+    for (let i = 0; i < 260; i++) { c.fillStyle = `rgba(230,235,255,${rnd() * .5})`; c.fillRect((rnd() - .5) * w * 1.6, (rnd() - .5) * h * .14, 1, 1); }
+    c.restore();
+  }
+  // sun or moon + glow
   g = c.createRadialGradient(sunX, sunY, 0, sunX, sunY, R * .75);
-  g.addColorStop(0, 'rgba(255,226,160,.75)'); g.addColorStop(.12, 'rgba(255,190,120,.4)'); g.addColorStop(.4, 'rgba(240,120,80,.12)'); g.addColorStop(1, 'rgba(240,120,80,0)');
+  g.addColorStop(0, M.orb.glow[0]); g.addColorStop(.12, M.orb.glow[1]); g.addColorStop(.4, M.orb.glow[2]); g.addColorStop(1, M.orb.glow[3]);
   c.fillStyle = g; c.fillRect(0, 0, w, h);
-  g = c.createRadialGradient(sunX, sunY - R * .01, 0, sunX, sunY, R * .05);
-  g.addColorStop(0, '#fffaf0'); g.addColorStop(.7, '#ffe3a3'); g.addColorStop(1, '#ffc671');
-  c.fillStyle = g; c.beginPath(); c.arc(sunX, sunY, R * .05, 0, Math.PI * 2); c.fill();
-  // cloud streaks lit from below
-  for (let i = 0; i < 9; i++) {
-    const cy = horizon - h * (.06 + rnd() * .34), cx = rnd() * w, cw = w * (.12 + rnd() * .28), ch = 2 + rnd() * 6;
-    const near = 1 - Math.min(1, Math.abs(cx - sunX) / (w * .6));
-    const col = near > .5 ? [255, 196, 150] : [214, 120, 150];
-    g = c.createLinearGradient(cx - cw / 2, 0, cx + cw / 2, 0);
-    g.addColorStop(0, `rgba(${col},0)`); g.addColorStop(.5, `rgba(${col},${.25 + near * .35})`); g.addColorStop(1, `rgba(${col},0)`);
-    c.fillStyle = g; c.beginPath(); c.ellipse(cx, cy, cw / 2, ch, 0, 0, Math.PI * 2); c.fill();
+  const orbR = R * M.orb.r;
+  g = c.createRadialGradient(sunX - orbR * .2, sunY - orbR * .2, 0, sunX, sunY, orbR);
+  g.addColorStop(0, M.orb.core[0]); g.addColorStop(.7, M.orb.core[1]); g.addColorStop(1, M.orb.core[2]);
+  c.fillStyle = g; c.beginPath(); c.arc(sunX, sunY, orbR, 0, Math.PI * 2); c.fill();
+  if (M.orb.moon) {
+    c.fillStyle = 'rgba(150,155,145,.35)';
+    for (const [ox, oy, rr] of [[-.3, -.2, .22], [.25, .1, .16], [-.05, .35, .12], [.35, -.3, .09]]) { c.beginPath(); c.arc(sunX + ox * orbR, sunY + oy * orbR, rr * orbR, 0, Math.PI * 2); c.fill(); }
+  }
+  // clouds
+  if (M.clouds === 'puff') {
+    for (let i = 0; i < 7; i++) {
+      const cx = rnd() * w, cy = horizon - h * (.12 + rnd() * .4), sc = R * (.03 + rnd() * .04);
+      for (let k = 0; k < 7; k++) {
+        const ox = (k - 3) * sc * .8 + (rnd() - .5) * sc * .5, oy = -Math.sin((k / 6) * Math.PI) * sc * .7 + (rnd() - .5) * sc * .2, rr = sc * (.55 + rnd() * .5);
+        g = c.createRadialGradient(cx + ox, cy + oy - rr * .3, 0, cx + ox, cy + oy, rr);
+        g.addColorStop(0, 'rgba(255,255,255,.95)'); g.addColorStop(.75, 'rgba(240,246,252,.85)'); g.addColorStop(1, 'rgba(210,225,240,0)');
+        c.fillStyle = g; c.beginPath(); c.arc(cx + ox, cy + oy, rr, 0, Math.PI * 2); c.fill();
+      }
+    }
+  } else {
+    for (let i = 0; i < 9; i++) {
+      const cy = horizon - h * (.06 + rnd() * .34), cx = rnd() * w, cw = w * (.12 + rnd() * .28), ch = 2 + rnd() * 6;
+      const near = 1 - Math.min(1, Math.abs(cx - sunX) / (w * .6));
+      const col = near > .5 ? M.cloudLit : M.cloudDim;
+      g = c.createLinearGradient(cx - cw / 2, 0, cx + cw / 2, 0);
+      g.addColorStop(0, `rgba(${col},0)`); g.addColorStop(.5, `rgba(${col},${.25 + near * .35})`); g.addColorStop(1, `rgba(${col},0)`);
+      c.fillStyle = g; c.beginPath(); c.ellipse(cx, cy, cw / 2, ch, 0, 0, Math.PI * 2); c.fill();
+    }
   }
   // distant hills, three layers of haze
   const layers = [
-    { base: horizon + h * .01, amp: h * .11, col: '#b0607a', haze: 'rgba(250,176,128,.55)', sc: 240, trees: 0 },
-    { base: horizon + h * .035, amp: h * .075, col: '#7a3761', haze: 'rgba(235,128,104,.38)', sc: 170, trees: 7 },
-    { base: horizon + h * .07, amp: h * .05, col: '#4b2148', haze: 'rgba(210,96,96,.26)', sc: 120, trees: 12 },
+    { base: horizon + h * .01, amp: h * .11, sc: 240, trees: 0 },
+    { base: horizon + h * .035, amp: h * .075, sc: 170, trees: 7 },
+    { base: horizon + h * .07, amp: h * .05, sc: 120, trees: 12 },
   ];
   layers.forEach((ly, li) => {
     const seed = L.seed * 13 + li * 101;
+    const [col, haze] = M.hills[li];
     const ridge = x => ly.base - ly.amp * (.35 + fbm(seed, x / ly.sc) * .9);
     c.beginPath(); c.moveTo(0, h);
     for (let x = 0; x <= w + 4; x += 4) c.lineTo(x, ridge(x));
     c.lineTo(w, h); c.closePath();
-    c.fillStyle = ly.col; c.fill();
+    c.fillStyle = col; c.fill();
     const hg = c.createLinearGradient(0, ly.base - ly.amp, 0, ly.base + h * .12);
-    hg.addColorStop(0, 'rgba(0,0,0,0)'); hg.addColorStop(1, ly.haze);
+    hg.addColorStop(0, 'rgba(0,0,0,0)'); hg.addColorStop(1, haze);
     c.fillStyle = hg; c.fill();
     for (let i = 0; i < ly.trees; i++) {
       const x = hash(seed, i * 7) * w, s = h * (.012 + li * .006) * (.7 + hash(seed, i * 7 + 1) * .6);
-      acacia(c, x, ridge(x) + 2, s, ly.col === '#4b2148' ? '#3a1839' : '#5f2a53', seed + i);
+      acacia(c, x, ridge(x) + 2, s, M.hillTree[li - 1] || M.hillTree[0], seed + i);
     }
   });
   // far gorge wall between the banks
@@ -2231,39 +2747,40 @@ function renderRealBG(v, L, T) {
   for (let x = 0; x <= w + 4; x += 5) c.lineTo(x, farTop - fbm(L.seed + 5, x / 60) * v.s * 1.2);
   c.lineTo(w, h); c.closePath();
   g = c.createLinearGradient(0, farTop - v.s, 0, v.Y(L.waterY));
-  g.addColorStop(0, '#7b3440'); g.addColorStop(1, '#3a1a2c');
+  g.addColorStop(0, M.far[0]); g.addColorStop(1, M.far[1]);
   c.fillStyle = g; c.fill();
   c.save(); c.clip();
   c.strokeStyle = 'rgba(40,10,30,.25)'; c.lineWidth = 1;
   for (let y = farTop; y < h; y += Math.max(5, v.s * .55)) {
     c.beginPath(); for (let x = 0; x <= w; x += 8) c.lineTo(x, y + (fbm(L.seed + y, x / 40) - .5) * 5); c.stroke();
   }
-  g = c.createLinearGradient(0, farTop, 0, h); g.addColorStop(0, 'rgba(240,140,110,.22)'); g.addColorStop(1, 'rgba(60,30,70,.2)');
+  g = c.createLinearGradient(0, farTop, 0, h); g.addColorStop(0, M.farGlow); g.addColorStop(1, 'rgba(60,30,70,.2)');
   c.fillStyle = g; c.fillRect(0, farTop - v.s * 2, w, h);
   c.restore();
 
   // terrain: laterite cliffs, rock pillars and spires
-  for (const p of T.polys) drawRock(v, L, p);
+  for (const p of T.polys) drawRock(v, L, p, M);
   // trees and grass on the banks
   const hR = L.hR || 0;
   const trees = [[-6.2, 0, 4.6], [-11.5, 0, 3.6], [-15, 0, 4.2], [L.gap + 6.8, hR, 4.1], [L.gap + 11.8, hR, 4.8]];
-  trees.forEach(([x, y, hh], i) => acacia(c, v.X(x), v.Y(y) - v.s * .12, hh * v.s, '#26122a', L.seed + i * 5, true));
+  trees.forEach(([x, y, hh], i) => acacia(c, v.X(x), v.Y(y) - v.s * .12, hh * v.s, M.tree, L.seed + i * 5, M.treeRim));
   for (let i = 0; i < 60; i++) {
     const side = i % 2 ? 1 : -1;
     const x = side < 0 ? -1 - hash(L.seed, i) * 16 : L.gap + 1 + hash(L.seed, i) * 16;
     const y = side < 0 ? 0 : hR;
     const px = v.X(x), py = v.Y(y) - v.s * .12;
-    c.strokeStyle = i % 3 ? '#3a3a1c' : '#5a4a22'; c.lineWidth = 1;
+    c.strokeStyle = i % 3 ? M.grass[0] : M.grass[1]; c.lineWidth = 1;
     for (let k = -2; k <= 2; k++) { c.beginPath(); c.moveTo(px + k * 1.5, py); c.lineTo(px + k * 2.6, py - (3 + hash(L.seed, i * 9 + k) * 5)); c.stroke(); }
   }
   // abutments and anchor hardware
   drawAnchorsReal(v, L);
 }
 
-function drawRock(v, L, p) {
+function drawRock(v, L, p, M) {
   const c = v.ctx;
-  let top = Infinity, bot = -Infinity, minx = Infinity, maxx = -Infinity;
-  for (const q of p.pts) { top = Math.min(top, v.Y(q[1])); bot = Math.max(bot, v.Y(q[1])); minx = Math.min(minx, v.X(q[0])); maxx = Math.max(maxx, v.X(q[0])); }
+  let top = Infinity, bot = -Infinity, minx = Infinity, maxx = -Infinity, cxw = 0;
+  for (const q of p.pts) { top = Math.min(top, v.Y(q[1])); bot = Math.max(bot, v.Y(q[1])); minx = Math.min(minx, v.X(q[0])); maxx = Math.max(maxx, v.X(q[0])); cxw += q[0]; }
+  cxw /= p.pts.length;
   minx = Math.max(minx, -10); maxx = Math.min(maxx, v.W + 10);
   path(c, p.pts, v);
   const g = c.createLinearGradient(0, top, 0, bot);
@@ -2287,17 +2804,20 @@ function drawRock(v, L, p) {
     c.fillStyle = rnd() < .5 ? 'rgba(30,8,10,.28)' : 'rgba(250,170,120,.14)';
     c.fillRect(minx + rnd() * (maxx - minx), top + rnd() * (bot - top), 1 + rnd() * 2, 1 + rnd());
   }
-  // the sun sits to the right: faces looking right catch it, faces looking left fall into shadow
-  const sunSide = p.pts.reduce((s, q) => s + q[0], 0) / p.pts.length < L.gap / 2;
-  const fx = sunSide ? maxx : minx;
-  const lg = c.createLinearGradient(fx, 0, fx + (sunSide ? -1 : 1) * v.s * 3.5, 0);
-  if (sunSide) { lg.addColorStop(0, 'rgba(255,170,100,.32)'); lg.addColorStop(1, 'rgba(255,170,100,0)'); }
-  else { lg.addColorStop(0, 'rgba(25,6,30,.45)'); lg.addColorStop(1, 'rgba(25,6,30,0)'); }
+  // light: the gorge-facing side catches the sun (or moon) when it faces it
+  const leftSide = cxw < L.gap / 2;
+  const faceX = p.kind === 'bank' ? (leftSide ? maxx : minx) : (S.sun.x > (minx + maxx) / 2 ? maxx : minx);
+  const normal = faceX === maxx ? 1 : -1;
+  const lit = (S.sun.x - faceX) * normal > 0;
+  const lg = c.createLinearGradient(faceX, 0, faceX - normal * v.s * 3.5, 0);
+  if (lit) { lg.addColorStop(0, `rgba(${M.light},.32)`); lg.addColorStop(1, `rgba(${M.light},0)`); }
+  else { lg.addColorStop(0, `rgba(${M.shadow},.45)`); lg.addColorStop(1, `rgba(${M.shadow},0)`); }
   c.fillStyle = lg; c.fillRect(minx - 10, top - 10, maxx - minx + 20, bot - top + 20);
   // depth: darken toward the water
   const dg = c.createLinearGradient(0, v.Y(L.waterY + 3), 0, v.Y(L.waterY));
   dg.addColorStop(0, 'rgba(20,6,20,0)'); dg.addColorStop(1, 'rgba(20,6,20,.45)');
   c.fillStyle = dg; c.fillRect(minx - 10, v.Y(L.waterY + 3), maxx - minx + 20, v.s * 9);
+  if (M.veil) { c.fillStyle = M.veil; c.fillRect(minx - 10, top - 10, maxx - minx + 20, bot - top + 20); }
   c.restore();
   if (p.kind === 'bank') {
     // murram road on top, rim-lit edge
@@ -2306,14 +2826,14 @@ function drawRock(v, L, p) {
       const xa = v.X(Math.min(tops[0][0], tops[1][0])), xb = v.X(Math.max(tops[0][0], tops[1][0])), y = v.Y(tops[0][1]);
       c.fillStyle = '#6f2f1d'; c.fillRect(xa, y, xb - xa, Math.max(3, v.s * .22));
       c.fillStyle = '#c56b3c'; c.fillRect(xa, y, xb - xa, Math.max(2, v.s * .08));
-      c.fillStyle = 'rgba(255,214,150,.85)'; c.fillRect(xa, y - 1, xb - xa, 1.5);
+      if (M.veil) { c.fillStyle = M.veil; c.fillRect(xa, y, xb - xa, Math.max(3, v.s * .22)); }
+      c.fillStyle = M.edge; c.fillRect(xa, y - 1, xb - xa, 1.5);
     }
   } else {
-    // sunlit crest
-    c.strokeStyle = 'rgba(255,200,140,.55)'; c.lineWidth = 1.5;
+    c.strokeStyle = M.edge; c.globalAlpha = .65; c.lineWidth = 1.5;
     c.beginPath(); c.moveTo(v.X(p.pts[0][0]), v.Y(p.pts[0][1])); c.lineTo(v.X(p.pts[1][0]), v.Y(p.pts[1][1]));
     if (p.kind === 'spire') { for (let i = 2; i < 4; i++) c.lineTo(v.X(p.pts[i][0]), v.Y(p.pts[i][1])); }
-    c.stroke();
+    c.stroke(); c.globalAlpha = 1;
   }
 }
 
@@ -2338,7 +2858,7 @@ function acacia(c, x, y, hgt, col, seed, rim) {
   }
   c.beginPath(); c.ellipse(tx, cy + hgt * .02, cw * .5, hgt * .06, 0, 0, Math.PI * 2); c.fill();
   if (rim) {
-    c.strokeStyle = 'rgba(255,170,100,.35)'; c.lineWidth = 1;
+    c.strokeStyle = typeof rim === 'string' ? rim : 'rgba(255,170,100,.35)'; c.lineWidth = 1;
     c.beginPath(); c.ellipse(tx + cw * .05, cy - hgt * .02, cw * .48, hgt * .07, 0, Math.PI * 1.05, Math.PI * 1.9); c.stroke();
   }
   c.lineCap = 'butt';
@@ -2361,6 +2881,7 @@ function drawAnchorsReal(v, L) {
       c.fillStyle = g; c.fillRect(bx, y + s * .05, bw, bh);
       c.fillStyle = 'rgba(255,220,170,.5)'; c.fillRect(bx, y + s * .05, bw, 1.5);
       c.strokeStyle = 'rgba(40,30,30,.35)'; c.lineWidth = 1; c.strokeRect(bx + .5, y + s * .05 + .5, bw - 1, bh - 1);
+      const M = moodOf(L); if (M.veil) { c.fillStyle = M.veil; c.fillRect(bx, y + s * .05, bw, bh); }
     } else if (above) {
       // steel saddle on a rock tower
       c.fillStyle = '#4b4f58'; c.fillRect(x - s * .35, y - s * .05, s * .7, s * .35);
@@ -2376,23 +2897,24 @@ function drawAnchorsReal(v, L) {
 }
 
 function renderVignette(c) {
+  const M = moodOf(S.level);
   const g = c.createRadialGradient(W / 2, H * .45, Math.min(W, H) * .35, W / 2, H * .5, Math.max(W, H) * .78);
-  g.addColorStop(0, 'rgba(10,4,20,0)'); g.addColorStop(1, 'rgba(10,4,20,.5)');
+  g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, M.vignette);
   c.fillStyle = g; c.fillRect(0, 0, W, H);
 }
 
 function drawWater(v, L, t) {
-  const c = v.ctx, yS = v.Y(L.waterY), h = v.H, w = v.W;
+  const c = v.ctx, yS = v.Y(L.waterY), h = v.H, w = v.W, M = moodOf(L);
   if (yS > h) return;
   let g = c.createLinearGradient(0, yS, 0, h);
-  g.addColorStop(0, 'rgba(92,70,104,.93)'); g.addColorStop(.12, 'rgba(44,52,86,.95)'); g.addColorStop(1, 'rgba(12,18,38,.98)');
+  g.addColorStop(0, M.water[0]); g.addColorStop(.12, M.water[1]); g.addColorStop(1, M.water[2]);
   c.fillStyle = g; c.fillRect(0, yS, w, h - yS);
   // sky reflection
   g = c.createLinearGradient(0, yS, 0, yS + v.s * 2.4);
-  g.addColorStop(0, 'rgba(250,150,100,.35)'); g.addColorStop(1, 'rgba(250,150,100,0)');
+  g.addColorStop(0, `rgba(${M.reflect},.35)`); g.addColorStop(1, `rgba(${M.reflect},0)`);
   c.fillStyle = g; c.fillRect(0, yS, w, v.s * 2.4);
-  // sun glint column
-  const sx = S.sun.x;
+  // sun or moon glint column
+  const sx = S.sun.x, [gr, gg, gb] = M.glint;
   c.globalCompositeOperation = 'lighter';
   for (let i = 0; i < 38; i++) {
     const yy = yS + 2 + Math.pow(i, 1.35) * 1.6;
@@ -2400,12 +2922,12 @@ function drawWater(v, L, t) {
     const flick = .5 + .5 * Math.sin(t * 2.3 + i * 1.7) * Math.sin(t * 1.1 + i * .6);
     const ww = (w * .02 + hash(7, i) * w * .06) * (1 - i / 50) * (.5 + flick * .7);
     const off = (hash(3, i) - .5) * w * .04 + Math.sin(t * .8 + i) * 4;
-    c.fillStyle = `rgba(255,${190 + i},${130 + i},${.08 + flick * .22 * (1 - i / 40)})`;
+    c.fillStyle = `rgba(${gr},${Math.min(255, gg + i)},${Math.min(255, gb + i)},${.08 + flick * .22 * (1 - i / 40)})`;
     c.fillRect(sx - ww / 2 + off, yy, ww, 1.4 + i * .04);
   }
   c.globalCompositeOperation = 'source-over';
   // ripples
-  c.strokeStyle = 'rgba(255,200,170,.13)'; c.lineWidth = 1;
+  c.strokeStyle = M.ripple; c.lineWidth = 1;
   for (let row = 0; row < 7; row++) {
     const yy = yS + 6 + row * row * 3.2 + row * 4;
     if (yy > h) break;
@@ -2415,7 +2937,7 @@ function drawWater(v, L, t) {
     c.stroke();
   }
   // surface line + foam where rock meets water
-  c.fillStyle = 'rgba(255,215,180,.55)'; c.fillRect(0, yS, w, 1.2);
+  c.fillStyle = `rgba(${M.reflect},.5)`; c.fillRect(0, yS, w, 1.2);
   for (const p of S.terrain.polys) {
     if (p.kind === 'spire') continue;
     const n = p.pts.length;
@@ -2427,7 +2949,7 @@ function drawWater(v, L, t) {
         for (let k = 0; k < 5; k++) {
           const ph = t * 2 + k * 1.3 + x;
           const fw = v.s * (.3 + .25 * Math.sin(ph));
-          c.fillStyle = `rgba(255,240,225,${.28 + .18 * Math.sin(ph * 1.3)})`;
+          c.fillStyle = `rgba(255,245,235,${.24 + .16 * Math.sin(ph * 1.3)})`;
           c.fillRect(px - fw / 2 + Math.sin(ph) * v.s * .3, yS - 1 + k * 2.4, fw, 1.4);
         }
       }
@@ -2436,8 +2958,23 @@ function drawWater(v, L, t) {
 }
 
 function drawBirds(v, t) {
-  const c = v.ctx;
-  c.strokeStyle = 'rgba(40,16,40,.75)'; c.lineWidth = 1.3; c.lineCap = 'round';
+  const c = v.ctx, M = moodOf(S.level);
+  if (!M.birds) {
+    // night: fireflies drifting over the banks
+    c.globalCompositeOperation = 'lighter';
+    const L = S.level;
+    for (let i = 0; i < 26; i++) {
+      const side = i % 2 ? L.gap + 1 + hash(21, i) * 12 : -1 - hash(21, i) * 12;
+      const x = v.X(side + Math.sin(t * .4 + i) * 1.2), y = v.Y(.6 + hash(22, i) * 3 + Math.sin(t * .7 + i * 2) * .5);
+      const a = .35 + .65 * Math.max(0, Math.sin(t * 2.2 + i * 1.9));
+      const g = c.createRadialGradient(x, y, 0, x, y, 7);
+      g.addColorStop(0, `rgba(230,255,140,${a})`); g.addColorStop(1, 'rgba(230,255,140,0)');
+      c.fillStyle = g; c.fillRect(x - 7, y - 7, 14, 14);
+    }
+    c.globalCompositeOperation = 'source-over';
+    return;
+  }
+  c.strokeStyle = M.birds; c.lineWidth = 1.3; c.lineCap = 'round';
   for (let i = 0; i < 6; i++) {
     const sp = 14 + hash(11, i) * 16;
     const x = ((hash(5, i) * v.W + t * sp) % (v.W + 120)) - 60;
@@ -2549,6 +3086,9 @@ function vehicleOutline(c, V) {
   } else if (k === 'matatu') {
     c.moveTo(-.9, .05); c.lineTo(-.92, 1.84); c.quadraticCurveTo(-.9, 1.98, -.72, 1.98); c.lineTo(2.78, 1.98);
     c.quadraticCurveTo(2.92, 1.98, 3.0, 1.86); c.lineTo(3.42, 1.18); c.quadraticCurveTo(3.6, 1.08, 3.6, .9); c.lineTo(3.6, .05); c.closePath();
+  } else if (k === 'boda') {
+    c.moveTo(-.45, .15); c.lineTo(-.3, .72); c.lineTo(.25, .78); c.lineTo(.42, 1.28); c.quadraticCurveTo(.5, 1.62, .72, 1.58);
+    c.quadraticCurveTo(.9, 1.5, .82, 1.28); c.lineTo(1.1, .95); c.lineTo(1.35, .55); c.lineTo(1.62, .3); c.lineTo(1.7, .1); c.closePath();
   } else {
     // truck: cab outline plus bed
     c.moveTo(-.9, .35); c.lineTo(-.9, 1.95); c.lineTo(3.85, 1.95); c.lineTo(3.9, 2.62); c.lineTo(5.15, 2.62);
@@ -2567,15 +3107,8 @@ function drawVehicle(v, sim, t) {
   c.translate(v.X(w0.x), v.Y(w0.y));
   c.scale(v.s, -v.s);
   c.rotate(ang);
-  // headlight cone (additive)
   const fx = D.wheels[D.wheels.length - 1] + D.front;
-  const hy = D.key === 'car' ? .5 : D.key === 'truck' ? .75 : .7;
-  c.save();
-  c.globalCompositeOperation = 'lighter';
-  const cg = c.createLinearGradient(fx, 0, fx + 7, 0);
-  cg.addColorStop(0, 'rgba(255,225,160,.34)'); cg.addColorStop(1, 'rgba(255,225,160,0)');
-  c.fillStyle = cg; c.beginPath(); c.moveTo(fx, hy + .12); c.lineTo(fx + 7.5, hy + .9); c.lineTo(fx + 7.5, hy - 1.4); c.lineTo(fx, hy - .12); c.closePath(); c.fill();
-  c.restore();
+  const hy = headlightY(D);
   // body, with a touch of suspension pitch around the axle line
   c.save();
   c.rotate(clamp(bang - ang, -.08, .08));
@@ -2584,6 +3117,7 @@ function drawVehicle(v, sim, t) {
   if (k === 'car') drawCar(c);
   else if (k === 'van') drawVan(c);
   else if (k === 'matatu') drawMatatu(c, t);
+  else if (k === 'boda') drawBoda(c, t, sim);
   else drawTruck(c);
   // lights
   c.fillStyle = '#fff1c2'; c.beginPath(); c.ellipse(fx - .06, hy, .08, .1, 0, 0, Math.PI * 2); c.fill();
@@ -2598,6 +3132,63 @@ function drawVehicle(v, sim, t) {
     wheel(c, lx, ly, D.r, V.roll[i]);
   });
   c.restore();
+}
+function headlightY(D) { return D.key === 'car' ? .5 : D.key === 'truck' ? .75 : D.key === 'boda' ? .82 : .7; }
+function vehicleFrame(v, sim) {
+  const V = sim.veh, P = sim.P, w0 = P[V.wheels[0]], w1 = P[V.wheels[V.wheels.length - 1]];
+  return { x: v.X(w0.x), y: v.Y(w0.y), ang: Math.atan2(w1.y - w0.y, w1.x - w0.x) };
+}
+// Headlight cone, drawn additively after any night tint so it stays bright.
+function drawBeam(v, sim) {
+  const c = v.ctx, D = sim.veh.def, M = moodOf(S.level), f = vehicleFrame(v, sim);
+  const fx = D.wheels[D.wheels.length - 1] + D.front, hy = headlightY(D);
+  c.save();
+  c.translate(f.x, f.y); c.scale(v.s, -v.s); c.rotate(f.ang);
+  c.globalCompositeOperation = 'lighter';
+  const len = 7.5 + M.beam * 6;
+  const cg = c.createLinearGradient(fx, 0, fx + len, 0);
+  cg.addColorStop(0, `rgba(255,225,160,${M.beam})`); cg.addColorStop(1, 'rgba(255,225,160,0)');
+  c.fillStyle = cg; c.beginPath(); c.moveTo(fx, hy + .12); c.lineTo(fx + len, hy + .9 + M.beam); c.lineTo(fx + len, hy - 1.4 - M.beam * 1.5); c.lineTo(fx, hy - .12); c.closePath(); c.fill();
+  if (M.beam > .4) {
+    const g = c.createRadialGradient(fx, hy, 0, fx, hy, .6);
+    g.addColorStop(0, 'rgba(255,240,200,.8)'); g.addColorStop(1, 'rgba(255,240,200,0)');
+    c.fillStyle = g; c.fillRect(fx - .6, hy - .6, 1.2, 1.2);
+    const tx = D.wheels[0] - D.rear, rg = c.createRadialGradient(tx, hy, 0, tx, hy, .5);
+    rg.addColorStop(0, 'rgba(255,60,40,.7)'); rg.addColorStop(1, 'rgba(255,60,40,0)');
+    c.fillStyle = rg; c.fillRect(tx - .5, hy - .5, 1, 1);
+  }
+  c.restore();
+}
+// Boda boda: motorbike, rider in a helmet, and a bunch of matooke on the rack
+function drawBoda(c, t, sim) {
+  // matooke bunch
+  c.fillStyle = '#3f7d2a';
+  for (const [x, y, r] of [[-.28, .78, .17], [-.12, .86, .16], [-.36, .95, .14], [-.18, 1.02, .15], [-.02, .98, .12], [-.3, 1.12, .1]]) { c.beginPath(); c.ellipse(x, y, r, r * .8, .4, 0, Math.PI * 2); c.fill(); }
+  c.fillStyle = 'rgba(190,230,120,.35)';
+  for (const [x, y] of [[-.3, .82], [-.14, .9], [-.2, 1.06]]) { c.beginPath(); c.ellipse(x, y + .04, .07, .04, .4, 0, Math.PI * 2); c.fill(); }
+  c.strokeStyle = '#5a3a1a'; c.lineWidth = .04; c.beginPath(); c.moveTo(-.2, .72); c.lineTo(-.1, 1.2); c.stroke();
+  // frame, tank and seat
+  c.strokeStyle = '#2a2a30'; c.lineWidth = .07; c.lineCap = 'round';
+  c.beginPath(); c.moveTo(0, 0); c.lineTo(.45, .45); c.lineTo(1.05, .72); c.lineTo(1.35, 0); c.stroke();
+  c.beginPath(); c.moveTo(-.35, .62); c.lineTo(.3, .64); c.stroke();
+  c.fillStyle = '#c0392b'; c.beginPath(); c.moveTo(.55, .62); c.quadraticCurveTo(.75, .86, 1.02, .76); c.lineTo(.96, .6); c.closePath(); c.fill();
+  c.fillStyle = '#1b1b20'; c.beginPath(); c.moveTo(-.1, .66); c.quadraticCurveTo(.25, .8, .6, .7); c.lineTo(.58, .62); c.lineTo(-.08, .6); c.closePath(); c.fill();
+  c.fillStyle = '#4a4d55'; c.fillRect(.38, .22, .34, .28);
+  c.strokeStyle = '#8d939c'; c.lineWidth = .05; c.beginPath(); c.moveTo(.2, .2); c.lineTo(-.3, .25); c.stroke();
+  c.strokeStyle = '#c0392b'; c.lineWidth = .06; c.beginPath(); c.moveTo(1.35, 0); c.lineTo(1.12, .85); c.lineTo(1.0, .98); c.stroke();
+  c.fillStyle = '#c0392b'; c.beginPath(); c.moveTo(1.08, .06); c.quadraticCurveTo(1.35, .5, 1.62, .1); c.lineTo(1.55, .05); c.quadraticCurveTo(1.35, .38, 1.14, .02); c.closePath(); c.fill();
+  // rider: jacket, arm to the bars, helmet with visor
+  const bob = Math.sin(t * 9) * .012;
+  c.strokeStyle = '#243447'; c.lineWidth = .13;
+  c.beginPath(); c.moveTo(.3, .72); c.quadraticCurveTo(.62, .62, .7, .3); c.stroke();
+  c.fillStyle = '#e8a33a'; c.beginPath(); c.moveTo(.18, .7 + bob); c.lineTo(.42, 1.32 + bob); c.lineTo(.66, 1.3 + bob); c.lineTo(.5, .68 + bob); c.closePath(); c.fill();
+  c.fillStyle = 'rgba(255,255,255,.55)'; c.fillRect(.3, 1.0 + bob, .26, .05);
+  c.strokeStyle = '#e8a33a'; c.lineWidth = .1; c.beginPath(); c.moveTo(.58, 1.26 + bob); c.lineTo(.86, 1.06 + bob); c.lineTo(1.02, .98); c.stroke();
+  c.fillStyle = '#6b3f26'; c.beginPath(); c.arc(1.02, .98, .045, 0, Math.PI * 2); c.fill();
+  c.fillStyle = '#f2f2f2'; c.beginPath(); c.arc(.6, 1.48 + bob, .16, 0, Math.PI * 2); c.fill();
+  c.fillStyle = '#1d2533'; c.beginPath(); c.moveTo(.66, 1.44 + bob); c.lineTo(.77, 1.5 + bob); c.lineTo(.74, 1.4 + bob); c.closePath(); c.fill();
+  c.fillStyle = '#d63a2f'; c.fillRect(.46, 1.52 + bob, .24, .04);
+  c.lineCap = 'butt';
 }
 function shade(c, x0, y0, x1, y1, a) { // soft bottom-to-top shading inside the current path
   const g = c.createLinearGradient(0, y0, 0, y1);
@@ -2668,6 +3259,7 @@ function drawTruck(c) {
   arches(c, V);
 }
 function arches(c, V) {
+  if (V.key === 'boda') return;
   c.fillStyle = 'rgba(15,10,15,.85)';
   for (const dx of V.wheels) { c.beginPath(); c.arc(dx, 0, V.r * 1.14, 0, Math.PI); c.fill(); }
 }
@@ -2683,7 +3275,16 @@ function wheel(c, x, y, r, roll) {
 }
 
 // ---------------------------------------------------------------- particles
-function spawn(o) { if (S.particles.length < 900) S.particles.push(o); }
+// Confetti in the colours of the Ugandan flag
+function confetti() {
+  const L = S.level, v = S.view; if (!L || !v) return;
+  const cols = ['#1a1a1a', '#fcdc04', '#d90000'];
+  const x0 = v.iX(0), x1 = v.iX(W), top = v.iY(0);
+  for (let i = 0; i < 160; i++) {
+    spawn({ type: 'confetti', x: x0 + Math.random() * (x1 - x0), y: top + Math.random() * 3, vx: (Math.random() - .5) * 2, vy: -Math.random() * 2, life: 0, max: 4 + Math.random() * 2, g: 2.2, rot: Math.random() * 6, vr: (Math.random() - .5) * 14, col: cols[i % 3], sz: .12 + Math.random() * .1, drift: Math.random() * 6 });
+  }
+}
+function spawn(o) { if (S.particles.length < 1100) S.particles.push(o); }
 function burst(e) {
   const n = { wood: 16, steel: 22, road: 14, cable: 8 }[e.mat] || 10;
   for (let i = 0; i < n; i++) {
@@ -2709,6 +3310,7 @@ function updateParticles(dt) {
     p.life += dt; p.vy -= p.g * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.rot += (p.vr || 0) * dt;
     if (p.type === 'drop' && p.y < L.waterY && p.vy < 0) p.life = p.max;
     if (p.type === 'chip' && p.y < L.waterY) { p.vx *= .9; p.vy = Math.max(p.vy, -.4); }
+    if (p.type === 'confetti') { p.vy = Math.max(p.vy, -2.2); p.vx *= .99; }
   }
   S.particles = S.particles.filter(p => p.life < p.max);
   for (const f of S.flashes) f.t += dt;
@@ -2718,6 +3320,11 @@ function drawParticles(v) {
   const c = v.ctx;
   for (const p of S.particles) {
     const k = 1 - p.life / p.max, x = v.X(p.x), y = v.Y(p.y);
+    if (p.type === 'confetti') {
+      c.save(); c.translate(x + Math.sin(p.life * 3 + p.drift) * v.s * .3, y); c.rotate(p.rot); c.scale(1, Math.cos(p.life * 7 + p.drift));
+      c.globalAlpha = Math.min(1, k * 3); c.fillStyle = p.col; const s = 3 + p.sz * 22; c.fillRect(-s, -s * .5, s * 2, s);
+      c.restore(); c.globalAlpha = 1; continue;
+    }
     if (p.type === 'spark') {
       c.globalCompositeOperation = 'lighter';
       c.strokeStyle = `rgba(255,${180 + 60 * k},${90 * k},${k})`; c.lineWidth = 1.6;
@@ -2729,8 +3336,8 @@ function drawParticles(v) {
     } else if (p.type === 'drop') {
       c.fillStyle = `rgba(230,236,255,${.8 * k})`; c.beginPath(); c.arc(x, y, Math.max(1, p.sz * v.s), 0, Math.PI * 2); c.fill();
     } else {
-      const r = (p.sz + (1 - k) * .55) * v.s;
-      c.fillStyle = p.type === 'mist' ? `rgba(240,225,230,${.18 * k})` : `rgba(190,120,90,${.22 * k})`;
+      const r = Math.min((p.sz + (1 - k) * .55) * v.s, p.type === 'mist' ? 90 : 26);
+      c.fillStyle = p.type === 'mist' ? `rgba(240,225,230,${.18 * k})` : `rgba(190,120,90,${.16 * k})`;
       c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.fill();
     }
   }
@@ -2749,8 +3356,12 @@ function renderLive(t, sim, v) {
   c.drawImage(S.bgReal, 0, 0, W, H);
   drawBirds(v, t);
   const hov = S.screen === 'live' && S.pointer.inside ? hitMemberLive(sim, S.pointer.x, S.pointer.y) : -1;
+  drawCrowd(v, sim, t);
   drawMembersReal(v, sim, t, hov);
   drawVehicle(v, sim, t);
+  const M = moodOf(S.level);
+  if (M.tint) { c.fillStyle = M.tint; c.fillRect(0, 0, W, H); drawLamps(v, sim, t); }
+  drawBeam(v, sim);
   drawWater(v, S.level, t);
   drawParticles(v);
   c.drawImage(S.vig, 0, 0, W, H);
@@ -2761,6 +3372,49 @@ function renderLive(t, sim, v) {
     const cap = (f >= 0 ? m.capT : m.capC) / 1000;
     const txt = kind === 'slack' ? `${mat.short} · slack` : `${mat.short} · ${kind} ${Math.abs(f).toFixed(1)} kN of ${cap.toFixed(1)} kN · ${Math.round(m.util * 100)}%`;
     labelBox(c, txt, S.pointer.x, S.pointer.y - 28, { bg: 'rgba(28,16,38,.9)', borderColor: 'rgba(255,200,150,.5)', color: '#fff1e2' });
+  }
+}
+// Night: warm lamps on posts at every other road joint
+function drawLamps(v, sim, t) {
+  const c = v.ctx, P = sim.P, seen = new Set();
+  c.globalCompositeOperation = 'lighter';
+  let k = 0;
+  for (const m of sim.members) {
+    if (m.mat !== 'road' || m.broken) continue;
+    for (const j of [m.a, m.b]) {
+      if (seen.has(j)) continue; seen.add(j);
+      if ((k++) % 2) continue;
+      const p = P[j], x = v.X(p.x), y = v.Y(p.y + 1.1);
+      const fl = .85 + .15 * Math.sin(t * 13 + j);
+      const g = c.createRadialGradient(x, y, 0, x, y, v.s * 1.8);
+      g.addColorStop(0, `rgba(255,200,120,${.55 * fl})`); g.addColorStop(.2, `rgba(255,170,90,${.22 * fl})`); g.addColorStop(1, 'rgba(255,150,70,0)');
+      c.fillStyle = g; c.fillRect(x - v.s * 1.8, y - v.s * 1.8, v.s * 3.6, v.s * 3.6);
+      c.fillStyle = 'rgba(255,235,190,.95)'; c.beginPath(); c.arc(x, y, Math.max(1.5, v.s * .07), 0, Math.PI * 2); c.fill();
+    }
+  }
+  c.globalCompositeOperation = 'source-over';
+}
+// Villagers on the far bank. They wave while waiting and jump when the vehicle makes it.
+function drawCrowd(v, sim, t) {
+  const L = S.level; if (!L || !L.code || L.id === 0) return;
+  const c = v.ctx, hR = L.hR || 0, won = sim.state === 'crossed';
+  const shirts = ['#d63a2f', '#f2c12e', '#1f4fb4', '#2e8b57', '#e67e22', '#8e44ad', '#ecf0f1'];
+  const n = 7;
+  for (let i = 0; i < n; i++) {
+    const x = L.gap + 2.2 + i * .75 + hash(L.seed, i) * .3, hgt = 1.45 + hash(L.seed + 1, i) * .35;
+    const jump = won ? Math.max(0, Math.sin(t * 9 + i * 1.3)) * .35 : 0;
+    const bx = v.X(x), by = v.Y(hR + jump) - v.s * .1, s = v.s;
+    c.fillStyle = '#1b1320';
+    c.fillRect(bx - s * .09, by - s * hgt * .45, s * .07, s * hgt * .45);
+    c.fillRect(bx + s * .02, by - s * hgt * .45, s * .07, s * hgt * .45);
+    c.fillStyle = shirts[i % shirts.length];
+    c.beginPath(); c.roundRect ? c.roundRect(bx - s * .16, by - s * hgt * .82, s * .32, s * hgt * .4, s * .06) : c.rect(bx - s * .16, by - s * hgt * .82, s * .32, s * hgt * .4); c.fill();
+    c.fillStyle = '#3b2418'; c.beginPath(); c.arc(bx, by - s * hgt * .92, s * .13, 0, Math.PI * 2); c.fill();
+    const wave = won ? -1.2 + Math.sin(t * 12 + i) * .5 : -0.2 + Math.sin(t * 2 + i) * .15;
+    c.strokeStyle = '#3b2418'; c.lineWidth = Math.max(1, s * .06); c.lineCap = 'round';
+    c.beginPath(); c.moveTo(bx + s * .14, by - s * hgt * .76); c.lineTo(bx + s * .14 + Math.sin(-wave) * s * .38, by - s * hgt * .76 - Math.cos(-wave) * s * .38 * (won ? 1 : -1)); c.stroke();
+    c.beginPath(); c.moveTo(bx - s * .14, by - s * hgt * .76); c.lineTo(bx - s * .14 - (won ? Math.sin(-wave) * s * .38 : s * .05), by - s * hgt * .76 - (won ? Math.cos(-wave) * s * .38 : -s * .36)); c.stroke();
+    c.lineCap = 'butt';
   }
 }
 function hitMemberLive(sim, px, py) {
@@ -2826,6 +3480,10 @@ const Snd = (() => {
     },
     creak() { noise(.4, 'bandpass', 380 + Math.random() * 200, 18, .22, 0, 250 + Math.random() * 100); },
     splash() { noise(1.3, 'lowpass', 2600, .7, .5, 0, 300); noise(.3, 'highpass', 4000, 1, .2, .05); tone(70, .5, 'sine', .3, 0, 35); },
+    cheer() {
+      noise(1.8, 'bandpass', 1400, .6, .14, 0, 2200); noise(1.4, 'bandpass', 700, .8, .1, .15);
+      tone(1900, .25, 'sine', .05, .3, 2600); tone(2100, .3, 'sine', .04, .7, 2900);
+    },
     win() { [392, 440, 523, 587, 659, 784, 659, 784].forEach((f, i) => marimba(f, i * .11)); marimba(1046, .95, .2); },
     fail() { [330, 294, 262, 196].forEach((f, i) => marimba(f, i * .18, .12)); },
     engine(on, speed, mass) {
@@ -2859,7 +3517,9 @@ function setScreen(name) {
   $('#tools-live').hidden = name !== 'live';
   $('#hud-mode').textContent = name === 'live' ? 'Live test' : 'Blueprint';
   if (name !== 'live') $('#result').hidden = true;
-  if (name !== 'build' && name !== 'live') $('#solutions').hidden = true;
+  if (name !== 'build' && name !== 'live') for (const id of ['solutions', 'hint']) $('#' + id).hidden = true;
+  if (name !== 'levels') for (const id of ['notes', 'badges']) $('#' + id).hidden = true;
+  if (name !== 'build') $('#btn-test').classList.remove('pulse');
   if (name !== 'live') Snd.engine(false, 0, 0);
 }
 
@@ -2880,7 +3540,7 @@ function demoDesign() {
   for (let x = 0; x < 16; x += 2) members.push([idx(x, 0), idx(x + 2, 0), 'road']);
   for (let x = 2; x <= 14; x += 2) members.push([idx(x, 0), idx(x, arch(x)), 'wood']);
   for (let x = 0; x < 16; x += 2) members.push([idx(x, arch(x)), idx(x + 2, arch(x + 2)), 'steel']);
-  for (let x = 2; x < 14; x += 2) members.push([idx(x, 0), idx(x + 2, arch(x + 2)), 'wood']);
+  for (let x = 2; x < 14; x += 2) members.push([idx(x, 0), idx(x + 2, arch(x + 2)), 'steel']);
   members.push([idx(0, -3), idx(2, 0), 'steel']); members.push([idx(16, -3), idx(14, 0), 'steel']);
   return { nodes, members };
 }
@@ -2891,33 +3551,53 @@ function startDemo() {
   S.demoEnd = 0;
 }
 
+function isDone(L) { const p = save.progress[L.id]; return !!(p && p.stars > 0); }
+function isUnlocked(i) {
+  return i === 0 || isDone(LEVELS[i - 1]) || isDone(LEVELS[i]) || LEVELS.slice(i + 1).some(isDone);
+}
 function buildLevelGrid() {
   const grid = $('#level-grid'); grid.innerHTML = '';
   let total = 0;
-  LEVELS.forEach((L, i) => {
-    const prog = save.progress[L.id];
-    const unlocked = i === 0 || (save.progress[LEVELS[i - 1].id] && save.progress[LEVELS[i - 1].id].stars > 0);
-    const stars = prog ? prog.stars : 0; total += stars;
-    const V = VEHICLES[L.vehicle];
-    const b = document.createElement('button');
-    b.className = 'lvl'; b.disabled = !unlocked;
-    b.setAttribute('aria-label', `${L.code} ${L.name}${unlocked ? '' : ' (locked)'}`);
-    b.innerHTML = `
-      <canvas class="lvl-thumb"></canvas>
-      <span class="lvl-stamp ${stars ? '' : unlocked ? 'pending' : 'locked'}">${stars ? 'Approved' : unlocked ? 'Open' : 'Locked'}</span>
-      <div class="lvl-meta">
-        <div><span class="k">Drg</span><span class="v code">${L.code}</span></div>
-        <div><span class="k">${L.place}</span><span class="v">${L.name}</span></div>
-        <div><span class="k">Span</span><span class="v">${L.gap} m</span></div>
-        <div><span class="k">Vehicle</span><span class="v">${V.name} · ${(V.mass / 1000).toFixed(1)} t</span></div>
-        <div class="full"><span><span class="k">Budget</span><span class="v">${ugx(L.budget)}</span></span>
-          <span class="lvl-stars" aria-label="${stars} of 3 stars">${[1, 2, 3].map(k => `<span class="${k <= stars ? '' : 'e'}">★</span>`).join('')}</span></div>
-      </div>`;
-    b.addEventListener('click', () => { Snd.init(); openLevel(L); });
-    grid.appendChild(b);
-    requestAnimationFrame(() => drawThumb(b.querySelector('canvas'), L, save.designs[L.id]));
+  CHAPTERS.forEach(ch => {
+    const list = LEVELS.filter(L => L.chapter === ch.id);
+    const done = list.filter(isDone).length;
+    const head = document.createElement('div');
+    head.className = 'chapter-head';
+    head.innerHTML = `<span class="num">Chapter ${ch.id}</span><h3>${ch.name}</h3><p>${ch.blurb} ${done}/${list.length} complete.</p>`;
+    grid.appendChild(head);
+    const box = document.createElement('div');
+    box.className = 'level-grid-inner';
+    grid.appendChild(box);
+    list.forEach(L => {
+      const i = LEVELS.indexOf(L);
+      const prog = save.progress[L.id];
+      const unlocked = isUnlocked(i);
+      const stars = prog ? prog.stars : 0; total += stars;
+      const V = VEHICLES[L.vehicle];
+      const b = document.createElement('button');
+      b.className = 'lvl'; b.disabled = !unlocked;
+      b.setAttribute('aria-label', `${L.code} ${L.name}${unlocked ? '' : ' (locked)'}`);
+      const nextUp = unlocked && !stars && (i === 0 || isDone(LEVELS[i - 1]));
+      b.innerHTML = `
+        <canvas class="lvl-thumb"></canvas>
+        ${nextUp ? '<span class="lvl-new">Next up</span>' : ''}
+        <span class="lvl-stamp ${stars ? '' : unlocked ? 'pending' : 'locked'}">${stars ? 'Approved' : unlocked ? 'Open' : 'Locked'}</span>
+        <div class="lvl-meta">
+          <div><span class="k">Drg</span><span class="v code">${L.code}</span></div>
+          <div><span class="k">${L.place}</span><span class="v">${L.name}</span></div>
+          <div><span class="k">Span</span><span class="v">${L.gap} m</span></div>
+          <div><span class="k">Vehicle</span><span class="v">${V.name} · ${(V.mass / 1000).toFixed(V.mass < 1000 ? 2 : 1)} t</span></div>
+          <div class="full"><span><span class="k">Budget</span><span class="v">${ugx(L.budget)}</span></span>
+            <span class="lvl-stars" aria-label="${stars} of 3 stars">${[1, 2, 3].map(k => `<span class="${k <= stars ? '' : 'e'}">★</span>`).join('')}</span></div>
+        </div>`;
+      b.addEventListener('click', () => { Snd.init(); openLevel(L); });
+      box.appendChild(b);
+      requestAnimationFrame(() => drawThumb(b.querySelector('canvas'), L, save.designs[L.id]));
+    });
   });
   $('#levels-sum').textContent = `${total} / ${LEVELS.length * 3} stars`;
+  $('#notes-count').textContent = `${FIELD_NOTES.filter(noteUnlocked).length}/${FIELD_NOTES.length}`;
+  $('#badges-count').textContent = `${Object.keys(save.badges).length}/${BADGES.length}`;
 }
 function drawThumb(canvas, L, D) {
   const r = canvas.getBoundingClientRect();
@@ -2949,11 +3629,12 @@ function drawThumb(canvas, L, D) {
   for (const a of L.anchors) { c.beginPath(); c.arc(v.X(a[0]), v.Y(a[1]), 2.5, 0, Math.PI * 2); c.fill(); }
 }
 
-function openLevel(L) {
+function openLevel(L, opts = {}) {
   S.level = L;
-  const saved = save.designs[L.id];
-  S.design = saved ? JSON.parse(JSON.stringify(saved)) : { nodes: [], members: [] };
-  S.hist = []; S.redo = []; S.sim = null; S.drag = null; S.particles = []; S.flashes = [];
+  const saved = opts.design || save.designs[L.id];
+  S.design = saved ? JSON.parse(JSON.stringify({ nodes: saved.nodes, members: saved.members })) : { nodes: [], members: [] };
+  S.hist = []; S.redo = []; S.sim = null; S.drag = null; S.move = null; S.particles = []; S.flashes = [];
+  S.sketch = false; S.failMark = null; S.testArmed = 0;
   S.tool = L.materials[0];
   setScreen('build');
   buildToolButtons();
@@ -2961,16 +3642,22 @@ function openLevel(L) {
   $('#hud-code').textContent = L.code;
   $('#hud-name').textContent = L.name;
   $('#hud-place').textContent = L.place;
-  $('#hud-veh').textContent = `${V.name} ${(V.mass / 1000).toFixed(1)} t`;
-  $('#hud-budget').textContent = ugxShort(L.budget);
+  $('#hud-veh').textContent = `${V.name} ${(V.mass / 1000).toFixed(V.mass < 1000 ? 2 : 1)} t`;
+  $('#hud-budget').textContent = L.sandbox ? 'no limit' : ugxShort(L.budget);
+  document.body.classList.toggle('sandbox', !!L.sandbox);
+  const canMirror = !(L.hR);
+  $('#btn-mirror').disabled = !canMirror;
+  if (!canMirror) S.mirror = false;
+  $('#btn-mirror').setAttribute('aria-pressed', S.mirror ? 'true' : 'false');
+  $('#btn-hint').hidden = !!L.sandbox;
   updateSolveButton();
   requestAnimationFrame(() => { rebuild(); updateCost(); });
   rebuild(); updateCost();
-  if (!save.seenHelp) { save.seenHelp = true; persist(); setTimeout(() => showHelp(true), 350); }
+  if (opts.shared) toast('A friend shared this bridge. Press Space to test it. Can you build it cheaper?', 5200);
+  else if (!save.seenHelp && !L.guide) { save.seenHelp = true; persist(); setTimeout(() => showHelp(true), 350); }
   else if (H > W && W < 700) toast('Turn your phone sideways for a bigger drawing.', 4200);
-  else toast(L.notes[0]);
+  else toast(L.notes[0], 4200);
 }
-
 function buildToolButtons() {
   const box = $('#tools-mat'); box.innerHTML = '';
   S.level.materials.forEach((k, i) => {
@@ -2984,10 +3671,11 @@ function buildToolButtons() {
     box.appendChild(b);
   });
   $('#tool-erase').setAttribute('aria-pressed', S.tool === 'erase' ? 'true' : 'false');
+  $('#tool-move').setAttribute('aria-pressed', S.tool === 'move' ? 'true' : 'false');
 }
 function selectTool(k) {
   if (S.screen !== 'build') return;
-  if (k !== 'erase' && !S.level.materials.includes(k)) return;
+  if (k !== 'erase' && k !== 'move' && !S.level.materials.includes(k)) return;
   S.tool = k;
   document.querySelectorAll('#tools-build .tool[data-tool]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tool === k ? 'true' : 'false'));
   Snd.tick();
@@ -3025,23 +3713,39 @@ function showHelp(first) {
 function snapshot() { S.hist.push(JSON.stringify(S.design)); if (S.hist.length > 200) S.hist.shift(); S.redo = []; }
 function undo() { if (!S.hist.length) return; S.redo.push(JSON.stringify(S.design)); S.design = JSON.parse(S.hist.pop()); S.lastAdded = null; changed(); Snd.tick(); }
 function redo() { if (!S.redo.length) return; S.hist.push(JSON.stringify(S.design)); S.design = JSON.parse(S.redo.pop()); S.lastAdded = null; changed(); Snd.tick(); }
-function changed() { updateCost(); save.designs[S.level.id] = S.design; persist(); }
+function changed() { updateCost(); S.failMark = null; save.designs[S.level.id] = S.design; persist(); }
 function nodeIndexAt(x, y) {
   const L = S.level, nA = L.anchors.length;
   for (let i = 0; i < nA; i++) if (Math.hypot(L.anchors[i][0] - x, L.anchors[i][1] - y) < .2) return i;
   for (let i = 0; i < S.design.nodes.length; i++) if (Math.hypot(S.design.nodes[i][0] - x, S.design.nodes[i][1] - y) < .2) return nA + i;
   return -1;
 }
+function ensureNode(x, y) {
+  const k = nodeIndexAt(x, y); if (k >= 0) return k;
+  S.design.nodes.push([+x.toFixed(3), +y.toFixed(3)]);
+  return S.level.anchors.length + S.design.nodes.length - 1;
+}
+const connected = (i, j) => S.design.members.some(m => (m[0] === i && m[1] === j) || (m[0] === j && m[1] === i));
 function addMember(from, tgt, mat) {
   let to = tgt.node;
-  const D = S.design, nA = S.level.anchors.length;
+  const D = S.design;
   if (to < 0) { to = nodeIndexAt(tgt.x, tgt.y); }
   if (to === from) return false;
-  if (to >= 0 && D.members.some(m => (m[0] === from && m[1] === to) || (m[0] === to && m[1] === from))) { toast('Those joints are already connected.'); return false; }
+  if (to >= 0 && connected(from, to)) { toast('Those joints are already connected.'); return false; }
   snapshot();
-  if (to < 0) { D.nodes.push([+tgt.x.toFixed(3), +tgt.y.toFixed(3)]); to = nA + D.nodes.length - 1; }
+  if (to < 0) to = ensureNode(tgt.x, tgt.y);
   D.members.push([from, to, mat]);
   S.lastAdded = { k: D.members.length - 1, t: S.time };
+  // mirror mode: draw the matching member on the other side of the span
+  if (S.mirror && !S.level.hR) {
+    const g = S.level.gap, a = nodePos(from), b = nodePos(to);
+    const ma = [g - a[0], a[1]], mb = [g - b[0], b[1]];
+    const same = (Math.abs(ma[0] - a[0]) < 1e-6 && Math.abs(mb[0] - b[0]) < 1e-6) || (Math.abs(ma[0] - b[0]) < 1e-6 && Math.abs(mb[0] - a[0]) < 1e-6 && Math.abs(ma[1] - b[1]) < 1e-6);
+    if (!same) {
+      const i = ensureNode(ma[0], ma[1]), j = ensureNode(mb[0], mb[1]);
+      if (i !== j && !connected(i, j)) D.members.push([i, j, mat]);
+    }
+  }
   changed(); Snd.place(mat);
   return true;
 }
@@ -3058,9 +3762,22 @@ function pruneOrphans() {
     if (!S.design.members.some(m => m[0] === k || m[1] === k)) removeNode(k);
   }
 }
+function mirrorMemberIndex(k) {
+  const m = S.design.members[k], g = S.level.gap, a = nodePos(m[0]), b = nodePos(m[1]);
+  const i = nodeIndexAt(g - a[0], a[1]), j = nodeIndexAt(g - b[0], b[1]);
+  if (i < 0 || j < 0) return -1;
+  const idx = S.design.members.findIndex(q => (q[0] === i && q[1] === j) || (q[0] === j && q[1] === i));
+  return idx === k ? -1 : idx;
+}
 function eraseAt() {
   if (S.hoverNode >= S.level.anchors.length) { snapshot(); removeNode(S.hoverNode); pruneOrphans(); S.hoverNode = -1; changed(); Snd.erase(); return true; }
-  if (S.hoverMember >= 0) { snapshot(); S.design.members.splice(S.hoverMember, 1); pruneOrphans(); S.hoverMember = -1; changed(); Snd.erase(); return true; }
+  if (S.hoverMember >= 0) {
+    snapshot();
+    const twin = S.mirror && !S.level.hR ? mirrorMemberIndex(S.hoverMember) : -1;
+    const del = [S.hoverMember, twin].filter(k => k >= 0).sort((a, b) => b - a);
+    for (const k of del) S.design.members.splice(k, 1);
+    pruneOrphans(); S.hoverMember = -1; changed(); Snd.erase(); return true;
+  }
   return false;
 }
 function clearDesign() {
@@ -3119,9 +3836,15 @@ cv.addEventListener('pointermove', e => {
   if (!S.view) return;
   S.pointer.wx = S.view.iX(x); S.pointer.wy = S.view.iY(y);
   if (S.screen !== 'build') return;
+  if (S.move) {
+    const gx = Math.round(S.view.iX(x) * 2) / 2, gy = Math.round(S.view.iY(y) * 2) / 2;
+    const n = S.design.nodes[S.move.node - S.level.anchors.length];
+    if (n[0] !== gx || n[1] !== gy) { n[0] = gx; n[1] = gy; Snd.tick(); }
+    return;
+  }
   if (S.drag) { const prev = S.drag.target; S.drag.target = dragTarget(x, y); if (!prev || prev.x !== S.drag.target.x || prev.y !== S.drag.target.y) Snd.tick(); return; }
   const h = hitTest(x, y); S.hoverNode = h.node; S.hoverMember = h.mem;
-  cv.style.cursor = h.node >= 0 || h.mem >= 0 ? 'pointer' : 'crosshair';
+  cv.style.cursor = S.tool === 'move' ? (h.node >= S.level.anchors.length ? 'grab' : 'default') : h.node >= 0 || h.mem >= 0 ? 'pointer' : 'crosshair';
 });
 cv.addEventListener('pointerleave', () => { S.pointer.inside = false; S.hoverNode = -1; S.hoverMember = -1; });
 cv.addEventListener('contextmenu', e => e.preventDefault());
@@ -3133,6 +3856,15 @@ cv.addEventListener('pointerdown', e => {
   const h = hitTest(x, y); S.hoverNode = h.node; S.hoverMember = h.mem;
   if (e.button === 2 || S.tool === 'erase') { eraseAt(); return; }
   if (e.button !== 0) return;
+  if (S.tool === 'move') {
+    if (h.node >= S.level.anchors.length) {
+      const n = S.design.nodes[h.node - S.level.anchors.length];
+      S.move = { node: h.node, from: n.slice(), before: JSON.stringify(S.design) };
+      cv.setPointerCapture(e.pointerId); cv.style.cursor = 'grabbing';
+    } else if (h.node >= 0) toast('Anchors are fixed to the rock. Move the joints you built.');
+    else toast('Press on a joint and drag it somewhere new.');
+    return;
+  }
   if (h.node >= 0) {
     cv.setPointerCapture(e.pointerId);
     S.drag = { from: h.node, target: null, id: e.pointerId };
@@ -3143,7 +3875,30 @@ cv.addEventListener('pointerdown', e => {
     toast('Start from an amber anchor on the banks, or from a joint you have built.'); Snd.deny();
   }
 });
+function endMove() {
+  const mv = S.move; S.move = null; cv.style.cursor = 'grab';
+  const D = S.design, nA = S.level.anchors.length, k = mv.node, n = D.nodes[k - nA];
+  if (n[0] === mv.from[0] && n[1] === mv.from[1]) return;
+  const clash = nodeIndexAtExcept(n[0], n[1], k);
+  const bad = D.members.filter(m => m[0] === k || m[1] === k).find(m => {
+    const a = nodePos(m[0]), b = nodePos(m[1]), L = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    return L > MATERIALS[m[2]].maxLen + 1e-6 || L < .45;
+  });
+  if (clash >= 0 || bad) {
+    n[0] = mv.from[0]; n[1] = mv.from[1];
+    toast(clash >= 0 ? 'Another joint is already there.' : `That would make a ${MATERIALS[bad[2]].short.toLowerCase()} member too ${Math.hypot(nodePos(bad[1])[0] - nodePos(bad[0])[0], nodePos(bad[1])[1] - nodePos(bad[0])[1]) < .45 ? 'short' : 'long'}.`);
+    Snd.deny(); return;
+  }
+  S.hist.push(mv.before); S.redo = []; changed(); Snd.place('steel');
+}
+function nodeIndexAtExcept(x, y, except) {
+  const L = S.level, nA = L.anchors.length;
+  for (let i = 0; i < nA; i++) if (i !== except && Math.hypot(L.anchors[i][0] - x, L.anchors[i][1] - y) < .2) return i;
+  for (let i = 0; i < S.design.nodes.length; i++) if (nA + i !== except && Math.hypot(S.design.nodes[i][0] - x, S.design.nodes[i][1] - y) < .2) return nA + i;
+  return -1;
+}
 function endDrag(e) {
+  if (S.move) { endMove(); return; }
   if (!S.drag) return;
   const d = S.drag; S.drag = null;
   if (e && e.type === 'pointercancel') return;
@@ -3159,7 +3914,9 @@ cv.addEventListener('pointercancel', endDrag);
 window.addEventListener('keydown', e => {
   if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
   if (!$('#help').hidden) { if (e.key === 'Escape' || e.key === 'Enter') { $('#help').hidden = true; e.preventDefault(); } return; }
-  if (!$('#solutions').hidden) { if (e.key === 'Escape') { $('#solutions').hidden = true; e.preventDefault(); } return; }
+  for (const id of ['solutions', 'hint', 'notes', 'badges', 'sandbox']) {
+    if (!$('#' + id).hidden) { if (e.key === 'Escape') { $('#' + id).hidden = true; e.preventDefault(); } return; }
+  }
   const k = e.key.toLowerCase(), mod = e.ctrlKey || e.metaKey;
   if (S.screen === 'build') {
     if (mod && k === 'z' && !e.shiftKey) { undo(); e.preventDefault(); return; }
@@ -3167,9 +3924,12 @@ window.addEventListener('keydown', e => {
     if (mod) return;
     if (k >= '1' && k <= '4') { const m = S.level.materials[+k - 1]; if (m) selectTool(m); }
     else if (k === 'e') selectTool('erase');
+    else if (k === 'g') selectTool('move');
+    else if (k === 'x') toggleMirror();
     else if (k === ' ') { e.preventDefault(); startTest(); }
     else if (k === 'escape') { if (S.drag) S.drag = null; else goLevels(); }
-    else if (k === 'h' || k === '?') showHelp();
+    else if (k === 'h') { if (!S.level.sandbox) showHint(); }
+    else if (k === '?') showHelp();
     else if (k === 'm') toggleMute();
   } else if (S.screen === 'live') {
     if (mod) return;
@@ -3188,6 +3948,12 @@ function startTest() {
   if (S.trans) return;
   const L = S.level, D = S.design;
   if (!D.members.some(m => m[2] === 'road')) { toast('Lay some road deck first. Only road carries wheels.'); Snd.deny(); return; }
+  if (!roadReaches(D) && performance.now() - (S.testArmed || 0) > 3000) {
+    S.testArmed = performance.now();
+    toast('Your road doesn\'t reach the far bank yet. Press Test again to try anyway.', 3600); Snd.deny(); return;
+  }
+  S.testArmed = 0; S.bulletUntil = 0; S.bulletUsed = false;
+  save.stats.tests = (save.stats.tests || 0) + 1;
   S.sim = createSim(L, D);
   S.particles = []; S.flashes = []; S.resultAt = 0; S.resultShown = false; S.shake = 0; S.acc = 0;
   S.trans = { to: 'live', t0: performance.now(), dur: reduceMotion ? 1 : 750 };
@@ -3196,6 +3962,14 @@ function startTest() {
   $('#btn-slow').setAttribute('aria-pressed', S.slow ? 'true' : 'false');
   $('#btn-forces').setAttribute('aria-pressed', S.forces ? 'true' : 'false');
   $('#legend').classList.toggle('forces', S.forces);
+}
+// Does a chain of road members connect the two bank-edge anchors (0 and 1)?
+function roadReaches(D) {
+  const adj = new Map();
+  for (const [a, b, m] of D.members) if (m === 'road') { (adj.get(a) || adj.set(a, []).get(a)).push(b); (adj.get(b) || adj.set(b, []).get(b)).push(a); }
+  const seen = new Set([0]), q = [0];
+  while (q.length) { const k = q.shift(); for (const n of adj.get(k) || []) if (!seen.has(n)) { seen.add(n); q.push(n); } }
+  return seen.has(1);
 }
 function stopTest() {
   if (S.trans) return;
@@ -3208,19 +3982,23 @@ function replay() {
   S.sim = createSim(S.level, S.design); S.particles = []; S.flashes = []; S.resultAt = 0; S.resultShown = false; $('#result').hidden = true;
 }
 function toggleSlow() { S.slow = !S.slow; $('#btn-slow').setAttribute('aria-pressed', S.slow ? 'true' : 'false'); Snd.tick(); }
-function toggleForces() { S.forces = !S.forces; $('#btn-forces').setAttribute('aria-pressed', S.forces ? 'true' : 'false'); $('#legend').classList.toggle('forces', S.forces); Snd.tick(); }
+function toggleForces() { S.forces = !S.forces; if (S.forces) { save.stats.sawForces = 1; persist(); } $('#btn-forces').setAttribute('aria-pressed', S.forces ? 'true' : 'false'); $('#legend').classList.toggle('forces', S.forces); Snd.tick(); }
 function toggleMute() { save.muted = !save.muted; persist(); Snd.setMuted(save.muted); $('#btn-mute').classList.toggle('off', save.muted); }
 
 function handleEvents(ev, sim, isDemo) {
   for (const e of ev) {
     if (e.type === 'break') {
       burst(e);
-      if (!isDemo) { Snd.snap(e.mat); S.shake = Math.max(S.shake, reduceMotion ? 0 : 7); }
+      if (!isDemo) {
+        Snd.snap(e.mat); S.shake = Math.max(S.shake, reduceMotion ? 0 : 7);
+        // bullet time: the first failure plays out slowly so you can see it
+        if (!S.bulletUsed && !reduceMotion) { S.bulletUsed = true; S.bulletUntil = performance.now() + 1300; }
+      }
     } else if (e.type === 'splash') {
       splash(e.x, e.y, e.v);
-      if (!isDemo) { Snd.splash(); S.shake = Math.max(S.shake, reduceMotion ? 0 : 5); }
+      if (!isDemo) { Snd.splash(); S.shake = Math.max(S.shake, reduceMotion ? 0 : 5); save.stats.splash = (save.stats.splash || 0) + 1; persist(); }
     } else if (e.type === 'finish' && !isDemo) {
-      // wait a moment so the vehicle rolls clear, then show the report
+      confetti(); Snd.cheer();
     }
   }
 }
@@ -3228,7 +4006,8 @@ function vehicleSpeed(sim) { const p = sim.P[sim.veh.wheels[0]]; return Math.hyp
 
 function stepLive(dt) {
   const sim = S.sim; if (!sim) return;
-  const scale = S.slow ? .25 : 1;
+  const bullet = performance.now() < (S.bulletUntil || 0);
+  const scale = S.slow ? .25 : bullet ? .28 : 1;
   S.acc = (S.acc || 0) + dt * scale;
   let n = 0;
   while (S.acc >= 1 / 60 && n < 3) {
@@ -3257,14 +4036,84 @@ function stepLive(dt) {
   });
 }
 
+// Reads a finished test and explains, in plain words, what happened and what to try.
+function engineerNotes(sim, L, D, cost, crossed, stars) {
+  const out = [], V = VEHICLES[L.vehicle], vn = V.name.toLowerCase(), fb = sim.firstBreak;
+  const kN = f => Math.abs(f / 1000).toFixed(0) + ' kN';
+  if (!roadReaches(D)) out.push(`The road doesn't join bank to bank, so the ${vn} ran out of road. Every plank has to link up from the left pin to the right one.`);
+  // Maxwell's counting rule: a rigid pin-jointed frame needs at least 2 members per free joint
+  const used = new Set(); for (const m of D.members) { used.add(m[0]); used.add(m[1]); }
+  const freeJoints = [...used].filter(i => i >= L.anchors.length).length, need = 2 * freeJoints;
+  if (!crossed && D.members.length < need && freeJoints > 1) out.push(`Your frame can fold like a folding chair: ${freeJoints} joints need at least ${need} members to lock in place, and it has ${D.members.length}. Add diagonals so every square becomes two triangles.`);
+  if (fb) {
+    const mat = MATERIALS[fb.mat].short.toLowerCase();
+    if (fb.mode === 'buckle') {
+      let t = `First failure: a ${fb.L.toFixed(1)} m ${mat} member buckled under ${kN(fb.force)} of squeeze (it could take ${kN(fb.cap)}).`;
+      if (fb.L > 1.8) t += ' Shorter is stronger: split it with a joint and a brace and each half carries about four times as much.';
+      if (fb.mat === 'wood' && L.materials.includes('steel')) t += ' Or switch it to steel.';
+      out.push(t);
+    } else if (fb.mat === 'road') {
+      const help = L.anchors.some(a => a[1] > 1) && L.materials.includes('cable') ? 'hang it from the towers with cables' : L.anchors.length > 2 ? 'prop it from the lower anchors, or build triangles under it' : 'build a row of triangles under or over it';
+      out.push(`First failure: the road deck tore apart, stretched like a rope with ${kN(fb.force)} of pull. It needs support: ${help}.`);
+    } else if (fb.mat === 'cable') {
+      out.push(`First failure: a cable snapped at ${kN(fb.force)}. Share the load between more cables, or stiffen the deck with triangles so no single cable takes it all.`);
+    } else {
+      out.push(`First failure: a ${fb.L.toFixed(1)} m ${mat} member was pulled apart (${kN(fb.force)}, capacity ${kN(fb.cap)}). Add a second member to share the load${fb.mat === 'wood' && L.materials.includes('steel') ? ', or make it steel' : ''}.`);
+    }
+    if (!save.stats.sawForces) out.push('Tip: replay with Forces view (F). Red members are being pulled, blue ones squashed. The brightest ones are working hardest.');
+  } else if (!crossed && sim.result) {
+    if (sim.result.reason === 'water') out.push(`Nothing broke, but the deck bent so far that the ${vn} slid off. Stiffen it with triangles.`);
+    else out.push(`Nothing broke, but the ${vn} got stuck. Look for a step or a steep kink in the road.`);
+  }
+  if (crossed && !L.sandbox) {
+    const B = L.budget, lazy = sim.members.filter(m => !m.stub && !m.broken && m.mat !== 'road' && m.peak < .3);
+    const nodes = L.anchors.concat(D.nodes);
+    const mcost = m => { const d = D.members[m.id]; if (!d) return 0; const a = nodes[d[0]], b = nodes[d[1]]; return MATERIALS[d[2]].cost * Math.hypot(b[0] - a[0], b[1] - a[1]); };
+    const lazyCost = lazy.reduce((t, m) => t + mcost(m), 0);
+    if (stars < 3 && lazy.length) out.push(`${lazy.length} member${lazy.length > 1 ? 's' : ''} never went above 30% of ${lazy.length > 1 ? 'their' : 'its'} strength (${ugx(lazyCost)} worth). Remove some, or make steel ones timber. Three stars needs ${ugx(B * .7)} or less.`);
+    const lean = (SOLUTIONS[L.id] || []).reduce((m, x) => Math.min(m, x.cost), Infinity);
+    if (cost < lean) out.push(`You beat the engineer's best design (${ugx(lean)}). That takes real skill.`);
+    else if (stars === 3) out.push(`Excellent. The engineer's best design costs ${ugx(lean)}. Can you get closer?`);
+  }
+  return out.slice(0, 3);
+}
+
+// Achievements: returns the ids earned by this test that weren't earned before.
+function checkBadges(sim, L, D, cost, crossed, stars) {
+  const got = [], earn = id => { if (!save.badges[id]) { save.badges[id] = Date.now(); got.push(id); } };
+  const real = sim.members.filter(m => !m.stub);
+  const broke = real.filter(m => m.broken).length, peak = real.reduce((p, m) => Math.max(p, m.peak), 0);
+  if (crossed && (L.sandbox || stars > 0)) earn('first');
+  if (stars > 0 && L.code === 'AP-04') earn('triangle');
+  if (LEVELS.filter(l => l.chapter === 1).every(isDone)) earn('apprentice');
+  if (stars === 3) earn('three');
+  if (stars > 0 && cost < L.budget * .5) earn('half');
+  const lean = (SOLUTIONS[L.id] || []).reduce((m, x) => Math.min(m, x.cost), Infinity);
+  if (stars > 0 && cost < lean) earn('beat');
+  if (crossed && real.length && peak < .25) earn('lazy');
+  if (crossed && peak >= .95) earn('edge');
+  if (crossed && broke >= 3) earn('survivor');
+  if ((save.stats.splash || 0) >= 5) earn('splash');
+  if (broke >= 25) earn('demolition');
+  if (LEVELS.filter(l => l.chapter === 2).every(l => save.progress[l.id] && save.progress[l.id].stars === 3)) earn('nile');
+  if (L.sandbox && crossed && L.gap >= 40) earn('dreamer');
+  return got;
+}
+function awardBadges(ids) {
+  ids.forEach((id, i) => {
+    const b = BADGES.find(x => x.id === id);
+    setTimeout(() => { toast(`Badge earned: ${b.name}. ${b.desc}`, 3800); Snd.tick(); }, 900 + i * 2600);
+  });
+}
+
 function showResult() {
   const sim = S.sim, L = S.level; S.resultShown = true;
-  const cost = designCost(L, S.design), B = L.budget;
+  const D = S.design, cost = designCost(L, D), B = L.budget;
   let pm = null; for (const m of sim.members) if (!m.stub && (!pm || m.peak > pm.peak)) pm = m;
   const crossed = sim.state === 'crossed';
-  const within = cost <= B;
-  const stars = crossed && within ? (cost <= B * .7 ? 3 : cost <= B * .85 ? 2 : 1) : 0;
-  const V = VEHICLES[L.vehicle];
+  const within = L.sandbox || cost <= B;
+  const stars = crossed && within && !L.sandbox ? starsFor(L, cost) : 0;
+  const V = VEHICLES[L.vehicle], vn = V.name.toLowerCase();
   const stamp = $('#res-stamp');
   stamp.className = 'stamp' + (crossed ? (within ? '' : ' warn') : ' bad');
   stamp.textContent = crossed ? (within ? 'Approved' : 'Over budget') : 'Rejected';
@@ -3272,46 +4121,241 @@ function showResult() {
   $('#res-title').textContent = crossed ? 'Crossed.' : 'Collapsed.';
   const broke = sim.members.filter(m => m.broken && !m.stub).length;
   let line;
-  if (crossed && within) line = stars === 3 ? `The ${V.name.toLowerCase()} crossed, and you came in well under budget. Top marks from the council.` : `The ${V.name.toLowerCase()} made it across${broke ? `, though ${broke} member${broke > 1 ? 's' : ''} failed on the way` : ''}. Trim the cost for more stars.`;
+  if (L.sandbox) line = crossed ? `The ${vn} made it across your ${L.gap} m bridge.` : `The ${vn} didn't make it.`;
+  else if (crossed && within) line = stars === 3 ? `The ${vn} crossed, and you came in well under budget. Top marks from the council.` : `The ${vn} made it across${broke ? `, though ${broke} member${broke > 1 ? 's' : ''} failed on the way` : ''}. Trim the cost for more stars.`;
   else if (crossed) line = `It held, but it cost ${ugx(cost - B)} more than the budget allows. The council won't sign off.`;
-  else if (sim.result && sim.result.reason === 'water') line = `The ${V.name.toLowerCase()} went into the river ${Math.max(0, sim.result.x).toFixed(1)} m along the span. Look for the members that glowed first.`;
-  else line = `The ${V.name.toLowerCase()} couldn't get across. Check the road deck runs all the way from bank to bank.`;
+  else if (sim.result && sim.result.reason === 'water') line = `The ${vn} went into the river ${Math.max(0, sim.result.x).toFixed(1)} m along the span.`;
+  else line = `The ${vn} couldn't get across.`;
   $('#res-line').textContent = line;
-  $('#res-stars').innerHTML = [1, 2, 3].map(k => `<span class="${k <= stars ? 'on' : ''}">★</span>`).join('');
+  $('#res-stars').innerHTML = L.sandbox ? '' : [1, 2, 3].map(k => `<span class="${k <= stars ? 'on' : ''}">★</span>`).join('');
+  // engineer's notes and a marker on the drawing where it first failed
+  const notes = engineerNotes(sim, L, D, cost, crossed, stars);
+  let firstTime = false;
+  if (stars > 0 && L.unlocks && !isDone(L)) firstTime = true;
+  const noteItems = notes.map(n => `<li>${n}</li>`);
+  if (firstTime) { const fn = FIELD_NOTES.find(f => f.id === L.unlocks); noteItems.push(`<li><b>New field note unlocked: ${fn.title}.</b> <button class="linkish" id="res-readnote">Read it</button></li>`); }
+  $('#res-notes').hidden = !noteItems.length;
+  $('#res-notes-list').innerHTML = noteItems.join('');
+  const rn = $('#res-readnote'); if (rn) rn.onclick = () => showNotes(L.unlocks);
+  if (sim.firstBreak) {
+    const m = D.members[sim.firstBreak.id];
+    if (m) { const a = nodePos(m[0]), b = nodePos(m[1]); S.failMark = { x: (a[0] + b[0]) / 2, y: (a[1] + b[1]) / 2, text: sim.firstBreak.mode === 'buckle' ? 'Buckled first' : 'Snapped first' }; }
+  }
   const kind = pm && pm.ff < 0 ? (pm.mat === 'cable' ? 'slack' : 'compression') : 'tension';
   const rows = [
-    ['Cost', `${ugx(cost)} of ${ugxShort(B)}`],
-    ['Stars at', `${ugxShort(B * .85)} ★★ · ${ugxShort(B * .7)} ★★★`],
-    ['Peak stress', pm ? `${Math.round(Math.min(pm.peak, 9.99) * 100)}% · ${MATERIALS[pm.mat].short.toLowerCase()} in ${kind}` : '-'],
-    ['Members failed', `${broke} of ${S.design.members.length}`],
+    ['Cost', L.sandbox ? ugx(cost) : `${ugx(cost)} of ${ugxShort(B)}`],
+    ...(L.sandbox ? [] : [['Stars at', `${ugxShort(B * .85)} ★★ · ${ugxShort(B * .7)} ★★★`]]),
+    ['Peak stress', pm && pm.peak >= .005 ? `${Math.round(Math.min(pm.peak, 9.99) * 100)}% · ${MATERIALS[pm.mat].short.toLowerCase()} in ${kind}` : 'next to nothing: the rock took it all'],
+    ['Members failed', `${broke} of ${D.members.length}`],
     ['Time', crossed ? `${sim.result.t.toFixed(1)} s` : '-'],
   ];
   $('#res-stats').innerHTML = rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
+  $('#res-share').hidden = !crossed;
   const idx = LEVELS.indexOf(L);
   const next = LEVELS[idx + 1];
   const nb = $('#res-next');
-  $('#res-solve').hidden = stars > 0 || !SOLUTIONS[L.id];
-  if (stars === 0) { save.fails[L.id] = (save.fails[L.id] || 0) + 1; persist(); updateSolveButton(); }
-  if (stars > 0) {
+  $('#res-solve').hidden = L.sandbox || stars > 0 || !SOLUTIONS[L.id];
+  const newBadges = checkBadges(sim, L, D, cost, crossed, stars);
+  if (L.sandbox) {
+    save.designs.sandbox = D; persist();
+    nb.textContent = 'New site';
+    nb.onclick = () => { $('#result').hidden = true; showSandbox(); };
+    crossed ? Snd.win() : Snd.fail();
+  } else if (stars > 0) {
     const prev = save.progress[L.id];
-    if (!prev || stars > prev.stars || (stars === prev.stars && cost < prev.cost)) { save.progress[L.id] = { stars, cost }; persist(); }
+    if (!prev || stars > prev.stars || (stars === prev.stars && cost < prev.cost)) { save.progress[L.id] = { stars, cost }; }
+    if (L.chapter === 1 && next && next.chapter !== L.chapter) setTimeout(() => toast('Apprentice chapter complete. The Nile awaits.', 4200), 600);
     nb.textContent = next ? 'Next crossing ›' : 'All crossings ›';
     nb.onclick = () => { $('#result').hidden = true; next ? openLevel(next) : goLevels(); };
     Snd.win();
   } else {
+    save.fails[L.id] = (save.fails[L.id] || 0) + 1;
     nb.textContent = 'Watch again';
     nb.onclick = () => { $('#result').hidden = true; replay(); };
     Snd.fail();
   }
+  persist(); updateSolveButton(); awardBadges(newBadges);
   $('#res-edit').onclick = () => { $('#result').hidden = true; stopTest(); };
   $('#result').hidden = false;
 }
 
 // ---------------------------------------------------------------- solutions
 function updateSolveButton() {
-  const L = S.level; if (!L || !L.code || !SOLUTIONS[L.id]) { $('#btn-solve').hidden = true; return; }
-  $('#btn-solve').hidden = !((save.fails[L.id] || 0) > 0 || save.progress[L.id]);
+  const L = S.level; if (!L || !L.code) return;
+  // after two failed tests on a level, the Hint button starts to glow
+  $('#btn-hint').classList.toggle('pulse', !L.sandbox && (save.fails[L.id] || 0) >= 2 && !isDone(L));
 }
+
+// ---------------------------------------------------------------- hints
+function showHint() {
+  const L = S.level;
+  $('#hint-eyebrow').textContent = `${L.code} · ${L.name} · Hints`;
+  $('#hint-tip').textContent = L.tip || L.notes.join(' ');
+  const has = !!(SOLUTIONS[L.id] && SOLUTIONS[L.id].length);
+  $('#hint-sketch').disabled = !has; $('#hint-solve').disabled = !has;
+  $('#hint-sketch').textContent = S.sketch ? 'Hide the sketch' : 'Show the sketch';
+  $('#hint').hidden = false;
+  $('#hint-close').focus();
+}
+function toggleSketch() {
+  const go = () => { S.sketch = !S.sketch; $('#hint').hidden = true; if (S.sketch) toast('Engineer\'s sketch on. Trace over the amber lines in your own materials.', 4000); };
+  S.sketch ? go() : revealGate(go);
+}
+function sketchDesign() {
+  const L = S.level, list = SOLUTIONS[L.id] || [];
+  return list[0] || null; // the sturdy one: most forgiving to trace
+}
+function toggleMirror() {
+  if (S.level.hR) { toast('Mirror needs level banks. This far bank is higher.'); return; }
+  S.mirror = !S.mirror; $('#btn-mirror').setAttribute('aria-pressed', S.mirror ? 'true' : 'false'); Snd.tick();
+  if (S.mirror) toast('Mirror on: everything you draw or erase is copied to the other side of the span.');
+}
+
+// ---------------------------------------------------------------- field notes
+const FIG = {
+  forces: '<line x1="30" y1="40" x2="110" y2="40" stroke="#eaf3ff" stroke-width="5"/><path d="M22 40h-14m6-6-6 6 6 6M118 40h14m-6-6 6 6-6 6" stroke="#ff6b5f" stroke-width="2.5" fill="none"/><text x="70" y="64" fill="#ff8a80" font-size="11" text-anchor="middle" font-family="monospace">TENSION</text><line x1="150" y1="40" x2="230" y2="40" stroke="#eaf3ff" stroke-width="5"/><path d="M128 40h14m-6-6 6 6-6 6M252 40h-14m6-6-6 6 6 6" stroke="#6fb8ff" stroke-width="2.5" fill="none"/><text x="190" y="64" fill="#8fc8ff" font-size="11" text-anchor="middle" font-family="monospace">COMPRESSION</text>',
+  sag: '<line x1="30" y1="30" x2="30" y2="100" stroke="#eaf3ff" stroke-width="3"/><line x1="230" y1="30" x2="230" y2="100" stroke="#eaf3ff" stroke-width="3"/><path d="M30 34 L130 70 L230 34" stroke="#ffd79c" stroke-width="3" fill="none"/><path d="M30 34 L130 44 L230 34" stroke="#ffd79c" stroke-width="2" stroke-dasharray="4 4" fill="none" opacity=".6"/><rect x="118" y="72" width="24" height="18" fill="#ffc65c"/><text x="130" y="112" fill="#eaf3ff" font-size="10" text-anchor="middle" font-family="monospace">FLATTER = MUCH MORE PULL</text>',
+  loadpath: '<rect x="0" y="60" width="40" height="60" fill="#163a66"/><rect x="220" y="60" width="40" height="60" fill="#163a66"/><line x1="40" y1="60" x2="220" y2="60" stroke="#eaf3ff" stroke-width="5"/><line x1="40" y1="100" x2="100" y2="60" stroke="#ffd79c" stroke-width="3"/><line x1="220" y1="100" x2="160" y2="60" stroke="#ffd79c" stroke-width="3"/><path d="M130 20v30m-6-8 6 8 6-8" stroke="#ffc65c" stroke-width="2.5" fill="none"/><path d="M92 70 L60 92m8 0-8 0 2-8M168 70l32 22m-8 0 8 0-2-8" stroke="#6fb8ff" stroke-width="2" fill="none"/>',
+  triangle: '<rect x="30" y="30" width="60" height="60" stroke="#eaf3ff" stroke-width="3" fill="none"/><path d="M30 90 L56 30 L116 30 L90 90 Z" stroke="#ff6b5f" stroke-width="2" stroke-dasharray="4 4" fill="none"/><text x="68" y="112" fill="#ff8a80" font-size="10" text-anchor="middle" font-family="monospace">FOLDS</text><path d="M160 90 L200 30 L240 90 Z" stroke="#ffd79c" stroke-width="3" fill="none"/><text x="200" y="112" fill="#ffd79c" font-size="10" text-anchor="middle" font-family="monospace">RIGID</text>',
+  buckling: '<line x1="0" y1="105" x2="260" y2="105" stroke="#eaf3ff" stroke-width="2"/><line x1="70" y1="105" x2="70" y2="65" stroke="#ffd79c" stroke-width="4"/><path d="M70 50v12m-5-6 5 6 5-6" stroke="#6fb8ff" stroke-width="2" fill="none"/><path d="M180 105 Q205 60 180 18" stroke="#ff6b5f" stroke-width="4" fill="none"/><path d="M180 4v12m-5-6 5 6 5-6" stroke="#6fb8ff" stroke-width="2" fill="none"/><text x="70" y="122" fill="#eaf3ff" font-size="10" text-anchor="middle" font-family="monospace">SHORT: HOLDS</text><text x="185" y="122" fill="#ff8a80" font-size="10" text-anchor="middle" font-family="monospace">2x LONG: 1/4</text>',
+  cables: '<rect x="20" y="10" width="10" height="100" fill="#eaf3ff"/><rect x="230" y="10" width="10" height="100" fill="#eaf3ff"/><line x1="0" y1="85" x2="260" y2="85" stroke="#eaf3ff" stroke-width="4"/><g stroke="#cdbbff" stroke-width="1.5"><line x1="25" y1="14" x2="60" y2="85"/><line x1="25" y1="14" x2="90" y2="85"/><line x1="25" y1="14" x2="120" y2="85"/><line x1="235" y1="14" x2="200" y2="85"/><line x1="235" y1="14" x2="170" y2="85"/><line x1="235" y1="14" x2="140" y2="85"/></g><path d="M0 110 Q30 104 60 110 T120 110 T180 110 T260 110" stroke="#6fb8ff" stroke-width="1.5" fill="none"/>',
+  spans: '<line x1="10" y1="30" x2="250" y2="30" stroke="#eaf3ff" stroke-width="3"/><path d="M10 30 Q130 80 250 30" stroke="#ff6b5f" stroke-width="2" fill="none" stroke-dasharray="4 3"/><line x1="10" y1="90" x2="250" y2="90" stroke="#eaf3ff" stroke-width="3"/><rect x="124" y="90" width="12" height="28" fill="#163a66" stroke="#eaf3ff"/><path d="M10 90 Q70 103 130 90 Q190 103 250 90" stroke="#ffd79c" stroke-width="2" fill="none" stroke-dasharray="4 3"/><text x="130" y="20" fill="#ff8a80" font-size="10" text-anchor="middle" font-family="monospace">ONE SPAN: 4x THE BENDING</text>',
+  shear: '<line x1="20" y1="80" x2="240" y2="80" stroke="#eaf3ff" stroke-width="4"/><line x1="40" y1="40" x2="220" y2="40" stroke="#eaf3ff" stroke-width="3"/><g stroke-width="3"><line x1="20" y1="80" x2="40" y2="40" stroke="#ff6b5f"/><line x1="40" y1="40" x2="60" y2="80" stroke="#ff6b5f"/><line x1="60" y1="80" x2="80" y2="40" stroke="#ffb06b"/><line x1="80" y1="40" x2="100" y2="80" stroke="#8b8f99"/><line x1="100" y1="80" x2="120" y2="40" stroke="#8b8f99"/><line x1="120" y1="40" x2="140" y2="80" stroke="#8b8f99"/><line x1="140" y1="80" x2="160" y2="40" stroke="#8b8f99"/><line x1="160" y1="40" x2="180" y2="80" stroke="#ffb06b"/><line x1="180" y1="80" x2="200" y2="40" stroke="#ff6b5f"/><line x1="200" y1="40" x2="220" y2="80" stroke="#ff6b5f"/></g><text x="130" y="108" fill="#eaf3ff" font-size="10" text-anchor="middle" font-family="monospace">DIAGONALS WORK HARDEST AT THE ENDS</text>',
+  jinja: '<path d="M0 100 Q40 94 80 100 T160 100 T260 100" stroke="#6fb8ff" stroke-width="1.5" fill="none"/><line x1="0" y1="75" x2="260" y2="75" stroke="#eaf3ff" stroke-width="4"/><path d="M85 110 L95 12 L105 110" stroke="#eaf3ff" stroke-width="3" fill="none"/><path d="M160 110 L170 12 L180 110" stroke="#eaf3ff" stroke-width="3" fill="none"/><g stroke="#cdbbff" stroke-width="1.2"><line x1="95" y1="20" x2="30" y2="75"/><line x1="95" y1="24" x2="50" y2="75"/><line x1="95" y1="28" x2="70" y2="75"/><line x1="95" y1="20" x2="132" y2="75"/><line x1="95" y1="26" x2="118" y2="75"/><line x1="170" y1="20" x2="135" y2="75"/><line x1="170" y1="26" x2="150" y2="75"/><line x1="170" y1="20" x2="235" y2="75"/><line x1="170" y1="24" x2="215" y2="75"/><line x1="170" y1="28" x2="195" y2="75"/></g>',
+};
+function noteUnlocked(n) {
+  const L = LEVELS.find(l => l.unlocks === n.id);
+  return !L || isDone(L);
+}
+function showNotes(focusId) {
+  const grid = $('#notes-grid'); grid.innerHTML = '';
+  FIELD_NOTES.forEach(n => {
+    const ok = noteUnlocked(n), L = LEVELS.find(l => l.unlocks === n.id);
+    const d = document.createElement('article');
+    d.className = 'note' + (ok ? '' : ' locked'); d.id = 'note-' + n.id;
+    d.innerHTML = `<svg viewBox="0 0 260 125" role="img" aria-label="${n.title}">${FIG[n.id] || ''}</svg><div><h4>${n.title}</h4><p>${ok ? n.text : `Finish ${L.code} ${L.name} to unlock this note.`}</p></div>`;
+    grid.appendChild(d);
+  });
+  $('#result').hidden = true;
+  $('#notes').hidden = false;
+  if (focusId) requestAnimationFrame(() => { const el = $('#note-' + focusId); if (el) el.scrollIntoView({ block: 'center' }); });
+}
+function showBadges() {
+  const grid = $('#badge-grid'); grid.innerHTML = '';
+  BADGES.forEach(b => {
+    const ok = !!save.badges[b.id];
+    const d = document.createElement('div');
+    d.className = 'badge' + (ok ? '' : ' locked');
+    d.innerHTML = `<i>${ok ? '★' : '?'}</i><div><b>${b.name}</b><span>${b.desc}</span></div>`;
+    grid.appendChild(d);
+  });
+  $('#badges').hidden = false;
+}
+
+// ---------------------------------------------------------------- sandbox
+function sandboxLevel(cfg) {
+  const gap = cfg.gap, hR = cfg.hR, piers = cfg.piers;
+  const waterY = -Math.min(14, 6 + gap / 8);
+  const anchors = [[0, 0], [gap, hR], [0, -3], [gap, hR - 3]];
+  const pillars = [];
+  for (let i = 1; i <= piers; i++) { const x = Math.round(gap * i / (piers + 1) * 2) / 2; anchors.push([x, -4]); pillars.push({ x, y: -4 }); }
+  const spires = [];
+  if (cfg.towers) { const ty = Math.min(12, 6 + gap / 8); anchors.push([-3, ty], [gap + 3, hR + ty]); spires.push({ x: -3, y: ty, w: 3 }, { x: gap + 3, y: hR + ty, w: 3, base: hR }); }
+  return {
+    id: 'sandbox', sandbox: true, chapter: 0, code: 'SB-00', name: 'Sandbox', place: 'Your own site',
+    gap, hR, waterY, seed: 60 + gap, vehicle: cfg.vehicle, budget: 1e9, mood: cfg.mood,
+    materials: ['road', 'wood', 'steel', 'cable'], anchors, pillars, spires, cfg,
+    notes: ['Sandbox: no budget and no rules. Build anything.'],
+  };
+}
+function readSandboxForm() {
+  return { gap: +$('#sb-gap').value, hR: +$('#sb-hr').value, piers: +$('#sb-piers').value, towers: $('#sb-towers').checked, vehicle: $('#sb-vehicle').value, mood: $('#sb-mood').value };
+}
+function syncSandboxOutputs() {
+  $('#sb-gap-out').textContent = $('#sb-gap').value + ' m';
+  $('#sb-hr-out').textContent = $('#sb-hr').value + ' m';
+  $('#sb-piers-out').textContent = $('#sb-piers').value;
+}
+function showSandbox() {
+  const c = save.sandboxCfg;
+  if (c) { $('#sb-gap').value = c.gap; $('#sb-hr').value = c.hR; $('#sb-piers').value = c.piers; $('#sb-towers').checked = !!c.towers; $('#sb-vehicle').value = c.vehicle; $('#sb-mood').value = c.mood; }
+  syncSandboxOutputs();
+  if (S.screen === 'live') { S.trans = null; S.sim = null; setScreen('build'); }
+  $('#sandbox').hidden = false;
+}
+function startSandbox(cfg, design) {
+  const same = save.sandboxCfg && JSON.stringify(save.sandboxCfg) === JSON.stringify(cfg);
+  save.sandboxCfg = cfg; persist();
+  $('#sandbox').hidden = true;
+  openLevel(sandboxLevel(cfg), { design: design || (same ? save.designs.sandbox : { nodes: [], members: [] }), shared: !!design });
+}
+
+// ---------------------------------------------------------------- sharing
+function b64url(str) { return btoa(unescape(encodeURIComponent(str))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+function unb64url(s) { s = s.replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; return decodeURIComponent(escape(atob(s))); }
+function shareLink() {
+  const L = S.level, D = S.design;
+  const pack = { l: L.sandbox ? 'sb' : L.id, n: D.nodes.map(n => [Math.round(n[0] * 1000), Math.round(n[1] * 1000)]), m: D.members.map(m => [m[0], m[1], MAT_ORDER.indexOf(m[2])]) };
+  if (L.sandbox) pack.c = L.cfg;
+  const url = location.href.split('#')[0] + '#b=' + b64url(JSON.stringify(pack));
+  const done = () => { toast('Link copied. Send it to a friend and dare them to build it cheaper.', 4200); earnShare(); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, () => fallbackCopy(url, done));
+  else fallbackCopy(url, done);
+}
+function fallbackCopy(text, done) {
+  const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { toast('Copy this link: ' + text, 9000); }
+  ta.remove();
+}
+function earnShare() { if (!save.badges.sharer) { save.badges.sharer = Date.now(); persist(); awardBadges(['sharer']); } }
+function readSharedFromHash() {
+  const m = location.hash.match(/[#&]b=([A-Za-z0-9_-]+)/);
+  if (!m) return false;
+  try {
+    const p = JSON.parse(unb64url(m[1]));
+    const design = { nodes: p.n.map(n => [n[0] / 1000, n[1] / 1000]), members: p.m.map(x => [x[0], x[1], MAT_ORDER[x[2]]]) };
+    history.replaceState(null, '', location.href.split('#')[0]);
+    if (p.l === 'sb' && p.c) { startSandbox(p.c, design); return true; }
+    const L = LEVELS.find(l => l.id === p.l);
+    if (!L) return false;
+    const nA = L.anchors.length, maxI = nA + design.nodes.length;
+    if (design.members.some(x => x[0] >= maxI || x[1] >= maxI || !MATERIALS[x[2]])) return false;
+    openLevel(L, { design, shared: true });
+    return true;
+  } catch (e) { return false; }
+}
+// A 1200x800 postcard of the current scene with a drawing-sheet caption strip.
+function savePostcard() {
+  const L = S.level, sim = S.sim;
+  const out = document.createElement('canvas'); out.width = 1200; out.height = 800;
+  const c = out.getContext('2d');
+  const sh = 640, sw = cv.width, shh = cv.height;
+  const scale = Math.max(1200 / sw, sh / shh), dw = sw * scale, dh = shh * scale;
+  c.drawImage(cv, (1200 - dw) / 2, (sh - dh) / 2, dw, dh);
+  c.fillStyle = '#f4efe4'; c.fillRect(0, sh, 1200, 800 - sh);
+  c.strokeStyle = '#1d2433'; c.lineWidth = 3; c.beginPath(); c.moveTo(0, sh); c.lineTo(1200, sh); c.stroke();
+  c.fillStyle = '#1d2433';
+  c.font = '900 64px "Big Shoulders Display", "Arial Narrow", Impact, sans-serif'; c.fillText('DARAJA', 36, sh + 78);
+  c.font = '500 20px "IBM Plex Mono", ui-monospace, monospace';
+  const cost = designCost(L, S.design), stars = L.sandbox ? 0 : starsFor(L, cost);
+  c.fillText(`${L.code} · ${L.name.toUpperCase()} · ${L.place.toUpperCase()}`, 300, sh + 50);
+  const V = VEHICLES[L.vehicle];
+  c.font = '600 26px "Barlow Semi Condensed", "Segoe UI", sans-serif';
+  c.fillText(`${sim && sim.state === 'crossed' ? 'Crossed' : 'Tested'} by a ${V.name.toLowerCase()} · ${L.gap} m span · ${ugx(cost)}`, 300, sh + 92);
+  if (stars) { c.fillStyle = '#e09a1a'; c.font = '40px serif'; c.fillText('★'.repeat(stars), 1060 - 40 * (stars - 1), sh + 88); }
+  c.fillStyle = 'rgba(29,36,51,.6)'; c.font = '500 16px "IBM Plex Mono", ui-monospace, monospace';
+  c.fillText(location.host ? location.host + location.pathname : 'Daraja', 300, sh + 130);
+  out.toBlob(blob => {
+    if (!blob) { toast('Could not save the postcard in this browser.'); return; }
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = `daraja-${L.code.toLowerCase()}.png`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    toast('Postcard saved to your downloads.'); earnShare();
+  }, 'image/png');
+}
+
 // The one place a reveal is unlocked. It runs the callback straight away today.
 // A rewarded-ad SDK (e.g. a game portal's "rewarded break") would be called here
 // and run cb() only when the viewer finishes the ad.
@@ -3353,10 +4397,19 @@ function loadSolution(sol) {
 }
 
 // ---------------------------------------------------------------- navigation
-function goTitle() { setScreen('title'); startDemo(); }
+function nextLevel() { return LEVELS.find((L, i) => isUnlocked(i) && !isDone(L)); }
+function goTitle() {
+  setScreen('title'); startDemo();
+  const n = nextLevel(), any = LEVELS.some(isDone);
+  $('#btn-continue').hidden = !(any && n);
+  if (any && n) $('#btn-continue').textContent = `Continue: ${n.name}`;
+  $('#btn-start').textContent = any ? 'All crossings' : 'Start building';
+  $('#btn-start').className = any ? 'btn btn-ghost' : 'btn btn-primary';
+}
 function goLevels() { setScreen('levels'); buildLevelGrid(); }
 
 $('#btn-start').addEventListener('click', () => { Snd.init(); goLevels(); });
+$('#btn-continue').addEventListener('click', () => { Snd.init(); const n = nextLevel(); n ? openLevel(n) : goLevels(); });
 $('#btn-help-title').addEventListener('click', () => { Snd.init(); showHelp(); });
 $('#btn-levels-back').addEventListener('click', goTitle);
 $('#btn-back').addEventListener('click', () => { if (S.screen === 'live') { S.trans = null; setScreen('build'); } goLevels(); });
@@ -3371,7 +4424,24 @@ $('#btn-clear').addEventListener('click', clearDesign);
 $('#tool-erase').addEventListener('click', () => selectTool('erase'));
 $('#btn-mute').addEventListener('click', toggleMute);
 $('#btn-help').addEventListener('click', () => showHelp());
-$('#btn-solve').addEventListener('click', showSolutions);
+$('#btn-hint').addEventListener('click', showHint);
+$('#hint-close').addEventListener('click', () => { $('#hint').hidden = true; });
+$('#hint-sketch').addEventListener('click', toggleSketch);
+$('#hint-solve').addEventListener('click', () => { $('#hint').hidden = true; showSolutions(); });
+$('#tool-move').addEventListener('click', () => selectTool('move'));
+$('#btn-mirror').addEventListener('click', toggleMirror);
+$('#btn-notes').addEventListener('click', () => showNotes());
+$('#notes-close').addEventListener('click', () => { $('#notes').hidden = true; });
+$('#btn-badges').addEventListener('click', showBadges);
+$('#badges-close').addEventListener('click', () => { $('#badges').hidden = true; });
+$('#btn-sandbox').addEventListener('click', showSandbox);
+$('#sb-close').addEventListener('click', () => { $('#sandbox').hidden = true; });
+$('#sb-go').addEventListener('click', () => startSandbox(readSandboxForm()));
+$('#sb-form').addEventListener('input', syncSandboxOutputs);
+$('#sb-form').addEventListener('submit', e => e.preventDefault());
+$('#res-postcard').addEventListener('click', savePostcard);
+$('#res-link').addEventListener('click', shareLink);
+for (const id of ['hint', 'notes', 'badges', 'sandbox']) $('#' + id).addEventListener('click', e => { if (e.target.id === id) $('#' + id).hidden = true; });
 $('#res-solve').addEventListener('click', showSolutions);
 $('#sol-close').addEventListener('click', () => { $('#solutions').hidden = true; });
 $('#solutions').addEventListener('click', e => { if (e.target.id === 'solutions') $('#solutions').hidden = true; });
@@ -3390,7 +4460,12 @@ function frame(now) {
     S.demoAcc = (S.demoAcc || 0) + dt;
     for (let k = 0; k < 3 && S.demoAcc >= 1 / 60; k++) { handleEvents(stepSim(S.demo, 1 / 60), S.demo, true); S.demoAcc -= 1 / 60; }
     if (S.demoAcc > .1) S.demoAcc = 0;
-    if (S.demo.state !== 'running') { S.demoEnd = S.demoEnd || now; if (now - S.demoEnd > 1500) { S.demo = createSim(DEMO_LEVEL, demoDesign()); S.demoEnd = 0; } }
+    if (S.demo.state !== 'running') { S.demoEnd = S.demoEnd || now; if (now - S.demoEnd > 1500) {
+      // each loop of the title demo shows a different time of day
+      const moods = ['dusk', 'night', 'dawn', 'noon'];
+      DEMO_LEVEL.mood = moods[(moods.indexOf(DEMO_LEVEL.mood || 'dusk') + 1) % moods.length];
+      rebuild(); S.demo = createSim(DEMO_LEVEL, demoDesign()); S.demoEnd = 0; S.particles = [];
+    } }
     renderLive(t, S.demo, S.view);
     updateParticles(dt);
   } else if (S.screen === 'levels') {
@@ -3419,12 +4494,13 @@ function frame(now) {
 
 window.addEventListener('resize', () => { resize(); if (S.screen === 'levels') buildLevelGrid(); });
 resize();
-const boot = () => { goTitle(); requestAnimationFrame(frame); };
+const boot = () => { goTitle(); requestAnimationFrame(frame); if (readSharedFromHash()) Snd.init(); };
 if (document.fonts && document.fonts.ready) Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 1500))]).then(() => { boot(); });
 else boot();
 
 // hook for automated checks
-window.__daraja = { S, showSolutions, openLevel: i => openLevel(LEVELS[i - 1]), setDesign(d) { S.design = d; changed(); }, startTest, goLevels, LEVELS };
+window.addEventListener('hashchange', readSharedFromHash);
+window.__daraja = { S, showSolutions, showHint, showNotes, showBadges, showSandbox, startSandbox, sandboxLevel, confetti, openLevelObj: openLevel, openLevel: k => openLevel(LEVELS.find(l => l.code === k || l.id === k)), setDesign(d) { S.design = d; changed(); }, startTest, goLevels, LEVELS };
 })();
 
 </script>

@@ -109,6 +109,7 @@ function candidate(level, o) {
     });
   }
   if (!level.materials.includes('steel')) for (const m of b.members) if (m[2] === 'steel') m[2] = 'wood';
+  for (let i = b.members.length - 1; i >= 0; i--) if (!level.materials.includes(b.members[i][2])) b.members.splice(i, 1);
   // drop members that became illegal (wood too long when steel is locked)
   const members = b.members.filter(m => b.len(m[0], m[1]) <= E.MATERIALS[m[2]].maxLen + 1e-6);
   return { nodes: b.nodes, members };
@@ -211,6 +212,7 @@ for (const L of E.LEVELS) {
   const { lean, sturdy } = solveLevel(L);
   const fmt = (s, name) => s && ({ name, cost: Math.round(s.c), peak: +s.peak.toFixed(3), nodes: s.d.nodes, members: s.d.members });
   out[L.id] = [fmt(sturdy, 'Sturdy'), fmt(lean, 'Lean')].filter(Boolean);
+  if (sturdy && lean && lean.c >= sturdy.c - 1) out[L.id] = [Object.assign(fmt(sturdy, 'Best'))];
   const star = c => (c <= L.budget * .7 ? 3 : c <= L.budget * .85 ? 2 : c <= L.budget ? 1 : 0);
   console.log(`${L.code} ${L.name.padEnd(20)} sturdy ${sturdy ? (sturdy.c / 1000).toFixed(2) + 'M ' + Math.round(sturdy.peak * 100) + '% ' + star(sturdy.c) + '*' : '-'}  lean ${lean ? (lean.c / 1000).toFixed(2) + 'M ' + Math.round(lean.peak * 100) + '% ' + star(lean.c) + '*' : '-'}  budget ${(L.budget / 1000).toFixed(1)}M  (${((Date.now() - t0) / 1000).toFixed(0)} s)`);
 }

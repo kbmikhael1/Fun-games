@@ -35,7 +35,7 @@ const check = (ok, msg) => { console.log(`${ok ? 'ok  ' : 'FAIL'} ${msg}`); if (
 }
 // 2. A bare road deck must fail (the game's first lesson)
 {
-  const L = E.LEVELS[0], d = designer(L);
+  const L = E.LEVELS.find(l => l.code === 'DJ-01'), d = designer(L);
   for (let i = 0; i < 5; i++) d.mem(i * 2, 0, i * 2 + 2, 0, 'road');
   const sim = simulate(L, d);
   check(sim.state === 'failed', `level 1 bare deck collapses (${sim.state})`);

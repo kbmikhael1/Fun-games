@@ -22,11 +22,12 @@
     <h1 id="title-word">Daraja</h1>
     <p class="tagline">Draw a bridge on the blueprint. Then watch a real vehicle cross it at dusk, or fall into the river.</p>
     <div class="title-actions">
+      <button id="btn-continue" class="btn btn-primary" hidden>Continue</button>
       <button id="btn-start" class="btn btn-primary">Start building</button>
       <button id="btn-help-title" class="btn btn-ghost">How to play</button>
     </div>
   </div>
-  <p class="title-foot">8 crossings · Kampala to the Source of the Nile · Sound on for the full effect</p>
+  <p class="title-foot">14 crossings · from a Kampala ditch to the Source of the Nile · sandbox · sound on for the full effect</p>
 </section>
 
 <!-- Level register -->
@@ -37,7 +38,12 @@
       <p class="eyebrow">Daraja Bridge Works · Drawing register</p>
       <h2 id="levels-h">Choose a crossing</h2>
     </div>
-    <p class="levels-sum" id="levels-sum"></p>
+    <div class="levels-tools">
+      <p class="levels-sum" id="levels-sum"></p>
+      <button class="btn btn-ghost btn-small" id="btn-notes">Field notes <span id="notes-count"></span></button>
+      <button class="btn btn-ghost btn-small" id="btn-badges">Badges <span id="badges-count"></span></button>
+      <button class="btn btn-primary btn-small" id="btn-sandbox">Sandbox</button>
+    </div>
   </header>
   <div id="level-grid" class="level-grid"></div>
 </section>
@@ -72,11 +78,15 @@
   <div class="tb-group" id="tools-build">
     <div class="tools-mat" id="tools-mat"></div>
     <span class="sep"></span>
+    <button class="tool tool-sm" id="tool-move" data-tool="move" aria-pressed="false"><span class="tool-name">Move</span><span class="k">G · joints</span></button>
     <button class="tool tool-sm" id="tool-erase" data-tool="erase" aria-pressed="false"><span class="tool-name">Erase</span><span class="k">E · right-click</span></button>
+    <button class="tool tool-sm" id="btn-mirror" aria-pressed="false"><span class="tool-name">Mirror</span><span class="k">X · draw both sides</span></button>
+    <span class="sep"></span>
     <button class="tool tool-sm" id="btn-undo"><span class="tool-name">Undo</span><span class="k">Ctrl Z</span></button>
     <button class="tool tool-sm" id="btn-redo"><span class="tool-name">Redo</span><span class="k">Ctrl Y</span></button>
     <button class="tool tool-sm" id="btn-clear"><span class="tool-name">Clear</span><span class="k">all</span></button>
-    <button class="tool tool-sm" id="btn-solve" hidden><span class="tool-name">Solutions</span><span class="k">stuck? look here</span></button>
+    <span class="sep"></span>
+    <button class="tool tool-sm tool-hint" id="btn-hint"><span class="tool-name">Hint</span><span class="k">H · tip, sketch, solution</span></button>
     <span class="sep"></span>
     <button class="btn btn-go" id="btn-test"><span>Test</span><small>Space</small></button>
   </div>
@@ -99,7 +109,12 @@
     <h3 id="res-title">Crossed.</h3>
     <p class="res-line" id="res-line"></p>
     <div class="res-row"><div class="stars" id="res-stars" aria-label="Stars"></div><div class="stamp" id="res-stamp">Approved</div></div>
+    <div class="res-notes" id="res-notes" hidden><p class="eyebrow">Site engineer's notes</p><ul id="res-notes-list"></ul></div>
     <dl class="res-stats" id="res-stats"></dl>
+    <div class="res-share" id="res-share">
+      <button class="linkish" id="res-postcard">Save a postcard</button>
+      <button class="linkish" id="res-link">Copy a challenge link</button>
+    </div>
     <div class="res-actions">
       <button class="btn btn-ink-ghost" id="res-solve" hidden>See solutions</button>
       <button class="btn btn-ink-ghost" id="res-edit">Refine design</button>
@@ -119,6 +134,74 @@
   </div>
 </section>
 
+<!-- Hints -->
+<section id="hint" class="overlay-card" hidden role="dialog" aria-modal="true" aria-labelledby="hint-h">
+  <div class="sheet sheet-hint">
+    <p class="eyebrow" id="hint-eyebrow">AP-01 · Hints</p>
+    <h3 id="hint-h">Need a hand?</h3>
+    <ol class="hint-steps">
+      <li><b>Tip</b><p id="hint-tip"></p></li>
+      <li><b>Engineer's sketch</b><p>Faint lines of a working bridge appear on your drawing. Trace over them in your own materials.</p><button class="btn btn-ink-ghost btn-small" id="hint-sketch">Show the sketch</button></li>
+      <li><b>Full solution</b><p>Load a finished design and see how it was done.</p><button class="btn btn-ink-ghost btn-small" id="hint-solve">See solutions</button></li>
+    </ol>
+    <div class="res-actions"><button class="btn btn-ink" id="hint-close">Back to the drawing</button></div>
+  </div>
+</section>
+
+<!-- Field notes -->
+<section id="notes" class="overlay-card" hidden role="dialog" aria-modal="true" aria-labelledby="notes-h">
+  <div class="sheet sheet-wide">
+    <p class="eyebrow">Daraja Bridge Works · Engineering handbook</p>
+    <h3 id="notes-h">Field notes</h3>
+    <div class="notes-grid" id="notes-grid"></div>
+    <div class="res-actions"><button class="btn btn-ink" id="notes-close">Close</button></div>
+  </div>
+</section>
+
+<!-- Badges -->
+<section id="badges" class="overlay-card" hidden role="dialog" aria-modal="true" aria-labelledby="badges-h">
+  <div class="sheet sheet-wide">
+    <p class="eyebrow">Daraja Bridge Works · Commendations</p>
+    <h3 id="badges-h">Badges</h3>
+    <div class="badge-grid" id="badge-grid"></div>
+    <div class="res-actions"><button class="btn btn-ink" id="badges-close">Close</button></div>
+  </div>
+</section>
+
+<!-- Sandbox -->
+<section id="sandbox" class="overlay-card" hidden role="dialog" aria-modal="true" aria-labelledby="sandbox-h">
+  <div class="sheet sheet-sandbox">
+    <p class="eyebrow">Daraja Bridge Works · Your own site</p>
+    <h3 id="sandbox-h">Sandbox</h3>
+    <p class="res-line">No budget, no rules. Set up any gorge and build whatever you like.</p>
+    <form id="sb-form" class="sb-form">
+      <label for="sb-gap">Span <output id="sb-gap-out">20 m</output></label>
+      <input type="range" id="sb-gap" min="6" max="60" step="1" value="20">
+      <label for="sb-hr">Far bank height <output id="sb-hr-out">0 m</output></label>
+      <input type="range" id="sb-hr" min="-3" max="4" step="0.5" value="0">
+      <label for="sb-piers">River piers <output id="sb-piers-out">0</output></label>
+      <input type="range" id="sb-piers" min="0" max="3" step="1" value="0">
+      <label for="sb-towers" class="sb-check"><input type="checkbox" id="sb-towers"> Rock towers for cables</label>
+      <label for="sb-vehicle">Vehicle</label>
+      <select id="sb-vehicle">
+        <option value="boda">Boda boda · 0.26 t</option>
+        <option value="car">Saloon car · 1.2 t</option>
+        <option value="van">Delivery van · 2.4 t</option>
+        <option value="matatu" selected>Matatu · 3.2 t</option>
+        <option value="truck">Murram tipper · 6 t</option>
+      </select>
+      <label for="sb-mood">Time of day</label>
+      <select id="sb-mood">
+        <option value="dawn">Dawn</option>
+        <option value="noon">Noon</option>
+        <option value="dusk" selected>Dusk</option>
+        <option value="night">Night</option>
+      </select>
+    </form>
+    <div class="res-actions"><button class="btn btn-ink-ghost" id="sb-close">Cancel</button><button class="btn btn-ink" id="sb-go">Start building</button></div>
+  </div>
+</section>
+
 <!-- Help -->
 <section id="help" class="overlay-card" hidden role="dialog" aria-modal="true" aria-labelledby="help-h">
   <div class="sheet sheet-help">
@@ -133,8 +216,8 @@
     <div class="help-mats" id="help-mats"></div>
     <p class="help-note">Engineering truths in the game: long members in compression buckle (capacity falls with 1/L²). Cables only pull. Forces view shows tension in red and compression in blue.</p>
     <div class="help-keys">
-      <span><kbd>1</kbd>–<kbd>4</kbd> material</span><span><kbd>E</kbd> erase</span><span><kbd>Ctrl</kbd>+<kbd>Z</kbd> undo</span>
-      <span><kbd>Space</kbd> test / edit</span><span><kbd>S</kbd> slow-mo</span><span><kbd>F</kbd> forces</span><span><kbd>M</kbd> sound</span>
+      <span><kbd>1</kbd>–<kbd>4</kbd> material</span><span><kbd>G</kbd> move joints</span><span><kbd>E</kbd> erase</span><span><kbd>X</kbd> mirror</span><span><kbd>Ctrl</kbd>+<kbd>Z</kbd> undo</span>
+      <span><kbd>H</kbd> hint</span><span><kbd>Space</kbd> test / edit</span><span><kbd>S</kbd> slow-mo</span><span><kbd>F</kbd> forces</span><span><kbd>M</kbd> sound</span><span><kbd>?</kbd> this page</span>
     </div>
     <div class="res-actions"><button class="btn btn-ink" id="help-close">Got it</button></div>
   </div>

@@ -22,6 +22,7 @@ const VEHICLES = {
   car:    { key: 'car',    name: 'Saloon car',        mass: 1200, wheels: [0, 2.5],        r: 0.34, speed: 5.5, height: 1.25, rear: 0.8, front: 0.8, accel: 5.0 },
   van:    { key: 'van',    name: 'Delivery van',      mass: 2400, wheels: [0, 3.0],        r: 0.38, speed: 5.0, height: 2.0,  rear: 0.7, front: 0.8, accel: 4.5 },
   matatu: { key: 'matatu', name: 'Matatu',            mass: 3200, wheels: [0, 2.9],        r: 0.37, speed: 5.5, height: 2.0,  rear: 0.9, front: 0.7, accel: 4.5 },
+  boda:   { key: 'boda',   name: 'Boda boda',         mass: 260,  wheels: [0, 1.35],       r: 0.3,  speed: 5.0, height: 1.55, rear: 0.45, front: 0.35, accel: 4.5 },
   truck:  { key: 'truck',  name: 'Murram tipper',     mass: 6000, wheels: [0, 1.3, 4.6],   r: 0.5,  speed: 4.0, height: 2.6,  rear: 0.9, front: 1.2, accel: 3.5 },
 };
 
@@ -134,7 +135,7 @@ function createSim(level, design, opts = {}) {
   return {
     level, P, members, nA, terrain,
     veh: { def: V, wheels, body, rigid, contact: wheels.map(() => false), roll: wheels.map(() => 0), startX },
-    t: 0, state: 'running', result: null, stuckT: 0, events: [],
+    t: 0, state: 'running', result: null, stuckT: 0, events: [], firstBreak: null, breaks: 0,
     substeps: opts.substeps || 40, finishX: level.gap + (level.finishPad || 5),
     maxX: startX,
   };
@@ -355,6 +356,8 @@ function breakMember(sim, m, mode, ev) {
   mk(m.a, a); mk(m.b, b);
   const s1 = sim.members[sim.members.length - 2], s2 = sim.members[sim.members.length - 1];
   sim.veh.rigid.push({ a: s1.a, b: s1.b, L0: s1.L0 }, { a: s2.a, b: s2.b, L0: s2.L0 });
+  sim.breaks++;
+  if (!sim.firstBreak) sim.firstBreak = { id: m.id, mat: m.mat, mode, L: m.L0, force: m.ff, cap: mode === 'tension' ? m.capT : m.capC, t: sim.t, x: mx, y: my };
   ev.push({ type: 'break', id: m.id, mat: m.mat, mode, x: mx, y: my, vx: (a.vx + b.vx) / 2, vy: (a.vy + b.vy) / 2 });
 }
 

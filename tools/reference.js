@@ -28,6 +28,12 @@ function designer(level) {
 const edge = k => (i, n) => (i < k || i >= n - k ? 'steel' : 'wood');
 
 const REFERENCE = {
+  101: d => d.mem(0, 0, 2, 0, 'road'),
+  102: d => { d.mem(0, 0, 2, 0, 'road'); d.mem(2, 0, 4, 0, 'road'); },
+  103: d => { for (const x of [0, 2, 4]) d.mem(x, 0, x + 2, 0, 'road'); d.mem(0, -2, 2, 0, 'wood'); d.mem(6, -2, 4, 0, 'wood'); d.mem(0, -2, 4, 0, 'wood'); d.mem(6, -2, 2, 0, 'wood'); },
+  104: d => d.warren(0, 0, 8, 0, 4, 1.5, 'wood', 'wood'),
+  105: d => d.warren(0, 0, 10, 0, 5, -2, 'wood', 'steel'),
+  106: d => { for (let x = 0; x < 12; x += 2) d.mem(x, 0, x + 2, 0, 'road'); for (const x of [2, 4]) d.mem(-2, 6, x, 0, 'cable'); for (const x of [8, 10]) d.mem(14, 6, x, 0, 'cable'); d.mem(-2, 6, 6, 0, 'cable'); },
   1: d => d.warren(0, 0, 10, 0, 5, -2, 'wood', 'wood'),
   2: d => d.warren(0, 0, 14, 0, 7, -2, 'wood', 'wood'),
   3: d => { d.warren(0, 0, 10, 0, 5, -2, 'wood', edge(1)); d.warren(10, 0, 20, 0, 5, -2, 'wood', edge(1)); d.mem(10, 0, 10, -3.5, 'steel'); },
