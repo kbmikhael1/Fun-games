@@ -134,7 +134,7 @@ function start() {
   w.log[0].text = `A small band settled by the water at ${w.villageName}. They have never heard the name ${name}.`;
   document.body.classList.remove('on-title'); App.onTitle = false;
   for (const id of ['#hud', '#prayers', '#dock', '#side']) $(id).hidden = false;
-  showTab('inspect');
+  showTab('inspect'); if (innerWidth < 900) $('#side').hidden = true;
   const c = w.center;
   App.cam.dist = 170; App.cam.pitch = 1.25; App.goal.dist = 34; App.goal.pitch = .78; App.goal.yaw = App.cam.yaw + .6;
   App.goal.target = { x: c.x, y: hAt(w, c.x, c.z), z: c.z };
@@ -164,6 +164,14 @@ function frame(now) {
     renderFrame(w, dt, App.cam);
     if (!App.onTitle) { updateBubbles(w); updateCursor(w); if (now - App.lastHud > 250) { App.lastHud = now; updateHud(w); renderPrayers(w); } if (now - (App.lastIns || 0) > (App.sel || App.tab !== 'inspect' ? 400 : 1500)) { App.lastIns = now; refreshSide(); } updateTicker(now); Snd.ambient(w, dt); }
     $('#flash').style.opacity = Math.min(.8, R.flash * .5);
+    // adaptive quality: keep slower machines smooth
+    App.ft = lerp(App.ft || 16, dt * 1000, .03);
+    if (!App.onTitle && now - (App.qT || now) > 6000 && App.ft > 42 && (App.q || 0) < 2) {
+      App.q = (App.q || 0) + 1; App.qT = now;
+      if (App.q === 1) { R.renderer.setPixelRatio(1); resize(); }
+      else { R.sun.castShadow = false; R.grass.visible = false; R.flowers.visible = false; }
+    }
+    if (!App.qT && !App.onTitle) App.qT = now;
   }
   requestAnimationFrame(frame);
 }

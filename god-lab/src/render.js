@@ -1111,9 +1111,9 @@ function updateSky(w, dt) {
   const storm = clamp01((W.storm > 0 ? 1 : 0) * .8 + (W.rain > 0 && W.rr > 50 ? .5 : 0) + W.dust * .6);
   const sunCol = _c.set(0xfff2dc).lerp(_c2.set(0xffa860), dusk * .8);
   R.sun.color.copy(sunCol).lerp(_c2.set(0x9ab0ff), nt);
-  R.sun.intensity = lerp(2.6, .35, nt) * (1 - storm * .6) * (1 + R.flash * .6);
-  R.hemi.intensity = lerp(1.0, .28, nt) * (1 - storm * .3) + R.flash * 2.5;
-  R.hemi.color.set(0xcfe6ff).lerp(_c2.set(0x5a6aa0), nt);
+  R.sun.intensity = lerp(2.6, .6, nt) * (1 - storm * .6) * (1 + R.flash * .6);
+  R.hemi.intensity = lerp(1.0, .45, nt) * (1 - storm * .3) + R.flash * 2.5;
+  R.hemi.color.set(0xcfe6ff).lerp(_c2.set(0x6a7ab8), nt);
   const top = _c.set(0x3f86d8).lerp(_c2.set(0x5a6a8a), storm).lerp(_c2.set(0x0a1028), nt).lerp(_c2.set(0x8a4a6a), dusk * .4 * (1 - nt));
   const hor = _c2.set(0xcde6f5).lerp(new THREE.Color(0x8a8e94), storm).lerp(new THREE.Color(0x1a2240), nt).lerp(new THREE.Color(0xffb070), dusk * .7 * (1 - nt));
   if (W.dust > .05) { top.lerp(new THREE.Color(0x6a5040), W.dust * .6); hor.lerp(new THREE.Color(0x8a6a50), W.dust * .6); }

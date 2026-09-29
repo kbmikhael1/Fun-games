@@ -170,7 +170,7 @@ body:not(.on-title) #title { display: none; }
 
 /* ---------- bubbles & labels */
 #bubbles { position: fixed; inset: 0; pointer-events: none; z-index: 2; }
-.bub { position: absolute; transform: translate(-50%, -100%); max-width: 210px; background: rgba(255, 252, 244, .95); color: #2a2218; font-size: 12px; font-weight: 600; line-height: 1.35; padding: 6px 10px; border-radius: 12px; box-shadow: 0 6px 20px rgba(0, 0, 0, .3); pointer-events: auto; cursor: pointer; transition: opacity .3s; }
+.bub { position: absolute; transform: translate(-50%, -100%); width: max-content; max-width: 210px; background: rgba(255, 252, 244, .95); color: #2a2218; font-size: 12px; font-weight: 600; line-height: 1.35; padding: 6px 10px; border-radius: 12px; box-shadow: 0 6px 20px rgba(0, 0, 0, .3); pointer-events: auto; cursor: pointer; transition: opacity .3s; }
 .bub::after { content: ''; position: absolute; left: 50%; bottom: -6px; margin-left: -6px; border: 6px solid transparent; border-top-color: rgba(255, 252, 244, .95); border-bottom: 0; }
 .bub b { display: block; font-size: 10.5px; color: #8a6a3a; text-transform: uppercase; letter-spacing: .06em; }
 .bub.pray { background: linear-gradient(180deg, #fff8dc, #ffe8a8); box-shadow: 0 0 0 2px rgba(242, 201, 106, .9), 0 0 30px rgba(242, 201, 106, .7); }
@@ -217,7 +217,8 @@ body.mortal #dock, body.mortal #prayers { opacity: .35; pointer-events: none; }
   .res { display: none; }
   .vc-next, .gc-btns .tbtn:not(#btn-help) { display: none; }
   #prayers { top: auto; bottom: 170px; width: min(300px, calc(100vw - 24px)); max-height: 30vh; }
-  #side { left: 12px; right: 12px; width: auto; top: auto; bottom: 150px; height: 45vh; }
+  #side { left: 12px; right: 12px; width: auto; top: auto; bottom: 150px; height: 40vh; }
+  .bub { max-width: 160px; font-size: 11px; }
   .pw { width: 62px; } .pw i { font-size: 20px; }
   #ticker { display: none; }
 }

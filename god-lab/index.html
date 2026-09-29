@@ -181,7 +181,7 @@ body:not(.on-title) #title { display: none; }
 
 /* ---------- bubbles & labels */
 #bubbles { position: fixed; inset: 0; pointer-events: none; z-index: 2; }
-.bub { position: absolute; transform: translate(-50%, -100%); max-width: 210px; background: rgba(255, 252, 244, .95); color: #2a2218; font-size: 12px; font-weight: 600; line-height: 1.35; padding: 6px 10px; border-radius: 12px; box-shadow: 0 6px 20px rgba(0, 0, 0, .3); pointer-events: auto; cursor: pointer; transition: opacity .3s; }
+.bub { position: absolute; transform: translate(-50%, -100%); width: max-content; max-width: 210px; background: rgba(255, 252, 244, .95); color: #2a2218; font-size: 12px; font-weight: 600; line-height: 1.35; padding: 6px 10px; border-radius: 12px; box-shadow: 0 6px 20px rgba(0, 0, 0, .3); pointer-events: auto; cursor: pointer; transition: opacity .3s; }
 .bub::after { content: ''; position: absolute; left: 50%; bottom: -6px; margin-left: -6px; border: 6px solid transparent; border-top-color: rgba(255, 252, 244, .95); border-bottom: 0; }
 .bub b { display: block; font-size: 10.5px; color: #8a6a3a; text-transform: uppercase; letter-spacing: .06em; }
 .bub.pray { background: linear-gradient(180deg, #fff8dc, #ffe8a8); box-shadow: 0 0 0 2px rgba(242, 201, 106, .9), 0 0 30px rgba(242, 201, 106, .7); }
@@ -228,7 +228,8 @@ body.mortal #dock, body.mortal #prayers { opacity: .35; pointer-events: none; }
   .res { display: none; }
   .vc-next, .gc-btns .tbtn:not(#btn-help) { display: none; }
   #prayers { top: auto; bottom: 170px; width: min(300px, calc(100vw - 24px)); max-height: 30vh; }
-  #side { left: 12px; right: 12px; width: auto; top: auto; bottom: 150px; height: 45vh; }
+  #side { left: 12px; right: 12px; width: auto; top: auto; bottom: 150px; height: 40vh; }
+  .bub { max-width: 160px; font-size: 11px; }
   .pw { width: 62px; } .pw i { font-size: 20px; }
   #ticker { display: none; }
 }
@@ -3279,9 +3280,9 @@ function updateSky(w, dt) {
   const storm = clamp01((W.storm > 0 ? 1 : 0) * .8 + (W.rain > 0 && W.rr > 50 ? .5 : 0) + W.dust * .6);
   const sunCol = _c.set(0xfff2dc).lerp(_c2.set(0xffa860), dusk * .8);
   R.sun.color.copy(sunCol).lerp(_c2.set(0x9ab0ff), nt);
-  R.sun.intensity = lerp(2.6, .35, nt) * (1 - storm * .6) * (1 + R.flash * .6);
-  R.hemi.intensity = lerp(1.0, .28, nt) * (1 - storm * .3) + R.flash * 2.5;
-  R.hemi.color.set(0xcfe6ff).lerp(_c2.set(0x5a6aa0), nt);
+  R.sun.intensity = lerp(2.6, .6, nt) * (1 - storm * .6) * (1 + R.flash * .6);
+  R.hemi.intensity = lerp(1.0, .45, nt) * (1 - storm * .3) + R.flash * 2.5;
+  R.hemi.color.set(0xcfe6ff).lerp(_c2.set(0x6a7ab8), nt);
   const top = _c.set(0x3f86d8).lerp(_c2.set(0x5a6a8a), storm).lerp(_c2.set(0x0a1028), nt).lerp(_c2.set(0x8a4a6a), dusk * .4 * (1 - nt));
   const hor = _c2.set(0xcde6f5).lerp(new THREE.Color(0x8a8e94), storm).lerp(new THREE.Color(0x1a2240), nt).lerp(new THREE.Color(0xffb070), dusk * .7 * (1 - nt));
   if (W.dust > .05) { top.lerp(new THREE.Color(0x6a5040), W.dust * .6); hor.lerp(new THREE.Color(0x8a6a50), W.dust * .6); }
@@ -3515,7 +3516,7 @@ function start() {
   w.log[0].text = `A small band settled by the water at ${w.villageName}. They have never heard the name ${name}.`;
   document.body.classList.remove('on-title'); App.onTitle = false;
   for (const id of ['#hud', '#prayers', '#dock', '#side']) $(id).hidden = false;
-  showTab('inspect');
+  showTab('inspect'); if (innerWidth < 900) $('#side').hidden = true;
   const c = w.center;
   App.cam.dist = 170; App.cam.pitch = 1.25; App.goal.dist = 34; App.goal.pitch = .78; App.goal.yaw = App.cam.yaw + .6;
   App.goal.target = { x: c.x, y: hAt(w, c.x, c.z), z: c.z };
@@ -3545,6 +3546,14 @@ function frame(now) {
     renderFrame(w, dt, App.cam);
     if (!App.onTitle) { updateBubbles(w); updateCursor(w); if (now - App.lastHud > 250) { App.lastHud = now; updateHud(w); renderPrayers(w); } if (now - (App.lastIns || 0) > (App.sel || App.tab !== 'inspect' ? 400 : 1500)) { App.lastIns = now; refreshSide(); } updateTicker(now); Snd.ambient(w, dt); }
     $('#flash').style.opacity = Math.min(.8, R.flash * .5);
+    // adaptive quality: keep slower machines smooth
+    App.ft = lerp(App.ft || 16, dt * 1000, .03);
+    if (!App.onTitle && now - (App.qT || now) > 6000 && App.ft > 42 && (App.q || 0) < 2) {
+      App.q = (App.q || 0) + 1; App.qT = now;
+      if (App.q === 1) { R.renderer.setPixelRatio(1); resize(); }
+      else { R.sun.castShadow = false; R.grass.visible = false; R.flowers.visible = false; }
+    }
+    if (!App.qT && !App.onTitle) App.qT = now;
   }
   requestAnimationFrame(frame);
 }
