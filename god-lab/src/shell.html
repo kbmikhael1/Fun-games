@@ -4,156 +4,143 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>God Lab</title>
-<meta name="description" content="God Lab: create a world, watch life evolve, and decide what kind of god you are.">
+<meta name="description" content="God Lab: a valley, a people, and you, their god. Answer their prayers or strike them down, and watch them grow from a cave to a city.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Figtree:wght@400;500;600;700;800&display=swap">
 <style>
 /*@STYLE*/
 </style>
 </head>
 <body class="on-title">
-<canvas id="view" aria-label="Your world"></canvas>
+<canvas id="view" aria-label="Your valley"></canvas>
+<div id="flash"></div>
+<div id="bubbles" aria-hidden="true"></div>
+<div id="hover-label" hidden></div>
 
 <!-- Title -->
 <section id="title" aria-labelledby="title-h">
   <div class="title-card">
-    <p class="kicker">A world simulator for would-be gods</p>
+    <p class="kicker">A valley. A people. One god.</p>
     <h1 id="title-h">God Lab</h1>
-    <p class="lede">Shape a world. Watch life evolve on its own. Then decide what kind of god you are: gardener, destroyer, prophet, or one of them.</p>
-    <div class="opt-group" role="radiogroup" aria-label="World">
-      <span class="opt-label">World</span>
-      <div class="opts" id="opt-world"></div>
-    </div>
-    <div class="opt-group" role="radiogroup" aria-label="Life">
-      <span class="opt-label">Life</span>
-      <div class="opts" id="opt-life">
-        <button class="opt" data-v="default" aria-pressed="true"><b>A living world</b><span>A dozen species already roaming</span></button>
-        <button class="opt" data-v="soup" aria-pressed="false"><b>Primordial soup</b><span>Tiny cells in the sea. Evolve everything</span></button>
-        <button class="opt" data-v="empty" aria-pressed="false"><b>Empty</b><span>A blank world. Create your own life</span></button>
-      </div>
+    <p class="lede">A small band of people lives by a lake. They have fire, a cave and each other. Soon they will have you. Answer their prayers or strike them down. Walk among them. Watch them build a city.</p>
+    <label class="field"><span>What will your people call you?</span>
+      <input id="god-name" type="text" maxlength="14" value="Ama" autocomplete="off" spellcheck="false">
+    </label>
+    <div class="chips" id="name-chips"></div>
+    <div class="opt-row" role="radiogroup" aria-label="Divine power">
+      <button class="opt" data-v="faith" aria-pressed="true"><b>Faith gives power</b><span>Your power grows with their belief</span></button>
+      <button class="opt" data-v="unlimited" aria-pressed="false"><b>Unlimited power</b><span>Pure sandbox</span></button>
     </div>
     <div class="title-row">
-      <label class="seed">Seed <input id="seed" type="text" inputmode="numeric" maxlength="9"></label>
-      <button class="btn btn-gold" id="btn-create">Create the world</button>
+      <label class="seed">Valley <input id="seed" type="text" inputmode="numeric" maxlength="9"></label>
+      <button class="btn btn-gold" id="btn-create">Let there be light</button>
     </div>
   </div>
 </section>
 
-<!-- Top HUD -->
+<!-- HUD -->
 <header id="hud" hidden>
-  <div class="glass hud-world">
-    <div class="hud-name" id="hud-name">World</div>
-    <div class="hud-meta"><span id="hud-year">Year 0</span><span id="hud-season">Spring</span><span id="hud-climate" class="chip">Mild</span></div>
+  <div class="glass village-card">
+    <div class="vc-top"><span id="v-name" class="v-name">Village</span><span id="v-age" class="age-badge">Stone Age</span></div>
+    <div class="vc-meta"><span id="v-year">Year 1</span><span id="v-season">Spring</span><span id="v-time">Morning</span></div>
+    <div class="age-bar" title=""><i id="v-agebar"></i></div>
+    <div class="vc-next" id="v-next"></div>
+    <div class="res">
+      <span title="People"><em>👥</em><b id="r-pop">0</b></span>
+      <span title="Food"><em>🍖</em><b id="r-food">0</b></span>
+      <span title="Wood"><em>🪵</em><b id="r-wood">0</b></span>
+      <span title="Stone"><em>🪨</em><b id="r-stone">0</b></span>
+      <span title="Metal"><em>⚙️</em><b id="r-metal">0</b></span>
+    </div>
   </div>
-  <div class="glass hud-time" role="group" aria-label="Time">
-    <button class="tbtn" id="btn-pause" title="Pause (Space)" aria-label="Pause"><svg viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></svg></button>
-    <button class="tbtn spd" data-speed="1" title="Normal speed (1)">1×</button>
-    <button class="tbtn spd" data-speed="5" title="Fast (2)">5×</button>
-    <button class="tbtn spd" data-speed="20" title="Faster (3)">20×</button>
-    <button class="tbtn spd" data-speed="60" title="Deep time (4)">60×</button>
-    <span class="tsep"></span>
-    <button class="tbtn tbtn-wide" id="btn-rewind" title="Rewind time (R)"><svg viewBox="0 0 24 24"><path d="M11 6 5 12l6 6M19 6l-6 6 6 6"/></svg><span>Rewind</span></button>
+  <div class="glass time-card" role="group" aria-label="Time">
+    <button class="tbtn" data-speed="0" title="Pause (Space)">❚❚</button>
+    <button class="tbtn" data-speed="1" title="Real time (1)">1×</button>
+    <button class="tbtn" data-speed="4" title="Fast (2)">4×</button>
+    <button class="tbtn" data-speed="16" title="Seasons fly (3)">16×</button>
+    <button class="tbtn" data-speed="64" title="Years fly (4)">64×</button>
+    <button class="tbtn" data-speed="200" title="Ages fly (5)">200×</button>
   </div>
-  <div class="glass hud-stats">
-    <div><b id="hud-pop">0</b><span>creatures</span></div>
-    <div><b id="hud-spp">0</b><span>species</span></div>
-    <button class="tbtn" id="btn-sound" title="Sound (M)" aria-label="Sound"><svg viewBox="0 0 24 24"><path d="M4 10v4h4l5 4V6L8 10zM16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg></button>
-    <button class="tbtn" id="btn-help" title="How to play (?)" aria-label="Help">?</button>
-    <button class="tbtn" id="btn-panel" title="Show or hide the side panel (Tab)" aria-label="Panel"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM14 5v14"/></svg></button>
+  <div class="glass god-card">
+    <div class="gc-name"><span id="g-name">Ama</span> <span id="g-title" class="g-title">the Unknown</span></div>
+    <div class="meter"><span>Love</span><div class="mbar"><i id="g-love"></i></div></div>
+    <div class="meter"><span>Fear</span><div class="mbar fear"><i id="g-fear"></i></div></div>
+    <div class="meter"><span>Faith</span><div class="mbar faith"><i id="g-faith"></i></div></div>
+    <div class="meter power"><span>Power</span><div class="mbar mana"><i id="g-mana"></i></div><b id="g-mana-n">0</b></div>
+    <div class="gc-btns"><button class="tbtn" id="btn-sound" title="Sound (M)">🔊</button><button class="tbtn" id="btn-help" title="How to play (H)">?</button><button class="tbtn" id="btn-panel" title="Chronicle (C)">📜</button></div>
   </div>
 </header>
 
-<!-- Rewind strip -->
-<div id="rewind" class="glass" hidden>
-  <span class="rw-label">Return to</span>
-  <div id="rewind-list" class="rw-list"></div>
-  <button class="tbtn" id="rewind-close" aria-label="Close">×</button>
-</div>
-
-<!-- Event ticker -->
-<div id="ticker" aria-live="polite"></div>
-
-<!-- Powers -->
-<nav id="dock" hidden aria-label="God powers"></nav>
-<div id="flyout" class="glass" hidden></div>
-<div id="power-hint" class="glass" hidden><span class="ph-dot"></span><div><b id="ph-name"></b><span id="ph-text"></span></div><kbd>Esc</kbd></div>
-
-<!-- Side panel -->
-<aside id="panel" class="glass" hidden>
-  <div class="tabs" role="tablist">
-    <button role="tab" data-tab="life" aria-selected="true">Life</button>
-    <button role="tab" data-tab="chron" aria-selected="false">Chronicle</button>
-    <button role="tab" data-tab="tree" aria-selected="false">Tree</button>
-    <button role="tab" data-tab="graph" aria-selected="false">Census</button>
-    <button role="tab" data-tab="goals" aria-selected="false">Goals</button>
-    <button role="tab" data-tab="see" aria-selected="false">Lenses</button>
-  </div>
-  <div class="tab-body" id="tab-life"></div>
-  <div class="tab-body" id="tab-chron" hidden></div>
-  <div class="tab-body" id="tab-tree" hidden><p class="tab-note">Every species that ever lived. Time runs left to right; branches show who descended from whom. Grey lines are extinct.</p><canvas id="tree-canvas"></canvas></div>
-  <div class="tab-body" id="tab-graph" hidden><p class="tab-note">Population of each species over time. Marks along the bottom show your interventions.</p><canvas id="graph-canvas"></canvas><div id="graph-legend" class="legend"></div></div>
-  <div class="tab-body" id="tab-goals" hidden></div>
-  <div class="tab-body" id="tab-see" hidden></div>
+<!-- Prayers -->
+<aside id="prayers" class="glass" hidden>
+  <h2>Prayers <span id="pr-count"></span></h2>
+  <div id="pr-list"></div>
+  <p class="pr-empty" id="pr-empty">No one is praying right now.</p>
 </aside>
 
-<!-- Inspector -->
-<section id="inspector" class="glass" hidden aria-live="polite"></section>
+<!-- Powers -->
+<nav id="dock" hidden aria-label="Powers">
+  <div class="dock-tabs" id="dock-tabs"></div>
+  <div class="dock-powers glass" id="dock-powers"></div>
+</nav>
+<div id="power-hint" class="glass" hidden><b id="ph-name"></b><span id="ph-text"></span><kbd>Esc</kbd></div>
+<div id="subpick" class="glass" hidden></div>
 
-<!-- Incarnation HUD -->
-<section id="incarn" class="glass" hidden>
-  <div class="inc-top"><canvas id="inc-portrait" width="56" height="56"></canvas><div><b id="inc-name">You</b><span id="inc-sub"></span></div><button class="btn btn-small" id="btn-ascend">Ascend <kbd>Q</kbd></button></div>
-  <div class="bars">
-    <label>Energy<i><em id="inc-energy"></em></i></label>
-    <label>Health<i><em id="inc-health"></em></i></label>
-    <label>Life<i><em id="inc-age"></em></i></label>
+<!-- Side panel: inspector / chronicle -->
+<aside id="side" class="glass" hidden>
+  <div class="side-tabs" role="tablist">
+    <button data-tab="inspect" aria-selected="true">Look</button>
+    <button data-tab="chron" aria-selected="false">Chronicle</button>
+    <button data-tab="people" aria-selected="false">People</button>
+    <button data-tab="ages" aria-selected="false">Ages</button>
   </div>
-  <p class="inc-keys"><kbd>W A S D</kbd> move · <kbd>Space</kbd> bite · <kbd>E</kbd> mate · you graze by standing on plants</p>
+  <div class="side-body" id="tab-inspect"></div>
+  <div class="side-body" id="tab-chron" hidden></div>
+  <div class="side-body" id="tab-people" hidden></div>
+  <div class="side-body" id="tab-ages" hidden></div>
+  <button class="side-close tbtn" id="side-close" aria-label="Close">×</button>
+</aside>
+
+<div id="ticker" aria-live="polite"></div>
+<div id="banner" hidden><small id="banner-k"></small><b id="banner-t"></b><span id="banner-s"></span></div>
+
+<!-- Onboarding -->
+<div id="guide" class="glass" hidden><div id="guide-text"></div><div class="guide-foot"><span id="guide-step"></span><button class="btn btn-small" id="guide-next">Next</button></div></div>
+
+<!-- Incarnation -->
+<section id="incarn" class="glass" hidden>
+  <div class="inc-top"><div><b id="inc-name">You</b><span id="inc-sub"></span></div><button class="btn btn-small" id="btn-ascend">Ascend <kbd>Q</kbd></button></div>
+  <div class="bars"><label>Health<i><em id="inc-health"></em></i></label><label>Hunger<i><em id="inc-hunger"></em></i></label></div>
+  <p id="inc-msg" class="inc-msg"></p>
+  <p class="inc-keys"><kbd>W A S D</kbd> walk · <kbd>Shift</kbd> run · <kbd>E</kbd> talk, chop, gather, fight · <kbd>F</kbd> preach · <kbd>Q</kbd> return to the sky</p>
 </section>
 
 <!-- Modals -->
-<section id="designer" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="des-h">
-  <div class="sheet glass">
-    <div class="sheet-head"><h2 id="des-h">Create a species</h2><button class="tbtn" id="des-close" aria-label="Close">×</button></div>
-    <div class="des-body">
-      <div class="des-preview"><canvas id="des-canvas" width="220" height="220"></canvas><b id="des-name">New species</b><span id="des-role"></span></div>
-      <div class="des-controls">
-        <div class="presets" id="des-presets"></div>
-        <div class="sliders" id="des-sliders"></div>
-        <label class="des-count">How many <input type="range" id="des-count" min="2" max="40" value="12"><output id="des-count-out">12</output></label>
-      </div>
-    </div>
-    <div class="sheet-foot"><span class="dim">Then click the world to place them.</span><button class="btn btn-gold" id="des-place">Place in the world</button></div>
-  </div>
-</section>
-
-<section id="death" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="death-h">
-  <div class="sheet glass sheet-narrow">
-    <h2 id="death-h">You have died</h2>
-    <p id="death-text"></p>
-    <div id="death-heirs" class="heirs"></div>
-    <div class="sheet-foot"><button class="btn" id="death-ascend">Return to the heavens</button></div>
-  </div>
+<section id="modal" class="modal" hidden role="dialog" aria-modal="true">
+  <div class="sheet glass"><h2 id="modal-h"></h2><div id="modal-body"></div><div class="sheet-foot" id="modal-foot"></div></div>
 </section>
 
 <section id="help" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="help-h">
-  <div class="sheet glass">
+  <div class="sheet glass wide">
     <div class="sheet-head"><h2 id="help-h">How to be a god</h2><button class="tbtn" id="help-close" aria-label="Close">×</button></div>
     <div class="help-grid">
-      <div><h3>Watch</h3><p>Every creature has genes for size, speed, diet, fur, intelligence and more. They eat, flee, hunt, mate and die. Children inherit a mix of their parents' genes plus small mutations. When a group drifts far enough from its ancestors it becomes a new species.</p></div>
-      <div><h3>Look closer</h3><p>Scroll to zoom, drag to pan. Click any creature to see its genes, family and thoughts. The side panel holds the list of species, the Chronicle, the Tree of Life and the census.</p></div>
-      <div><h3>Intervene</h3><p>Choose a power from the left: <b class="c-create">Create</b>, <b class="c-destroy">Destroy</b>, <b class="c-bless">Bless</b>, <b class="c-speak">Speak</b>. Most powers are aimed with a click on the world.</p></div>
-      <div><h3>Walk among them</h3><p>Incarnate as any creature and live its life. When you die you can be reborn as one of your children and guide a bloodline.</p></div>
-      <div><h3>The spark</h3><p>A clever, numerous species becomes intelligent: it forms tribes, builds camps, farms, and towns. Perform miracles near them and they may build you a shrine.</p></div>
-      <div><h3>Undo history</h3><p>Rewind to any recent year and try a different path.</p></div>
+      <div><h3>Your people</h3><p>Every person has a name, a family, a job and a memory. They gather food, build homes, marry, have children and grow old. Click anyone to meet them.</p></div>
+      <div><h3>They pray to you</h3><p>When they are hungry, sick, scared or grieving, they pray. Their prayers appear on the left. Answer them and they love you. Ignore them and they doubt you.</p></div>
+      <div><h3>Loved or feared</h3><p>Every miracle and every disaster is remembered. A loving god gets festivals and white temples. A feared god gets offerings, obedience and black cathedrals.</p></div>
+      <div><h3>From caves to a city</h3><p>Speed up time (top) and watch them discover farming, bronze, iron, castles, factories and finally skyscrapers. Some day they may reach the stars.</p></div>
+      <div><h3>Powers</h3><p>Nature, Wrath, Grace and Hand. Rain, lightning, meteors, tornadoes, plagues, healing, blessings, raising the dead. Pick one at the bottom, then click the world.</p></div>
+      <div><h3>Walk among them</h3><p>Choose a person and press <b>Become human</b>. Walk with W A S D, talk, chop, fight and preach. When your body dies, you return to the sky.</p></div>
     </div>
-    <p class="keys"><kbd>Space</kbd> pause · <kbd>1</kbd>–<kbd>4</kbd> speed · <kbd>R</kbd> rewind · <kbd>Esc</kbd> cancel · <kbd>F</kbd> follow · <kbd>[</kbd> <kbd>]</kbd> brush size · <kbd>Tab</kbd> panel · <kbd>M</kbd> sound</p>
+    <p class="keys"><kbd>Drag</kbd> move · <kbd>Right-drag</kbd> or <kbd>Q</kbd>/<kbd>E</kbd> turn · <kbd>Wheel</kbd> zoom · <kbd>Space</kbd> pause · <kbd>1</kbd>–<kbd>5</kbd> speed · <kbd>Esc</kbd> cancel · <kbd>C</kbd> chronicle · <kbd>M</kbd> sound</p>
   </div>
 </section>
 
-<div id="popover" class="glass" hidden></div>
 <div id="toast" role="status" aria-live="polite"></div>
 
+<script>
+/*@THREE*/
+</script>
 <script>
 /*@SIM*/
 </script>

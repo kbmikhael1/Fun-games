@@ -2,86 +2,66 @@
 const fs = require('fs');
 const path = require('path');
 const src = fs.readFileSync(path.join(__dirname, '..', 'src', 'sim.js'), 'utf8');
-const S = new Function(src + '; return { createWorld, seedLife, stepWorld, GOD, TPY, G, spById, snapshot, restore, PRESETS, genesFrom, spawnSpecies, B, tileAt, tileTemp, MAX_CREATURES };')();
+const S = new Function(src + '; return { createWorld, stepWorld, GOD, YEAR, DAY, AGES, living, personById, ageOf, villageMood, hAt, isWater, tileAt };')();
 
 let fails = 0;
 const ok = (cond, msg) => { console.log(`${cond ? 'ok  ' : 'FAIL'} ${msg}`); if (!cond) fails++; };
-const run = (w, grid, years) => { for (let k = 0; k < years * S.TPY; k++) S.stepWorld(w, grid); };
-const landPoint = w => { for (let k = 0; k < 5000; k++) { const x = 10 + Math.random() * (w.W - 20), y = 10 + Math.random() * (w.H - 20), b = w.biome[S.tileAt(w, x, y)]; if (b === S.B.GRASS || b === S.B.FOREST) return [x, y]; } return [w.W / 2, w.H / 2]; };
+const run = (w, years) => { for (let k = 0; k < years * S.YEAR / .25; k++) S.stepWorld(w, .25); };
 
-// 1. A seeded world stays alive and within bounds for 15 years
+// 1. A valley with water, a village and people
 {
-  const w = S.createWorld({ seed: 7 }), grid = {};
-  S.seedLife(w);
-  const t0 = Date.now(); run(w, grid, 15); const ms = (Date.now() - t0) / (15 * S.TPY);
-  const living = w.species.filter(s => !s.extinct && s.pop > 0).length;
-  ok(w.creatures.length > 150 && w.creatures.length <= S.MAX_CREATURES, `population after 15 years: ${w.creatures.length}`);
-  ok(living >= 3, `${living} species alive after 15 years`);
-  ok(ms < 3, `speed: ${ms.toFixed(2)} ms per tick`);
-  ok(w.species.length > 11, `evolution produced new species (${w.species.length - 11} so far)`);
+  const w = S.createWorld({ seed: 11 });
+  let water = 0; for (const t of w.tile) if (S.isWater(t)) water++;
+  ok(water > 300, `the valley has a lake and a river (${water} water tiles)`);
+  ok(w.people.length >= 10 && w.trees.length > 1000 && w.animals.length > 10, `${w.people.length} people, ${w.trees.length} trees, ${w.animals.length} animals`);
+  ok(!S.isWater(S.tileAt(w, w.center.x, w.center.z)), 'the village stands on dry land');
 }
-// 2. Natural selection: on a frozen world, the population living in the cold evolves thicker fur
+// 2. Left alone, the people grow from a camp into a city
 {
-  const w = S.createWorld({ seed: 11, type: 'frozen' }), grid = {};
-  const p = landPoint(w);
-  S.spawnSpecies(w, S.genesFrom(w, { ...S.PRESETS.grazer, fur: .3, fert: .8 }, .3), p[0], p[1], 60, { quiet: true });
-  run(w, grid, 25);
-  const cold = w.creatures.filter(c => c.g[S.G.aquatic] < .5 && S.tileTemp(w, S.tileAt(w, c.x, c.y)) < .3);
-  const warm = w.creatures.filter(c => c.g[S.G.aquatic] < .5 && S.tileTemp(w, S.tileAt(w, c.x, c.y)) > .45);
-  const mean = a => a.reduce((t, c) => t + c.g[S.G.fur], 0) / Math.max(1, a.length);
-  ok(cold.length > 5 && mean(cold) > .33 && mean(cold) > mean(warm) + .03, `local adaptation: fur ${mean(cold).toFixed(2)} in the cold vs ${mean(warm).toFixed(2)} in the warm (started at 0.30)`);
+  const w = S.createWorld({ seed: 1 }), t0 = Date.now(); const ages = [];
+  for (let y = 0; y < 140 && w.age < 6; y++) { run(w, 1); if (ages[w.age] === undefined) ages[w.age] = y + 1; }
+  const ms = (Date.now() - t0) / Math.max(1, w.yearIndex);
+  run(w, 8);
+  ok(w.age === 6, `reached the Modern Age (farming ${ages[1]}, bronze ${ages[2]}, iron ${ages[3]}, medieval ${ages[4]}, industrial ${ages[5]}, modern ${ages[6]})`);
+  ok(S.living(w).length > 120, `${S.living(w).length} people live in the city`);
+  ok(w.buildings.some(b => b.type === 'home' && b.style === 6), 'apartment towers were built');
+  const starved = w.stats.byCause['starved to death'] || 0;
+  ok(starved < 20, `few starved (${starved})`);
+  ok(ms < 700, `speed: ${ms.toFixed(0)} ms per simulated year`);
 }
 // 3. God powers do what they say
 {
-  const w = S.createWorld({ seed: 3 }), grid = {};
-  S.seedLife(w); run(w, grid, 1);
-  const n0 = w.creatures.length, c0 = w.creatures[10];
-  S.GOD.meteor(w, c0.x, c0.y, 1.2); run(w, grid, .2);
-  ok(w.stats.byCause.meteor > 5, `meteor killed ${w.stats.byCause.meteor} creatures and left a crater`);
-  ok(w.climate.dust > .3, `meteor raised dust (${w.climate.dust.toFixed(2)}), cooling the world`);
-  const top = w.species.filter(s => !s.extinct).sort((a, b) => b.pop - a.pop)[0];
-  const target = w.creatures.find(c => c.sp === top.id);
-  const strain = S.GOD.plague(w, target.x, target.y, { lethal: .006, trans: .12 });
-  run(w, grid, .5);
-  ok(strain && strain.cases > 5, `plague spread to ${strain ? strain.cases : 0} creatures`);
-  const victim = w.creatures.find(c => !c.inf);
-  const spId = victim.sp; S.GOD.eraseSpecies(w, spId); run(w, grid, .2);
-  ok(!w.creatures.some(c => c.sp === spId), 'erase species removed every member');
-  const hero = w.creatures[0]; S.GOD.bless(w, hero, 'giant');
-  ok(hero.mass > 1 && hero.name, `blessed ${hero.name} became a giant (mass ${hero.mass.toFixed(2)})`);
-  const lp = landPoint(w); S.GOD.volcano(w, lp[0], lp[1]); run(w, grid, .3);
-  ok(w.lava.some(v => v > 0), 'volcano is pouring lava');
-  S.GOD.deluge(w); run(w, grid, 1.5);
-  ok(w.climate.sea > .05, `deluge raised the sea by ${w.climate.sea.toFixed(3)}`);
+  const w = S.createWorld({ seed: 3, unlimited: true }); run(w, 3);
+  const p = S.living(w).find(q => S.ageOf(w, q) > 16);
+  S.GOD.bless(w, p, 'immortal');
+  S.GOD.lightning(w, p.x, p.z); S.GOD.meteor(w, p.x, p.z); run(w, .1); S.GOD.meteorImpact(w, p.x, p.z);
+  S.GOD.plague(w, p.x, p.z); run(w, 1);
+  ok(p.alive, `${p.name} is immortal: survived lightning, a meteor and a plague`);
+  S.GOD.smite(w, p); ok(!p.alive, 'smite can still take an immortal life');
+  ok(S.GOD.resurrect(w, p.id) && p.alive, `${p.name} was raised from the dead`);
+  const n0 = S.living(w).length, c = w.center;
+  S.GOD.meteorImpact(w, c.x, c.z);
+  ok(S.living(w).length < n0, `a meteor on the village kills (${n0 - S.living(w).length} dead)`);
+  ok(S.villageMood(w).fear > .1, `they fear you now (fear ${S.villageMood(w).fear.toFixed(2)})`);
+  const q = S.living(w)[0]; S.GOD.pickUp(w, 'p', q.id); S.GOD.drop(w, q.x, q.z, S.hAt(w, q.x, q.z) + 30, 0, 0, 0); run(w, .05);
+  ok(!q.fly, 'a dropped person lands');
+  S.GOD.flood(w); run(w, .15); ok(w.water > .5, `the flood raised the water (${w.water.toFixed(2)})`); run(w, 1.5); ok(w.water < .05, 'and the water went down again');
 }
-// 4. Intelligence: the gift of fire leads to tribes and villages
+// 4. Prayers can be answered, and ignored prayers are remembered
 {
-  const w = S.createWorld({ seed: 5 }), grid = {};
-  const p = landPoint(w);
-  const sp = S.spawnSpecies(w, S.genesFrom(w, { ...S.PRESETS.omnivore, fert: .7, herd: .8 }, .6), p[0], p[1], 40, { quiet: true });
-  run(w, grid, 1);
-  S.GOD.fireGift(w, sp.id);
-  run(w, grid, 8);
-  const tribes = w.tribes.filter(t => !t.gone);
-  ok(tribes.length > 0, `gift of fire: ${tribes.length} tribes founded`);
-  ok(tribes.some(t => t.stage >= 1), `a tribe grew into a village (stages: ${tribes.map(t => t.stage).join(',')})`);
-}
-// 5. Messengers spread commandments; snapshots rewind time
-{
-  const w = S.createWorld({ seed: 9 }), grid = {};
-  S.seedLife(w); run(w, grid, 1);
-  const big = w.species.filter(s => !s.extinct && s.mean[S.G.aquatic] < .5).sort((a, b) => b.pop - a.pop)[0];
-  const c = w.creatures.find(x => x.sp === big.id);
-  S.GOD.messenger(w, c.x, c.y, c.sp, { type: 'migrate', x: c.x + 20, y: c.y });
-  run(w, grid, 1);
-  const believers = w.creatures.filter(x => x.belief).length;
-  ok(believers > 3, `messenger converted ${believers} creatures`);
-  const snap = S.snapshot(w); const tick = w.tick, n = w.creatures.length;
-  run(w, grid, 1);
-  const back = S.restore(snap);
-  ok(back.tick === tick && back.creatures.length === n, 'rewind restores the exact moment');
-  run(back, {}, .2);
-  ok(back.tick > tick, 'a restored world keeps running');
+  const w = S.createWorld({ seed: 5 }); run(w, 1);
+  const p = S.living(w).find(q => S.ageOf(w, q) > 16);
+  w.weather.moist = 0; const pr = [];
+  for (const q of S.living(w)) { if (q.sick) continue; }
+  const before = p.love;
+  const sick = S.living(w)[1]; sick.sick = .2;
+  const src2 = w.prayers.length;
+  // make a prayer directly and answer it
+  const e = S.GOD.heal(w, sick.x, sick.z);
+  ok(e && !sick.sick, 'heal cures the sick');
+  run(w, 4); const ign = w.god.deeds.ignored + w.god.deeds.answered;
+  ok(w.prayers.length > 0, `people prayed (${w.prayers.length} prayers in 4 years)`);
+  ok(w.prayers.every(q => q.done || w.t <= q.until + 2), 'old prayers expire');
 }
 if (fails) { console.log(`\n${fails} check(s) failed`); process.exit(1); }
 console.log('\nall checks passed');

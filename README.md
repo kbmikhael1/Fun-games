@@ -1,6 +1,6 @@
 # Daraja
 
-> Also in this repo: **[God Lab](god-lab/)**, a world simulator where you play god. Play it at https://kbmikhael1.github.io/Fun-games/god-lab/
+> Also in this repo: **[God Lab](god-lab/)**, a 3D god game: answer your people's prayers and watch them grow from a cave to a city. Play it at https://kbmikhael1.github.io/Fun-games/god-lab/
 
 *da·ra·ja* (Swahili, noun): a bridge.
 
