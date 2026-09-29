@@ -1,5 +1,7 @@
 # Daraja
 
+> Also in this repo: **[God Lab](god-lab/)**, a world simulator where you play god. Play it at https://kbmikhael1.github.io/Fun-games/god-lab/
+
 *da·ra·ja* (Swahili, noun): a bridge.
 
 Daraja is a bridge-building game set across fourteen Ugandan crossings, from a
